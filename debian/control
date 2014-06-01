@@ -14,7 +14,7 @@ Standards-Version: 3.9.4
 
 Package: swap-file-creator
 Architecture: all
-Depends: ${misc:Depends}
+Depends: sudo, ${misc:Depends}
 Description: Adds a swap file to the system
  Creates a 512 MB /swapfile1. Useful for systems with low RAM such as inside
  virtual machines.
