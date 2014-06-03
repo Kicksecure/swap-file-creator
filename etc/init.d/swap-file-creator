@@ -7,7 +7,7 @@
 # Default-Stop:      0 1 6
 # X-Interactive:     true
 # Short-Description: Swap File Creator
-# Description:       Swap File Creator
+# Description:       Creates swap file encrypted with random password on boot
 ### END INIT INFO
 
 ## This file is part of Whonix.
@@ -42,6 +42,10 @@ error_handler() {
 }
 
 trap "error_handler" ERR
+
+if [ -f "/etc/default/swap-file-creator" ]; then
+   source "/etc/default/swap-file-creator"
+fi
 
 [ -n "$DESC" ] || DESC="Swap File Creator"
 [ -n "$NAME" ] || NAME="swap-file-creator"
