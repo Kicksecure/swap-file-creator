@@ -1,0 +1,190 @@
+#! /bin/bash
+### BEGIN INIT INFO
+# Provides:          swap-file-creator
+# Required-Start:    $remote_fs $syslog mountkernfs
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# X-Interactive:     true
+# Short-Description: Swap File Creator
+# Description:       Swap File Creator
+### END INIT INFO
+
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+set -o pipefail
+
+error_handler() {
+   local exit_code="$?"
+   log_end_msg 1
+   echo "\
+###############################################################################
+## Swap File Creator script bug.
+## No panic. Nothing is broken. Just some rare condition has been hit.
+## Try again later. There is likely a solution for this problem.
+## Please report this bug!
+##
+## BASH_COMMAND: $BASH_COMMAND
+## exit_code: $exit_code
+##
+## Experts only:
+## bash -x $0 restart
+## for verbose output. Clean the output and
+## submit to developers.
+###############################################################################\
+"
+   rm --force "$RUN_FOLDER/progress"
+   rm --force "$RUN_FOLDER/success"
+   touch "$RUN_FOLDER/fail"
+   exit 1
+}
+
+trap "error_handler" ERR
+
+[ -n "$DESC" ] || DESC="Swap File Creator"
+[ -n "$NAME" ] || NAME="swap-file-creator"
+[ -n "$SCRIPTNAME" ] || SCRIPTNAME="/etc/init.d/$NAME"
+[ -n "$LOG" ] || LOG="/var/log/$NAME.log"
+[ -n "$SWAPFILE" ] || SWAPFILE="/swapfile"
+[ -n "$VERBOSE" ] || VERBOSE="yes"
+[ -n "$UUID" ] || UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
+[ -n "$DD_IF" ] || DD_IF="/dev/zero"
+[ -n "$DD_BS" ] || DD_BS="512M"
+[ -n "$DD_COUNT" ] || DD_COUNT="1"
+[ -n "$MAPPER" ] || MAPPER="swapfile"
+[ -n "$MAPPER_FULL" ] || MAPPER_FULL="/dev/mapper/$MAPPER"
+[ -n "$RUN_FOLDER" ] || RUN_FOLDER="/var/run/$NAME"
+[ -n "$RANDOM_PASSWORD" ] || RANDOM_PASSWORD="$(dd if="/dev/random" bs=1 count=100 2>/dev/null)"
+[ -n "$CRYPTSETUP_FORMAT" ] || CRYPTSETUP_FORMAT="cryptsetup --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat"
+[ -n "$SHRED_ON_STOP" ] || SHRED_ON_STOP="no"
+[ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
+. /lib/lsb/init-functions
+
+do_start() {
+   trap "error_handler" ERR
+
+   do_status_return_code="0"
+   do_status || { do_status_return_code="$?" ; true; };
+
+   if [ "$do_status_return_code" = "0" ]; then
+      log_action_msg "$NAME already running."
+      return 0
+   fi
+
+   mkdir --parents "$RUN_FOLDER"
+   rm --force "$RUN_FOLDER/success"
+   rm --force "$RUN_FOLDER/fail"
+   touch "$RUN_FOLDER/progress"
+
+   if [ ! -f "$SWAPFILE" ]; then
+      log_action_msg "INFO: Creating $SWAPFILE... This may take a while.."
+      dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$DD_BS" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
+      log_action_msg "INFO: Created $SWAPFILE"
+   fi
+
+   chown --recursive root:root "$SWAPFILE"
+   chmod --recursive 0600 "$SWAPFILE"
+
+   local loop
+   loop="$(losetup -f $LOSETUP_LOOP_EXTRA)"
+   echo "$loop" > "$RUN_FOLDER/loop"
+   losetup "$loop" "$SWAPFILE" $LOSETUP_EXTRA
+
+   echo "$RANDOM_PASSWORD" | $CRYPTSETUP_FORMAT "$loop"
+   echo "$RANDOM_PASSWORD" | cryptsetup luksOpen "$loop" "$MAPPER" $CRYPTSETUP_LUKSOPEN_EXTRA
+
+   chown --recursive root:root "$MAPPER_FULL"
+   chmod --recursive 0600 "$MAPPER_FULL"
+
+   mkswap --force --uuid "$UUID" "$MAPPER_FULL" $MKSWAP_EXTRA >/dev/null
+   swapon "$MAPPER_FULL" $SWAPON_EXTRA
+
+   rm --force "$RUN_FOLDER/progress"
+   touch "$RUN_FOLDER/success"
+   return 0
+}
+
+do_stop() {
+   trap "error_handler" ERR
+
+   swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
+
+   cryptsetup luksClose "$MAPPER" >/dev/null 2>&1 || true
+
+   local loop
+   loop="$(cat "$RUN_FOLDER/loop")" || true
+   if [ ! "$loop" = "" ]; then
+      losetup --detach "$loop" >/dev/null 2>&1 || true
+   fi
+
+   if [ "$SHRED_ON_STOP" = "yes" ]; then
+      if [ -f "$SWAPFILE" ]; then
+         log_action_msg "INFO: Shredding $SWAPFILE... This may take a while.."
+         shred $SHRED_OPTS "$SWAPFILE"
+         log_action_msg "INFO: Done shred $SWAPFILE"
+      fi
+   fi
+
+   rm --force "$RUN_FOLDER/progress"
+   rm --force "$RUN_FOLDER/fail"
+   rm --force "$RUN_FOLDER/success"
+
+   return 0
+}
+
+do_status() {
+   trap "error_handler" ERR
+
+   if [ -f "$RUN_FOLDER/success" ]; then
+      return 0
+   else
+      return 1
+   fi
+}
+
+case "$1" in
+   start)
+      [ "$VERBOSE" != no ] && log_daemon_msg "$DESC" "$NAME"
+      log_action_begin_msg "Starting $DESC"
+      do_start
+      log_end_msg 0
+      ;;
+   stop)
+      log_action_begin_msg "Stopping $DESC"
+      do_stop
+      log_end_msg 0
+      ;;
+   restart|force-reload)
+      log_action_begin_msg "Stopping $DESC"
+      do_stop
+      log_end_msg 0
+      log_action_begin_msg "Starting $DESC"
+      do_start
+      log_end_msg 0
+      ;;
+   status)
+      do_status_return_code="0"
+      do_status || { do_status_return_code="$?" ; true; };
+      if [ "$do_status_return_code" = "0" ]; then
+         log_action_msg "$DESC ok"
+      else
+         log_action_msg "$DESC not active"
+      fi
+      exit "$do_status_return_code"
+      ;;
+   *)
+      echo "Usage: $SCRIPTNAME (start|stop|restart|status)" >&2
+      exit 3
+      ;;
+esac
+
+true

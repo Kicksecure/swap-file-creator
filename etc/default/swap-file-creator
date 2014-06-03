@@ -1,0 +1,87 @@
+#!/bin/bash
+
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+## bash fragment
+
+## verbose output
+## defaults to:
+## no
+## possible values:
+## yes
+## no
+#VERBOSE="no"
+
+## size of swap file
+## defaults to:
+## 512M
+#DD_BS="1024M"
+
+## Delete swapfile on shut down.
+## defaults to:
+## no
+## possible values:
+## yes
+## no
+#SHRED_ON_STOP="yes"
+
+## shred options
+#SHRED_OPTS="--verbose --iterations=3"
+
+## shred extra options
+#SHRED_EXTRA=""
+
+## Swap file crypt format command.
+## No change required unless you know what you are doing.
+## defaults to:
+## cryptsetup --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat
+#CRYPTSETUP_FORMAT="cryptsetup -h sha256 -c aes-cbc-essiv:sha256 -s 256 luksFormat"
+
+## No change required unless you know what you are doing.
+## defaults to:
+## /dev/zero
+#DD_IF="/dev/random"
+
+## No change required unless you know what you are doing.
+#UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
+
+## No change required unless you know what you are doing.
+#SWAPFILE="/swapfile"
+
+## No change required unless you know what you are doing.
+#DD_EXTRA=""
+
+## No change required unless you know what you are doing.
+#LOSETUP_LOOP_EXTRA=""
+
+## No change required unless you know what you are doing.
+#LOSETUP_LOOP_EXTRA=""
+
+## No change required unless you know what you are doing.
+#MKSWAP_EXTRA=""
+
+## No change required unless you know what you are doing.
+#SWAPON_EXTRA=""
+
+## No change required unless you know what you are doing.
+#SWAPOFF_EXTRA=""
+
+## No change required unless you know what you are doing.
+#SWAPON_EXTRA="--verbose"
+
+## No change required unless you know what you are doing.
+#MAPPER="swapfile"
+
+## No change required unless you know what you are doing.
+#MAPPER_FULL="/dev/mapper/$MAPPER"
+
+## No change required unless you know what you are doing.
+#CRYPTSETUP_LUKSOPEN_EXTRA=""
+
+## No change required unless you know what you are doing.
+#RUN_FOLDER="/var/run/$NAME"
+
+## No change required unless you know what you are doing.
+#RANDOM_PASSWORD="$(dd if="/dev/random" bs=1 count=100 2>/dev/null)"
