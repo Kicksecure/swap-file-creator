@@ -5,7 +5,7 @@
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Swap File Creator
+# Short-Description: Encrypted Swap File Creator
 # Description:       Creates swap file encrypted with random password on boot
 ### END INIT INFO
 
@@ -46,7 +46,7 @@ if [ -f "/etc/default/swap-file-creator" ]; then
    source "/etc/default/swap-file-creator"
 fi
 
-[ -n "$DESC" ] || DESC="Swap File Creator"
+[ -n "$DESC" ] || DESC="Encrypted Swap File Creator"
 [ -n "$NAME" ] || NAME="swap-file-creator"
 [ -n "$SCRIPTNAME" ] || SCRIPTNAME="/etc/init.d/$NAME"
 [ -n "$LOG" ] || LOG="/var/log/$NAME.log"
