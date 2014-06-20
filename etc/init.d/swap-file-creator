@@ -89,9 +89,9 @@ do_start() {
    touch "$RUN_FOLDER/progress"
 
    if [ ! -f "$SWAPFILE" ]; then
-      log_action_msg "INFO: Creating $SWAPFILE... This may take a while.."
+      log_action_msg "INFO: Creating encrypted $SWAPFILE... This may take a while.."
       dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$DD_BS" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
-      log_action_msg "INFO: Created $SWAPFILE"
+      log_action_msg "INFO: Created encrypted $SWAPFILE"
    fi
 
    chown --recursive root:root "$SWAPFILE"
