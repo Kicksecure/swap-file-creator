@@ -123,8 +123,10 @@ do_stop() {
 
    cryptsetup luksClose "$MAPPER" >/dev/null 2>&1 || true
 
-   local loop
-   loop="$(cat "$RUN_FOLDER/loop")" || true
+   if [ -f "$RUN_FOLDER/loop" ]; then
+      local loop
+      loop="$(cat "$RUN_FOLDER/loop")" || true
+   fi
    if [ ! "$loop" = "" ]; then
       losetup --detach "$loop" >/dev/null 2>&1 || true
    fi
