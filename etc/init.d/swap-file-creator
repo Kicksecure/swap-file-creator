@@ -59,7 +59,6 @@ fi
 [ -n "$MAPPER" ] || MAPPER="swapfile"
 [ -n "$MAPPER_FULL" ] || MAPPER_FULL="/dev/mapper/$MAPPER"
 [ -n "$RUN_FOLDER" ] || RUN_FOLDER="/var/run/$NAME"
-[ -n "$RANDOM_PASSWORD" ] || RANDOM_PASSWORD="$(dd if="/dev/random" bs=1 count=100 2>/dev/null)"
 [ -n "$CRYPTSETUP_FORMAT" ] || CRYPTSETUP_FORMAT="cryptsetup --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat"
 [ -n "$SHRED_ON_STOP" ] || SHRED_ON_STOP="no"
 [ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"
@@ -101,6 +100,10 @@ do_start() {
    loop="$(losetup -f $LOSETUP_LOOP_EXTRA)"
    echo "$loop" > "$RUN_FOLDER/loop"
    losetup "$loop" "$SWAPFILE" $LOSETUP_EXTRA
+
+   ## Setting RANDOM_PASSWORD here, so /dev/random exists.
+   ## (Which is not the case on shutdown.)
+   [ -n "$RANDOM_PASSWORD" ] || RANDOM_PASSWORD="$(dd if="/dev/random" bs=1 count=100 2>/dev/null)"
 
    echo "$RANDOM_PASSWORD" | $CRYPTSETUP_FORMAT "$loop"
    echo "$RANDOM_PASSWORD" | cryptsetup luksOpen "$loop" "$MAPPER" $CRYPTSETUP_LUKSOPEN_EXTRA
