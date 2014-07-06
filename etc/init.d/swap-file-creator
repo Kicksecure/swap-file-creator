@@ -29,7 +29,7 @@ error_handler() {
 ## exit_code: $exit_code
 ##
 ## Experts only:
-## bash -x $0 restart
+## bash -x $BASH_SOURCE restart
 ## for verbose output. Clean the output and
 ## submit to developers.
 ###############################################################################\
