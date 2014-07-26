@@ -6,7 +6,7 @@ Source: swap-file-creator
 Section: misc
 Priority: optional
 Maintainer: Patrick Schleizer <adrelanos@riseup.net>
-Build-Depends: debhelper (>= 8), faketime, git
+Build-Depends: debhelper (>= 8), faketime
 Homepage: https://github.com/Whonix/swap-file-creator
 Vcs-Browser: https://github.com/Whonix/swap-file-creator
 Vcs-Git: https://github.com/Whonix/swap-file-creator.git
