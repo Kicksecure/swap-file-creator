@@ -19,7 +19,8 @@ set -o pipefail
 error_handler() {
    local exit_code="$?"
    log_end_msg 1
-   echo "\
+   if [ "$1" = "" ]; then
+      echo "\
 ###############################################################################
 ## Swap File Creator script bug.
 ## No panic. Nothing is broken. Just some rare condition has been hit.
@@ -35,6 +36,23 @@ error_handler() {
 ## submit to developers.
 ###############################################################################\
 "
+   else
+      echo "\
+###############################################################################
+## Swap File Creator script bug.
+## No panic. Nothing is broken. Just some rare condition has been hit.
+## Try again later. There is likely a solution for this problem.
+## Please report this bug!
+##
+## $1
+##
+## Experts only:
+## bash -x $BASH_SOURCE restart
+## for verbose output. Clean the output and
+## submit to developers.
+###############################################################################\
+"
+   fi
    rm --force "$RUN_FOLDER/progress"
    rm --force "$RUN_FOLDER/success"
    touch "$RUN_FOLDER/fail"
@@ -63,6 +81,7 @@ fi
 [ -n "$CRYPTSETUP_FORMAT" ] || CRYPTSETUP_FORMAT="cryptsetup --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat"
 [ -n "$SHRED_ON_STOP" ] || SHRED_ON_STOP="no"
 [ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"
+[ -n "$RANDOM_PASSWORD_TIMEOUT" ] || RANDOM_PASSWORD_TIMEOUT="10"
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -102,9 +121,22 @@ do_start() {
    echo "$loop" > "$RUN_FOLDER/loop"
    losetup "$loop" "$SWAPFILE" $LOSETUP_EXTRA
 
-   ## Setting RANDOM_PASSWORD here, so /dev/random exists.
-   ## (Which is not the case on shutdown.)
-   [ -n "$RANDOM_PASSWORD" ] || RANDOM_PASSWORD="$(dd if="/dev/random" bs=1 count=100 2>/dev/null)"
+   ## Setting RANDOM_PASSWORD here, to make sure /dev/random exists.
+   ## (Which is not the case on shutdown. - Therefore we do this inside the
+   ## start function, not outside any functions.)
+   if [ "$RANDOM_PASSWORD" = "" ]; then
+      random_password_exit_code="0"
+      RANDOM_PASSWORD="$(\
+            timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" \
+            dd if="/dev/random" bs=1 count=100 2>/dev/null\
+         )" \
+      || { random_password_exit_code="$?" ; true; };
+      if [ "$random_password_exit_code" = "0" ]; then
+         local msg="Failed to get RANDOM_PASSWORD from /dev/random after $RANDOM_PASSWORD_TIMEOUT seconds.
+Most likely due to low entropy. random_password_exit_code: $random_password_exit_code"
+         error_handler "$msg"
+      fi
+   fi
 
    echo "$RANDOM_PASSWORD" | $CRYPTSETUP_FORMAT "$loop"
    echo "$RANDOM_PASSWORD" | cryptsetup luksOpen "$loop" "$MAPPER" $CRYPTSETUP_LUKSOPEN_EXTRA
