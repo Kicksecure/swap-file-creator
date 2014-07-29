@@ -22,10 +22,7 @@ error_handler() {
    if [ "$1" = "" ]; then
       local msg="\
 ###############################################################################
-## Swap File Creator script bug.
-## No panic. Nothing is broken. Just some rare condition has been hit.
-## Try again later. There is likely a solution for this problem.
-## Please report this bug!
+## Swap File Creator ERROR
 ##
 ## BASH_COMMAND: $BASH_COMMAND
 ## exit_code: $exit_code
@@ -39,10 +36,7 @@ error_handler() {
    else
       local msg="\
 ###############################################################################
-## Swap File Creator script bug.
-## No panic. Nothing is broken. Just some rare condition has been hit.
-## Try again later. There is likely a solution for this problem.
-## Please report this bug!
+## Swap File Creator script ERROR
 ##
 ## $1
 ##
