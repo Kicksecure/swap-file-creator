@@ -20,7 +20,7 @@ error_handler() {
    local exit_code="$?"
    log_end_msg 1
    if [ "$1" = "" ]; then
-      echo "\
+      local msg="\
 ###############################################################################
 ## Swap File Creator script bug.
 ## No panic. Nothing is broken. Just some rare condition has been hit.
@@ -37,7 +37,7 @@ error_handler() {
 ###############################################################################\
 "
    else
-      echo "\
+      local msg="\
 ###############################################################################
 ## Swap File Creator script bug.
 ## No panic. Nothing is broken. Just some rare condition has been hit.
@@ -53,9 +53,12 @@ error_handler() {
 ###############################################################################\
 "
    fi
+   echo "$msg"
    rm --force "$RUN_FOLDER/progress"
    rm --force "$RUN_FOLDER/success"
    touch "$RUN_FOLDER/fail"
+   [ -n "$LOG" ] || LOG="/var/log/$NAME.log"
+   echo "$msg" >> "$LOG"
    [ -n "$SLEEP_SECONDS_ON_ERROR" ] || SLEEP_SECONDS_ON_ERROR="5"
    sleep "$SLEEP_SECONDS_ON_ERROR" &
    wait "$!"
