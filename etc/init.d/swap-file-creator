@@ -126,6 +126,12 @@ do_start() {
    ## (Which is not the case on shutdown. - Therefore we do this inside the
    ## start function, not outside any functions.)
    if [ "$RANDOM_PASSWORD" = "" ]; then
+      test_e_random_device_exit_code="0"
+      test -e "$RANDOM_DEVICE" || { test_e_random_device_exit_code="$?" ; true; };
+      if [ ! "$test_e_random_device_exit_code" = "0" ]; then
+         local msg="RANDOM_DEVICE $RANDOM_DEVICE does not exist."
+         error_handler "$msg"
+      fi
       random_password_exit_code="0"
       RANDOM_PASSWORD="$(\
             timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" \
