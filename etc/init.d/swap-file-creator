@@ -56,6 +56,9 @@ error_handler() {
    rm --force "$RUN_FOLDER/progress"
    rm --force "$RUN_FOLDER/success"
    touch "$RUN_FOLDER/fail"
+   [ -n "$SLEEP_SECONDS_ON_ERROR" ] || SLEEP_SECONDS_ON_ERROR="5"
+   sleep "$SLEEP_SECONDS_ON_ERROR" &
+   wait "$!"
    exit 1
 }
 
@@ -65,6 +68,7 @@ if [ -f "/etc/default/swap-file-creator" ]; then
    source "/etc/default/swap-file-creator"
 fi
 
+[ -n "$SLEEP_SECONDS_ON_ERROR" ] || SLEEP_SECONDS_ON_ERROR="5"
 [ -n "$DESC" ] || DESC="Encrypted Swap File Creator"
 [ -n "$NAME" ] || NAME="swap-file-creator"
 [ -n "$SCRIPTNAME" ] || SCRIPTNAME="/etc/init.d/$NAME"
