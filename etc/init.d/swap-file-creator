@@ -82,6 +82,7 @@ fi
 [ -n "$SHRED_ON_STOP" ] || SHRED_ON_STOP="no"
 [ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"
 [ -n "$RANDOM_PASSWORD_TIMEOUT" ] || RANDOM_PASSWORD_TIMEOUT="10"
+[ -n "$RANDOM_DEVICE" ] || RANDOM_DEVICE="/dev/random"
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
@@ -128,11 +129,11 @@ do_start() {
       random_password_exit_code="0"
       RANDOM_PASSWORD="$(\
             timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" \
-            dd if="/dev/random" bs=1 count=100 2>/dev/null\
+            dd if="$RANDOM_DEVICE" bs=1 count=100 2>/dev/null\
          )" \
       || { random_password_exit_code="$?" ; true; };
       if [ "$random_password_exit_code" = "0" ]; then
-         local msg="Failed to get RANDOM_PASSWORD from /dev/random after $RANDOM_PASSWORD_TIMEOUT seconds.
+         local msg="Failed to get RANDOM_PASSWORD from $RANDOM_DEVICE after $RANDOM_PASSWORD_TIMEOUT seconds.
 Most likely due to low entropy. random_password_exit_code: $random_password_exit_code"
          error_handler "$msg"
       fi
