@@ -142,7 +142,7 @@ do_start() {
       random_password_exit_code="0"
       RANDOM_PASSWORD="$(\
             timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" \
-            dd if="$RANDOM_DEVICE" bs=1 count=100 2>/dev/null\
+               dd if="$RANDOM_DEVICE" bs=1 count=100 2>/dev/null\
          )" \
       || { random_password_exit_code="$?" ; true; };
       if [ ! "$random_password_exit_code" = "0" ]; then
