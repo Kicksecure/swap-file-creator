@@ -15,6 +15,7 @@ Standards-Version: 3.9.4
 Package: swap-file-creator
 Architecture: all
 Depends: cryptsetup-bin, pv, ${misc:Depends}
+Recommends: haveged
 Description: Adds encrypted swap file to the system
  On every boot, creates a new encrypted swapfile with a random password.
  .
