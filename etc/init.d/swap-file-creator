@@ -74,8 +74,9 @@ fi
 [ -n "$VERBOSE" ] || VERBOSE="yes"
 [ -n "$UUID" ] || UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
 [ -n "$DD_IF" ] || DD_IF="/dev/zero"
-[ -n "$DD_BS" ] || DD_BS="512M"
-[ -n "$DD_COUNT" ] || DD_COUNT="1"
+[ -n "$DD_BS" ] || DD_BS="1M"
+[ -n "$DD_COUNT" ] || DD_COUNT="512"
+[ -n "$PV_SIZE" ] || PV_SIZE="${DD_COUNT}M"
 [ -n "$MAPPER" ] || MAPPER="swapfile"
 [ -n "$MAPPER_FULL" ] || MAPPER_FULL="/dev/mapper/$MAPPER"
 [ -n "$RUN_FOLDER" ] || RUN_FOLDER="/var/run/$NAME"
@@ -134,7 +135,7 @@ do_start() {
 
    if [ ! -f "$SWAPFILE" ]; then
       log_action_msg "Creating encrypted $SWAPFILE ($DD_BS)... This may take a while.."
-      dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$DD_BS" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
+      dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$PV_SIZE" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
       log_action_msg "Created encrypted $SWAPFILE"
    fi
 
