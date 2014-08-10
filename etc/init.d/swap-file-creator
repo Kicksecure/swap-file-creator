@@ -79,7 +79,7 @@ fi
 [ -n "$MAPPER" ] || MAPPER="swapfile"
 [ -n "$MAPPER_FULL" ] || MAPPER_FULL="/dev/mapper/$MAPPER"
 [ -n "$RUN_FOLDER" ] || RUN_FOLDER="/var/run/$NAME"
-[ -n "$CRYPTSETUP_FORMAT" ] || CRYPTSETUP_FORMAT="cryptsetup --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat"
+[ -n "$CRYPTSETUP_FORMAT" ] || CRYPTSETUP_FORMAT="cryptsetup --batch-mode --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat"
 [ -n "$SHRED_ON_STOP" ] || SHRED_ON_STOP="no"
 [ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"
 [ -n "$RANDOM_PASSWORD_TIMEOUT" ] || RANDOM_PASSWORD_TIMEOUT="10"
@@ -147,7 +147,7 @@ Most likely due to low entropy. random_password_exit_code: $random_password_exit
    fi
 
    echo "$RANDOM_PASSWORD" | $CRYPTSETUP_FORMAT "$loop"
-   echo "$RANDOM_PASSWORD" | cryptsetup luksOpen "$loop" "$MAPPER" $CRYPTSETUP_LUKSOPEN_EXTRA
+   echo "$RANDOM_PASSWORD" | cryptsetup --batch-mode luksOpen "$loop" "$MAPPER" $CRYPTSETUP_LUKSOPEN_EXTRA
 
    chown --recursive root:root "$MAPPER_FULL"
    chmod --recursive 0600 "$MAPPER_FULL"
@@ -165,7 +165,7 @@ do_stop() {
 
    swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
 
-   cryptsetup luksClose "$MAPPER" >/dev/null 2>&1 || true
+   cryptsetup --batch-mode luksClose "$MAPPER" >/dev/null 2>&1 || true
 
    if [ -f "$RUN_FOLDER/loop" ]; then
       local loop
