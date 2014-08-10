@@ -113,6 +113,7 @@ sanity_tests() {
    command -v cat >/dev/null 2>&1
    command -v test >/dev/null 2>&1
    command -v echo >/dev/null 2>&1
+   command -v stat >/dev/null 2>&1
 }
 
 do_start() {
@@ -133,8 +134,23 @@ do_start() {
    rm --force "$RUN_FOLDER/fail"
    touch "$RUN_FOLDER/progress"
 
-   if [ ! -f "$SWAPFILE" ]; then
-      log_action_msg "Creating encrypted $SWAPFILE ($DD_BS)... This may take a while.."
+   local swap_file_size_in_bytes
+   if [ -f "$SWAPFILE" ]; then
+      swap_file_size_in_bytes="$(stat -c '%s' "$SWAPFILE")"
+   else
+      swap_file_size_in_bytes="0"
+   fi
+   local swap_file_size_in_mb
+   swap_file_size_in_mb="$(( $swap_file_size_in_bytes / 1024 / 1024 ))"
+
+   ## Nevermind eventual small platform specific rounding errors.
+   swap_file_size_in_mb="$(( swap_file_size_in_mb + 2 ))"
+
+   ## We need to check the size of $SWAPFILE, because a previous run of dd that
+   ## got interrupted for some reason might have only created a smaller file
+   ## (0 MB in worst case).
+   if [ "$swap_file_size_in_mb" -lt "$DD_COUNT" ]; then
+      log_action_msg "Creating encrypted $SWAPFILE ($PV_SIZE)... This may take a while.."
       dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$PV_SIZE" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
       log_action_msg "Created encrypted $SWAPFILE"
    fi
