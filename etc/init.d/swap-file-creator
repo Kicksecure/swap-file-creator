@@ -93,6 +93,27 @@ fi
 # and status_of_proc is working.
 . /lib/lsb/init-functions
 
+sanity_tests() {
+   trap "error_handler" ERR
+
+   command -v pv >/dev/null 2>&1
+   command -v losetup >/dev/null 2>&1
+   command -v cryptsetup >/dev/null 2>&1
+   command -v mkdir >/dev/null 2>&1
+   command -v rm >/dev/null 2>&1
+   command -v touch >/dev/null 2>&1
+   command -v chown >/dev/null 2>&1
+   command -v dd >/dev/null 2>&1
+   command -v timeout >/dev/null 2>&1
+   command -v mkswap >/dev/null 2>&1
+   command -v swapon >/dev/null 2>&1
+   command -v swapoff >/dev/null 2>&1
+   command -v shred >/dev/null 2>&1
+   command -v cat >/dev/null 2>&1
+   command -v test >/dev/null 2>&1
+   command -v echo >/dev/null 2>&1
+}
+
 do_start() {
    trap "error_handler" ERR
 
@@ -103,6 +124,8 @@ do_start() {
       log_action_msg "$NAME already running."
       return 0
    fi
+
+   sanity_tests
 
    mkdir --parents "$RUN_FOLDER"
    rm --force "$RUN_FOLDER/success"
@@ -162,6 +185,8 @@ Most likely due to low entropy. random_password_exit_code: $random_password_exit
 
 do_stop() {
    trap "error_handler" ERR
+
+   sanity_tests
 
    swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
 
