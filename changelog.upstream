@@ -1,0 +1,306 @@
+commit b567d5b3971b545b30b45df5724c287b426eab71
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Feb 4 00:40:51 2015 +0000
+
+    updated makefile generic to version 1.3
+
+commit 30b91c2739429a301013c5852e0b3686a873edc8
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Feb 3 23:58:53 2015 +0000
+
+    Added creation of upstream changelog to debian/rules
+
+commit 756a1645c6328b11b70b0531da308fcb18c2a88d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jan 7 19:34:54 2015 +0000
+
+    bumped compat from 8 to 9
+
+commit eb558fda217d727ce09592c7bffd3d1cbe648a33
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Dec 5 19:01:19 2014 +0000
+
+    updated generic makefile
+
+commit fe5a051ea1250ba008558e076398bd40973504b0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 28 22:35:29 2014 +0000
+
+    makefile: refactoring, avoid using IFS
+
+commit 5fdc79f73148f9c14b6653fb02e664389b923d24
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Oct 25 01:58:53 2014 +0000
+
+    makefile:
+    - make debdist; make undebdist
+    - cleanup
+    - refactoring
+
+commit 6645ae71e6110cc947085c59601fd6f099a8094c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Oct 23 22:43:04 2014 +0000
+
+    makefile:
+    - new target "make undist", which deletes the upstream tarball
+    - $DISTDIR variable for make (un)dist, which defaults to ".." and can be used to create upstream tarballs in arbitrary locations
+    - refactoring, all function names and global variables now start with "make_" to make the script `source`ing friendly
+    - made `source`able
+
+commit 70124beeca3d306b0ca50bb9fbe98316d23b04e0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 13 12:36:57 2014 +0000
+
+    readme
+
+commit 3819ba2c3f58646e0786b6ea3bd2bec98fbffce0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Aug 19 18:52:43 2014 +0000
+
+    makefile: added new feature "make deb-chl-bumpup" - Bump upstream version number in debian/changelog.
+
+commit 51669534b4f36f637467634c2ee968cf1fe29e9f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 17 20:54:26 2014 +0000
+
+    Updated debian/changelog.
+
+commit 79e54586cae3075346ad6048c24c7705b57db8c0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 17 20:47:29 2014 +0000
+
+    Fixed changelog date.
+
+commit f6b02dc680ac6a330a717fae62dee7109d3c7c44
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 17 18:03:31 2014 +0000
+
+    bump version number
+
+commit aad1fddbdbd702f2f5178c2b22adfc4e61705ac0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Aug 14 13:35:19 2014 +0000
+
+    Implemented make deb-icup: Combination of make deb-pkg, make deb-pkg-install and make deb-pkg-cleanup.
+
+commit 1eb347811a59fb456349271a4eaa0134d05f2b55
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 10 15:06:00 2014 +0000
+
+    fix, check size of swapfile; output
+
+commit 99897b3da98708f8664e25621d9e0aa08234249f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 10 14:51:57 2014 +0000
+
+    fix when less then 512 MB RAM is available at swap file creation time
+
+commit 856a1c394f46699912631eab8807e025e89df98e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 10 14:40:20 2014 +0000
+
+    sanity tests
+
+commit ff6dd48db14a5a7c04941a5ee088e5b2b39c1788
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Aug 10 14:35:42 2014 +0000
+
+    use cryptsetup --batch-mode
+
+commit 16c1cf179e7d4036189ff1437e311a7a83dc9f95
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 18:19:31 2014 +0000
+
+    output
+
+commit cd5e77c104000a4306048b23f1e1e9117e67a6a1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 18:18:52 2014 +0000
+
+    output
+
+commit 7bb0b3caa28e24a7e52547cb677eedcf2b239749
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 18:09:26 2014 +0000
+
+    intent
+
+commit 7ef0a441e457a36dbbb93516729696817e1ecd41
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 18:08:01 2014 +0000
+
+    write errors to log
+
+commit e33c98e9996aab0a8d68fbf65a52e66b9e0a6827
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 18:07:20 2014 +0000
+
+    added Recommends: haveged
+
+commit 550ee509614e3de203e6af3056c22b4709412acc
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 18:03:21 2014 +0000
+
+    wait on error so message can be seen
+
+commit 9cade82fa4d54e0b614ef5e6952b27b3095ea98a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 17:52:26 2014 +0000
+
+    /swapfile -> /var/swapfile
+
+commit 80086b109e5765dd5756c31900ecdbe28a704ab5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 16:40:51 2014 +0000
+
+    fix
+
+commit cb00763f0b4b6d1f869ab338f3a570be21782e0a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 14:53:52 2014 +0000
+
+    sanity test if "$RANDOM_DEVICE" exists
+
+commit 2907a8421a6c03a4b23f19847afd04a79813eca6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 14:50:00 2014 +0000
+
+    made /dev/random configurable by RANDOM_DEVICE variable
+
+commit 2e632a885a5d63e1c35f6d8df662683d71209afa
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 14:48:16 2014 +0000
+
+    timeout when reading from /dev/random
+
+commit 615f89fd46555f23e5d1bc4a1fc0cfb87dd663c4
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jul 29 13:41:35 2014 +0000
+
+    init script, added Should-Start: haveged
+
+commit 46eae7000bf973c8ad330319351790f58ba82771
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 27 12:42:29 2014 +0000
+
+    packaging
+
+commit 8613437b25dd06845d69934c8b550678f6ee442b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 27 04:01:14 2014 +0000
+
+    packaging
+
+commit 75bead4fb39db8ec6d35379cd545732b338af286
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 26 15:26:39 2014 +0000
+
+    packaging
+
+commit 135bdc8d2565d76730f1f514386f73565ad438cd
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 26 15:16:07 2014 +0000
+
+    packaging: removed build dependency on git, since the .git folder won't be included in the upstream tarball.
+
+commit 16c3326a1466020c7d031dc0972d23bb354d560c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 12 17:11:03 2014 +0000
+
+    packaging
+
+commit e7d86240193fd415ecd8113829ed01c9c2b8358c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 12 15:34:20 2014 +0000
+
+    packaging
+
+commit c75742058fa7d58c86efdf9f7e5de2024b5707a8
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jul 6 13:25:19 2014 +0000
+
+    use $BASH_SOURCE instead of $0
+
+commit defe139ef4431f7f975d8fbb9d6d03a573fc11ea
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jul 5 08:09:44 2014 +0000
+
+    Bumped debian revision number to avoid lintian warning "new-package-should-close-itp-bug" so we can use lintian --fail-on-warnings as sanity test.
+
+commit 8dbd63d2f0bb6eb6dbc529016d06c3563a52eea5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Jul 3 11:56:22 2014 +0000
+
+    output, fixed duplicate "INFO"
+
+commit 0c18ca556323750afdbc0a5a27c85ed6fc77b331
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jun 28 01:56:55 2014 +0000
+
+    output
+
+commit da26dce139cdfbfed7b0bf3a502e1afa77bc2490
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jun 27 14:20:38 2014 +0000
+
+    fix
+
+commit 444011c815330e625df3cb1d6f0fdb120131d5b0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jun 24 15:45:14 2014 +0000
+
+    added debian epoch; added dotglob
+
+commit 3d082c3baa59c78527108aee911ae21bf9f2aec7
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Jun 21 10:53:33 2014 +0000
+
+    fix
+
+commit 30ecc393532c0a338b63c6d616fbcdbf706ae1f9
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jun 20 15:01:41 2014 +0000
+
+    output
+
+commit 29203bddbd038659b81192d5b9791364ae4972ba
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Jun 20 15:00:43 2014 +0000
+
+    output
+
+commit 96505a8c0ee04482a644af23eb1969932181ef22
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jun 3 18:27:37 2014 +0000
+
+    readme
+
+commit 38f70e6fb9158ced9fc15d36a881edd505a67047
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jun 3 17:15:04 2014 +0000
+
+    fix, removed X-Interactive, not required
+
+commit 50dcf3c16685ef1a6afc441d8301f2efc757dc09
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jun 3 17:08:58 2014 +0000
+
+    source /etc/default/swap-file-creator; lsb description
+
+commit 4819fcdc572ec32ae08e5a370cef32f0b6621dd4
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Jun 3 14:09:25 2014 +0000
+
+    encrypt swapfile on boot with random password, create swap file on boot using init script instead of postinst script
+
+commit df40e77583baee6866ba5ce8f2cf76d5122f4e82
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jun 1 15:38:36 2014 +0000
+
+    readme
+
+commit 4551275805b0a604d4c26340376e290eb94c112e
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat May 31 14:00:58 2014 +0000
+
+    initial import from https://github.com/Whonix/Whonix
