@@ -1,0 +1,93 @@
+#!/bin/bash
+
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+set -e
+
+source /usr/share/swap-file-creator/common
+
+do_start() {
+   do_status_return_code="0"
+   /usr/share/swap-file-creator/status || { do_status_return_code="$?" ; true; };
+
+   if [ "$do_status_return_code" = "0" ]; then
+      echo "$NAME already running."
+      return 0
+   fi
+
+   sanity_tests
+
+   mkdir --parents "$RUN_FOLDER"
+   rm --force "$RUN_FOLDER/success"
+   rm --force "$RUN_FOLDER/fail"
+   touch "$RUN_FOLDER/progress"
+
+   local swap_file_size_in_bytes
+   if [ -f "$SWAPFILE" ]; then
+      swap_file_size_in_bytes="$(stat -c '%s' "$SWAPFILE")"
+   else
+      swap_file_size_in_bytes="0"
+   fi
+   local swap_file_size_in_mb
+   swap_file_size_in_mb="$(( $swap_file_size_in_bytes / 1024 / 1024 ))"
+
+   ## Nevermind eventual small platform specific rounding errors.
+   swap_file_size_in_mb="$(( swap_file_size_in_mb + 2 ))"
+
+   ## We need to check the size of $SWAPFILE, because a previous run of dd that
+   ## got interrupted for some reason might have only created a smaller file
+   ## (0 MB in worst case).
+   if [ "$swap_file_size_in_mb" -lt "$DD_COUNT" ]; then
+      echo "Creating encrypted $SWAPFILE ($PV_SIZE)... This may take a while.."
+      dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$PV_SIZE" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
+      echo "Created encrypted $SWAPFILE"
+   fi
+
+   chown --recursive root:root "$SWAPFILE"
+   chmod --recursive 0600 "$SWAPFILE"
+
+   local loop
+   loop="$(losetup -f $LOSETUP_LOOP_EXTRA)"
+   echo "$loop" > "$RUN_FOLDER/loop"
+   losetup "$loop" "$SWAPFILE" $LOSETUP_EXTRA
+
+   ## Setting RANDOM_PASSWORD here, to make sure /dev/random exists.
+   ## (Which is not the case on shutdown. - Therefore we do this inside the
+   ## start function, not outside any functions.)
+   if [ "$RANDOM_PASSWORD" = "" ]; then
+      test_e_random_device_exit_code="0"
+      test -e "$RANDOM_DEVICE" || { test_e_random_device_exit_code="$?" ; true; };
+      if [ ! "$test_e_random_device_exit_code" = "0" ]; then
+         local msg="RANDOM_DEVICE $RANDOM_DEVICE does not exist."
+         error_handler "$msg"
+      fi
+      random_password_exit_code="0"
+      RANDOM_PASSWORD="$(\
+            timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" \
+               dd if="$RANDOM_DEVICE" bs=1 count=100 2>/dev/null\
+         )" \
+      || { random_password_exit_code="$?" ; true; };
+      if [ ! "$random_password_exit_code" = "0" ]; then
+         local msg="Failed to get RANDOM_PASSWORD from $RANDOM_DEVICE after $RANDOM_PASSWORD_TIMEOUT seconds.
+Most likely due to low entropy. random_password_exit_code: $random_password_exit_code Consider installing haveged."
+         error_handler "$msg"
+      fi
+   fi
+
+   echo "$RANDOM_PASSWORD" | $CRYPTSETUP_FORMAT "$loop"
+   echo "$RANDOM_PASSWORD" | cryptsetup --batch-mode luksOpen "$loop" "$MAPPER" $CRYPTSETUP_LUKSOPEN_EXTRA
+
+   chown --recursive root:root "$MAPPER_FULL"
+   chmod --recursive 0600 "$MAPPER_FULL"
+
+   mkswap --force --uuid "$UUID" "$MAPPER_FULL" $MKSWAP_EXTRA >/dev/null
+   swapon "$MAPPER_FULL" $SWAPON_EXTRA
+
+   rm --force "$RUN_FOLDER/progress"
+   touch "$RUN_FOLDER/success"
+   return 0
+}
+
+do_start

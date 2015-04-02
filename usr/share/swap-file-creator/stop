@@ -1,0 +1,41 @@
+#!/bin/bash
+
+## This file is part of Whonix.
+## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
+## See the file COPYING for copying conditions.
+
+set -e
+
+source /usr/share/swap-file-creator/common
+
+do_stop() {
+   sanity_tests
+
+   swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
+
+   cryptsetup --batch-mode luksClose "$MAPPER" >/dev/null 2>&1 || true
+
+   if [ -f "$RUN_FOLDER/loop" ]; then
+      local loop
+      loop="$(cat "$RUN_FOLDER/loop")" || true
+   fi
+   if [ ! "$loop" = "" ]; then
+      losetup --detach "$loop" >/dev/null 2>&1 || true
+   fi
+
+   if [ "$SHRED_ON_STOP" = "yes" ]; then
+      if [ -f "$SWAPFILE" ]; then
+         echo "Shredding $SWAPFILE... This may take a while.."
+         shred $SHRED_OPTS "$SWAPFILE"
+         echo "Done shred $SWAPFILE"
+      fi
+   fi
+
+   rm --force "$RUN_FOLDER/progress"
+   rm --force "$RUN_FOLDER/fail"
+   rm --force "$RUN_FOLDER/success"
+
+   return 0
+}
+
+do_stop

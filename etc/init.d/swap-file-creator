@@ -14,78 +14,6 @@
 ## Copyright (C) 2012 - 2014 Patrick Schleizer <adrelanos@riseup.net>
 ## See the file COPYING for copying conditions.
 
-set -o pipefail
-
-error_handler() {
-   local exit_code="$?"
-   log_end_msg 1
-   if [ "$1" = "" ]; then
-      local msg="\
-###############################################################################
-## Swap File Creator ERROR
-##
-## BASH_COMMAND: $BASH_COMMAND
-## exit_code: $exit_code
-##
-## Experts only:
-## bash -x $BASH_SOURCE restart
-## for verbose output. Clean the output and
-## submit to developers.
-###############################################################################\
-"
-   else
-      local msg="\
-###############################################################################
-## Swap File Creator script ERROR
-##
-## $1
-##
-## Experts only:
-## bash -x $BASH_SOURCE restart
-## for verbose output. Clean the output and
-## submit to developers.
-###############################################################################\
-"
-   fi
-   echo "$msg"
-   rm --force "$RUN_FOLDER/progress"
-   rm --force "$RUN_FOLDER/success"
-   touch "$RUN_FOLDER/fail"
-   [ -n "$LOG" ] || LOG="/var/log/$NAME.log"
-   echo "$msg" >> "$LOG"
-   [ -n "$SLEEP_SECONDS_ON_ERROR" ] || SLEEP_SECONDS_ON_ERROR="5"
-   sleep "$SLEEP_SECONDS_ON_ERROR" &
-   wait "$!"
-   exit 1
-}
-
-trap "error_handler" ERR
-
-if [ -f "/etc/default/swap-file-creator" ]; then
-   source "/etc/default/swap-file-creator"
-fi
-
-[ -n "$SLEEP_SECONDS_ON_ERROR" ] || SLEEP_SECONDS_ON_ERROR="5"
-[ -n "$DESC" ] || DESC="Encrypted Swap File Creator"
-[ -n "$NAME" ] || NAME="swap-file-creator"
-[ -n "$SCRIPTNAME" ] || SCRIPTNAME="/etc/init.d/$NAME"
-[ -n "$LOG" ] || LOG="/var/log/$NAME.log"
-[ -n "$SWAPFILE" ] || SWAPFILE="/var/swapfile"
-[ -n "$VERBOSE" ] || VERBOSE="yes"
-[ -n "$UUID" ] || UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
-[ -n "$DD_IF" ] || DD_IF="/dev/zero"
-[ -n "$DD_BS" ] || DD_BS="1M"
-[ -n "$DD_COUNT" ] || DD_COUNT="512"
-[ -n "$PV_SIZE" ] || PV_SIZE="${DD_COUNT}M"
-[ -n "$MAPPER" ] || MAPPER="swapfile"
-[ -n "$MAPPER_FULL" ] || MAPPER_FULL="/dev/mapper/$MAPPER"
-[ -n "$RUN_FOLDER" ] || RUN_FOLDER="/var/run/$NAME"
-[ -n "$CRYPTSETUP_FORMAT" ] || CRYPTSETUP_FORMAT="cryptsetup --batch-mode --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat"
-[ -n "$SHRED_ON_STOP" ] || SHRED_ON_STOP="no"
-[ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"
-[ -n "$RANDOM_PASSWORD_TIMEOUT" ] || RANDOM_PASSWORD_TIMEOUT="10"
-[ -n "$RANDOM_DEVICE" ] || RANDOM_DEVICE="/dev/random"
-
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
 
@@ -94,177 +22,31 @@ fi
 # and status_of_proc is working.
 . /lib/lsb/init-functions
 
-sanity_tests() {
-   trap "error_handler" ERR
-
-   command -v pv >/dev/null 2>&1
-   command -v losetup >/dev/null 2>&1
-   command -v cryptsetup >/dev/null 2>&1
-   command -v mkdir >/dev/null 2>&1
-   command -v rm >/dev/null 2>&1
-   command -v touch >/dev/null 2>&1
-   command -v chown >/dev/null 2>&1
-   command -v dd >/dev/null 2>&1
-   command -v timeout >/dev/null 2>&1
-   command -v mkswap >/dev/null 2>&1
-   command -v swapon >/dev/null 2>&1
-   command -v swapoff >/dev/null 2>&1
-   command -v shred >/dev/null 2>&1
-   command -v cat >/dev/null 2>&1
-   command -v test >/dev/null 2>&1
-   command -v echo >/dev/null 2>&1
-   command -v stat >/dev/null 2>&1
-}
-
-do_start() {
-   trap "error_handler" ERR
-
-   do_status_return_code="0"
-   do_status || { do_status_return_code="$?" ; true; };
-
-   if [ "$do_status_return_code" = "0" ]; then
-      log_action_msg "$NAME already running."
-      return 0
-   fi
-
-   sanity_tests
-
-   mkdir --parents "$RUN_FOLDER"
-   rm --force "$RUN_FOLDER/success"
-   rm --force "$RUN_FOLDER/fail"
-   touch "$RUN_FOLDER/progress"
-
-   local swap_file_size_in_bytes
-   if [ -f "$SWAPFILE" ]; then
-      swap_file_size_in_bytes="$(stat -c '%s' "$SWAPFILE")"
-   else
-      swap_file_size_in_bytes="0"
-   fi
-   local swap_file_size_in_mb
-   swap_file_size_in_mb="$(( $swap_file_size_in_bytes / 1024 / 1024 ))"
-
-   ## Nevermind eventual small platform specific rounding errors.
-   swap_file_size_in_mb="$(( swap_file_size_in_mb + 2 ))"
-
-   ## We need to check the size of $SWAPFILE, because a previous run of dd that
-   ## got interrupted for some reason might have only created a smaller file
-   ## (0 MB in worst case).
-   if [ "$swap_file_size_in_mb" -lt "$DD_COUNT" ]; then
-      log_action_msg "Creating encrypted $SWAPFILE ($PV_SIZE)... This may take a while.."
-      dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$PV_SIZE" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
-      log_action_msg "Created encrypted $SWAPFILE"
-   fi
-
-   chown --recursive root:root "$SWAPFILE"
-   chmod --recursive 0600 "$SWAPFILE"
-
-   local loop
-   loop="$(losetup -f $LOSETUP_LOOP_EXTRA)"
-   echo "$loop" > "$RUN_FOLDER/loop"
-   losetup "$loop" "$SWAPFILE" $LOSETUP_EXTRA
-
-   ## Setting RANDOM_PASSWORD here, to make sure /dev/random exists.
-   ## (Which is not the case on shutdown. - Therefore we do this inside the
-   ## start function, not outside any functions.)
-   if [ "$RANDOM_PASSWORD" = "" ]; then
-      test_e_random_device_exit_code="0"
-      test -e "$RANDOM_DEVICE" || { test_e_random_device_exit_code="$?" ; true; };
-      if [ ! "$test_e_random_device_exit_code" = "0" ]; then
-         local msg="RANDOM_DEVICE $RANDOM_DEVICE does not exist."
-         error_handler "$msg"
-      fi
-      random_password_exit_code="0"
-      RANDOM_PASSWORD="$(\
-            timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" \
-               dd if="$RANDOM_DEVICE" bs=1 count=100 2>/dev/null\
-         )" \
-      || { random_password_exit_code="$?" ; true; };
-      if [ ! "$random_password_exit_code" = "0" ]; then
-         local msg="Failed to get RANDOM_PASSWORD from $RANDOM_DEVICE after $RANDOM_PASSWORD_TIMEOUT seconds.
-Most likely due to low entropy. random_password_exit_code: $random_password_exit_code Consider installing haveged."
-         error_handler "$msg"
-      fi
-   fi
-
-   echo "$RANDOM_PASSWORD" | $CRYPTSETUP_FORMAT "$loop"
-   echo "$RANDOM_PASSWORD" | cryptsetup --batch-mode luksOpen "$loop" "$MAPPER" $CRYPTSETUP_LUKSOPEN_EXTRA
-
-   chown --recursive root:root "$MAPPER_FULL"
-   chmod --recursive 0600 "$MAPPER_FULL"
-
-   mkswap --force --uuid "$UUID" "$MAPPER_FULL" $MKSWAP_EXTRA >/dev/null
-   swapon "$MAPPER_FULL" $SWAPON_EXTRA
-
-   rm --force "$RUN_FOLDER/progress"
-   touch "$RUN_FOLDER/success"
-   return 0
-}
-
-do_stop() {
-   trap "error_handler" ERR
-
-   sanity_tests
-
-   swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
-
-   cryptsetup --batch-mode luksClose "$MAPPER" >/dev/null 2>&1 || true
-
-   if [ -f "$RUN_FOLDER/loop" ]; then
-      local loop
-      loop="$(cat "$RUN_FOLDER/loop")" || true
-   fi
-   if [ ! "$loop" = "" ]; then
-      losetup --detach "$loop" >/dev/null 2>&1 || true
-   fi
-
-   if [ "$SHRED_ON_STOP" = "yes" ]; then
-      if [ -f "$SWAPFILE" ]; then
-         log_action_msg "Shredding $SWAPFILE... This may take a while.."
-         shred $SHRED_OPTS "$SWAPFILE"
-         log_action_msg "Done shred $SWAPFILE"
-      fi
-   fi
-
-   rm --force "$RUN_FOLDER/progress"
-   rm --force "$RUN_FOLDER/fail"
-   rm --force "$RUN_FOLDER/success"
-
-   return 0
-}
-
-do_status() {
-   trap "error_handler" ERR
-
-   if [ -f "$RUN_FOLDER/success" ]; then
-      return 0
-   else
-      return 1
-   fi
-}
+source /usr/share/swap-file-creator/common
 
 case "$1" in
    start)
       [ "$VERBOSE" != no ] && log_daemon_msg "$DESC" "$NAME"
       log_action_begin_msg "Starting $DESC"
-      do_start
+      /usr/share/swap-file-creator/start
       log_end_msg 0
       ;;
    stop)
       log_action_begin_msg "Stopping $DESC"
-      do_stop
+      /usr/share/swap-file-creator/stop
       log_end_msg 0
       ;;
    restart|force-reload)
       log_action_begin_msg "Stopping $DESC"
-      do_stop
+      /usr/share/swap-file-creator/stop
       log_end_msg 0
       log_action_begin_msg "Starting $DESC"
-      do_start
+      /usr/share/swap-file-creator/start
       log_end_msg 0
       ;;
    status)
       do_status_return_code="0"
-      do_status || { do_status_return_code="$?" ; true; };
+      /usr/share/swap-file-creator/status || { do_status_return_code="$?" ; true; };
       if [ "$do_status_return_code" = "0" ]; then
          log_action_msg "$DESC ok"
       else
