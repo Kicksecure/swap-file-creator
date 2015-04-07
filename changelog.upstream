@@ -1,3 +1,27 @@
+commit dcebb7b045d0d95cee56eacc4c0e0879a579d677
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 2 18:41:26 2015 +0000
+
+    added genmkfile to Build-Depends
+
+commit 6af9908063919f75c77d8fcbc28e9cea924dd78f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 2 17:24:46 2015 +0000
+
+    updated makefile generic to version 1.5
+
+commit cba4e22135737f2966766711bfb606c0f905a4c4
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 2 14:54:30 2015 +0000
+
+    refactoring for future systemd support - https://phabricator.whonix.org/T106
+
+commit 19fb2efefbab4327d4c919afcf7cf65f7272ad0b
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Mar 24 17:36:53 2015 +0000
+
+    bumped changelog version
+
 commit 85712f5c5fafce2390559cb26072d7c21ba8f7fe
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Mar 24 17:26:49 2015 +0000
