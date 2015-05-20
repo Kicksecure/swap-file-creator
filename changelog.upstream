@@ -1,3 +1,15 @@
+commit f3187350233c4c87ab1bddc7db2734d97efee237
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed May 20 15:45:48 2015 +0000
+
+    systemd unit: workaround/fix, removed spaces, likely bug in 'deb-systemd-helper' that prevents enabling the service by default - https://phabricator.whonix.org/T316
+
+commit 569195600f536c48fa99b1e8dfda99ebe360343a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed May 13 20:33:12 2015 +0000
+
+    bumped changelog version
+
 commit a8f58cf240763599613e3ab4598a3e7e34400caa
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed May 13 20:32:46 2015 +0000
