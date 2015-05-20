@@ -3,15 +3,15 @@
 ## See the file COPYING for copying conditions.
 
 [Unit]
-Description = Encrypted Swap File Creator
-Documentation = https://github.com/Whonix/swap-file-creator
-Wants = haveged.service
+Description=Encrypted Swap File Creator
+Documentation=https://github.com/Whonix/swap-file-creator
+Wants=haveged.service
 
 [Service]
-Type = oneshot
-RemainAfterExit = yes
-ExecStart = /usr/share/swap-file-creator/start
-ExecStop = /usr/share/swap-file-creator/stop
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/share/swap-file-creator/start
+ExecStop=/usr/share/swap-file-creator/stop
 
 [Install]
-WantedBy = multi-user.target
+WantedBy=multi-user.target
