@@ -1,3 +1,21 @@
+commit f49f572e5a06ed33eeacc5647f0f85751cc611b9
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat May 23 16:01:34 2015 +0000
+
+    systemd unit: added 'StandardOutput=tty' for better look and feel. - https://phabricator.whonix.org/T106
+
+commit 37c16daf2b3bf21386323f9a134423e930c353bd
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat May 23 14:55:50 2015 +0000
+
+    comment
+
+commit e34e423d62485f03400739396b1e0505c117ec05
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed May 20 15:46:15 2015 +0000
+
+    bumped changelog version
+
 commit f3187350233c4c87ab1bddc7db2734d97efee237
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed May 20 15:45:48 2015 +0000
