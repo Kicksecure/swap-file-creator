@@ -48,7 +48,7 @@
 #UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
 
 ## No change required unless you know what you are doing.
-#SWAPFILE="/swapfile"
+#SWAPFILE="/var/swapfile"
 
 ## No change required unless you know what you are doing.
 #DD_EXTRA=""
