@@ -12,6 +12,8 @@ Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/share/swap-file-creator/start
 ExecStop=/usr/share/swap-file-creator/stop
+## For better look and feel.
+StandardOutput=tty
 
 [Install]
 WantedBy=multi-user.target
