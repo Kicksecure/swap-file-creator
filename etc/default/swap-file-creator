@@ -85,3 +85,6 @@
 
 ## No change required unless you know what you are doing.
 #RANDOM_PASSWORD="$(dd if="/dev/random" bs=1 count=100 2>/dev/null)"
+
+## No change required unless you know what you are doing.
+##RANDOM_PASSWORD_TIMEOUT="10"
