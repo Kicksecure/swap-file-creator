@@ -71,7 +71,8 @@ do_start() {
       || { random_password_exit_code="$?" ; true; };
       if [ ! "$random_password_exit_code" = "0" ]; then
          local msg="Failed to get RANDOM_PASSWORD from $RANDOM_DEVICE after $RANDOM_PASSWORD_TIMEOUT seconds.
-Most likely due to low entropy. random_password_exit_code: $random_password_exit_code Consider installing haveged."
+Most likely due to low entropy. random_password_exit_code: $random_password_exit_code Consider installing haveged.
+Try increasing RANDOM_PASSWORD_TIMEOUT in /etc/default/swap-file-creator."
          error_handler "$msg"
       fi
    fi
