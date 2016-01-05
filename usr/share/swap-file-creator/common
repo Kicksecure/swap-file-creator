@@ -10,16 +10,18 @@ set -o errtrace
 error_handler() {
    local exit_code="$?"
    #log_end_msg 1
+   trap "" ERR
    if [ "$1" = "" ]; then
       local msg="\
 ###############################################################################
 ## Swap File Creator ERROR
+## $0
 ##
 ## BASH_COMMAND: $BASH_COMMAND
 ## exit_code: $exit_code
 ##
 ## Experts only:
-## bash -x $BASH_SOURCE restart
+## bash -x $0
 ## for verbose output. Clean the output and
 ## submit to developers.
 ###############################################################################\
@@ -27,12 +29,13 @@ error_handler() {
    else
       local msg="\
 ###############################################################################
-## Swap File Creator script ERROR
+## Swap File Creator ERROR
+## $0
 ##
 ## $1
 ##
 ## Experts only:
-## bash -x $BASH_SOURCE restart
+## bash -x $0
 ## for verbose output. Clean the output and
 ## submit to developers.
 ###############################################################################\
