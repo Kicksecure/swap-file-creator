@@ -5,7 +5,7 @@
 [Unit]
 Description=Encrypted Swap File Creator
 Documentation=https://github.com/Whonix/swap-file-creator
-Wants=haveged.service
+After=haveged.service
 
 [Service]
 Type=oneshot
