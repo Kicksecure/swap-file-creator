@@ -1,3 +1,21 @@
+commit f489d586f045a38010bf20f1415abe39bb63953c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Nov 21 17:42:58 2016 +0000
+
+    readme
+
+commit 6747a46844bc4ebcb2ef39ad5341f5d67bfe100c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Aug 13 01:28:53 2016 +0200
+
+    fix, Wants=haveged.service -> After=haveged.service
+
+commit 5199437d10ba20ff490f6cfd5a001f4fb3289516
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 7 22:54:47 2016 +0000
+
+    bumped changelog version
+
 commit 581794f300a1f200bc7dee58f4296551d3406a59
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Jan 5 19:37:38 2016 +0000
