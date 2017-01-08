@@ -64,11 +64,7 @@ do_start() {
          error_handler "$msg"
       fi
       random_password_exit_code="0"
-      RANDOM_PASSWORD="$(\
-            timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" \
-               dd if="$RANDOM_DEVICE" bs=1 count=100 2>/dev/null \
-         )" \
-      || { random_password_exit_code="$?" ; true; };
+      RANDOM_PASSWORD="$(timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" dd if="$RANDOM_DEVICE" bs=1 count=100 2>/dev/null)" || { random_password_exit_code="$?" ; true; };
       if [ ! "$random_password_exit_code" = "0" ]; then
          local msg="Failed to get RANDOM_PASSWORD from $RANDOM_DEVICE after $RANDOM_PASSWORD_TIMEOUT seconds.
 Most likely due to low entropy. random_password_exit_code: $random_password_exit_code Consider installing haveged.
