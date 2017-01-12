@@ -1,3 +1,27 @@
+commit 2023100643ca8cd7da3e1937c84add0c1ed1fdb5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jan 8 05:26:24 2017 +0000
+
+    fix bash null byte warning
+
+commit e8d1a90e40bcc6b59dbaabe6b71ac601f66c62b0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jan 8 05:26:04 2017 +0000
+
+    StandardOutput=journal+console
+
+commit 8873f635822c17aaa7bac7d2edf2a6d17934ad31
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Jan 8 05:13:50 2017 +0000
+
+    minor
+
+commit 17e245f104207133fb0216ba873000d98abb9ae5
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Dec 10 02:31:42 2016 +0000
+
+    bumped changelog version
+
 commit f489d586f045a38010bf20f1415abe39bb63953c
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Mon Nov 21 17:42:58 2016 +0000
