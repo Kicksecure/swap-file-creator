@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 9), faketime, genmkfile, dh-systemd
 Homepage: https://github.com/Whonix/swap-file-creator
 Vcs-Browser: https://github.com/Whonix/swap-file-creator
 Vcs-Git: https://github.com/Whonix/swap-file-creator.git
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 
 Package: swap-file-creator
 Architecture: all
