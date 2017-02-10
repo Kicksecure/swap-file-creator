@@ -6,7 +6,7 @@ Source: swap-file-creator
 Section: misc
 Priority: optional
 Maintainer: Patrick Schleizer <adrelanos@riseup.net>
-Build-Depends: debhelper (>= 9), faketime, genmkfile, dh-systemd
+Build-Depends: debhelper (>= 9), genmkfile, dh-systemd
 Homepage: https://github.com/Whonix/swap-file-creator
 Vcs-Browser: https://github.com/Whonix/swap-file-creator
 Vcs-Git: https://github.com/Whonix/swap-file-creator.git
