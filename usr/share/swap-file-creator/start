@@ -87,4 +87,10 @@ Try increasing RANDOM_PASSWORD_TIMEOUT in /etc/default/swap-file-creator."
    return 0
 }
 
-do_start
+if [ -z "$(cat /proc/cmdline | grep "root=live:")" ]; then
+ do_start
+else
+echo "Live mode detected. Swap file creation skipped. "
+exit 0
+fi
+
