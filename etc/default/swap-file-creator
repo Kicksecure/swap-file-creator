@@ -25,7 +25,7 @@
 ## possible values:
 ## yes
 ## no
-SHRED_ON_STOP="yes"
+#SHRED_ON_STOP="yes"
 
 ## shred options
 #SHRED_OPTS="--verbose --iterations=3"

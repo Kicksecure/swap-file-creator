@@ -97,6 +97,6 @@ fi
 [ -n "$RUN_FOLDER" ] || RUN_FOLDER="/var/run/$NAME"
 [ -n "$CRYPTSETUP_FORMAT" ] || CRYPTSETUP_FORMAT="cryptsetup --batch-mode --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat"
 [ -n "$SHRED_ON_STOP" ] || SHRED_ON_STOP="no"
-[ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1 --remove"
+[ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"
 [ -n "$RANDOM_PASSWORD_TIMEOUT" ] || RANDOM_PASSWORD_TIMEOUT="10"
 [ -n "$RANDOM_DEVICE" ] || RANDOM_DEVICE="/dev/random"
