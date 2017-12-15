@@ -1,3 +1,49 @@
+commit 9cca1dfedc646c2159325afa1018c500fe5b6dd6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Dec 9 13:34:32 2017 +0100
+
+    minor
+
+commit 5dca779156ed5721804cf3746435c58d101b6d0d
+Merge: bd48e31 ef4e13d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Dec 9 13:33:40 2017 +0100
+
+    Merge remote-tracking branch 'origin/master'
+
+commit ef4e13db2ada8a8e127c7ee5bba91a70bc962fab
+Merge: bd48e31 4e789a6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sat Dec 9 12:31:47 2017 +0000
+
+    Merge pull request #2 from Algernon-01/master
+    
+    Patches for live system based on initramfs-tools.
+
+commit 4e789a6186cfdd2abb4859b453a20e22c9698c20
+Author: Algernon <33966997+Algernon-01@users.noreply.github.com>
+Date:   Fri Dec 8 23:37:25 2017 +0000
+
+    Reverted some stuff. Was only relevant for "toram".
+
+commit f95517396ca1b4c37c5d51c7c0c7296317564931
+Author: Algernon <33966997+Algernon-01@users.noreply.github.com>
+Date:   Fri Dec 8 23:02:54 2017 +0000
+
+    Patches for Whonix live system based on intramfs-tools.
+
+commit 38446865962e8c38cb3b08db1b391065b387ad42
+Author: user <33966997+Algernon-01@users.noreply.github.com>
+Date:   Mon Nov 27 15:30:43 2017 -0500
+
+    Patches for Whonix live
+
+commit bd48e31818f35d831ef62bc50112f1d6c5b16bb2
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Feb 17 14:09:28 2017 +0000
+
+    bumped changelog version
+
 commit c01fbc1c3a54d2961d621e10a11fcb127f02589e
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 10 15:47:52 2017 +0000
