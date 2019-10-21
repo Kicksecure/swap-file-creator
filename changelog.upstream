@@ -1,3 +1,15 @@
+commit 8191bd1486518541ce2b7cbdefa200b4a5411dc9
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Sun Oct 20 03:05:38 2019 -0400
+
+    syntax fix for buster
+
+commit 7c7f394facc35a6c2fa150cd351a62251b581588
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Aug 1 12:04:17 2019 +0000
+
+    bumped changelog version
+
 commit a27a913cfcf9e5fb911ed87870fa2eebaef0ed3b
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Aug 1 11:13:44 2019 +0000
