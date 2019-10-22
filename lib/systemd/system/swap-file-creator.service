@@ -5,6 +5,7 @@
 Description=Encrypted Swap File Creator
 Documentation=https://github.com/Whonix/swap-file-creator
 After=haveged.service
+After=jitterentropy.service
 
 [Service]
 Type=oneshot
