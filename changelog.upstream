@@ -1,3 +1,21 @@
+commit 068918b260e60dbb982bd09e514b34a784a5c313
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 22 08:52:17 2019 -0400
+
+    Recommends: jitterentropy-rngd
+
+commit 937762a5784acc2ae159b34b479bcf0c8d10a7cb
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 22 08:51:40 2019 -0400
+
+    After=jitterentropy.service
+
+commit 3544d0683330ac5f524b38948efc8208dc256e8d
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Mon Oct 21 09:56:18 2019 +0000
+
+    bumped changelog version
+
 commit 8191bd1486518541ce2b7cbdefa200b4a5411dc9
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sun Oct 20 03:05:38 2019 -0400
