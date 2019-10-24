@@ -1,3 +1,21 @@
+commit f474e41a8b65fa4b01623573432cbb41187ef8d1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Oct 24 11:51:23 2019 +0000
+
+    fix enough RAM logic
+
+commit e2aec55e254bf5bca1dbb6dcb3d670f122066206
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Oct 24 07:34:27 2019 -0400
+
+    if there is ENOUGH_RAM (defaults to 1950 MB) ("2 GB"), do not create a swapfile
+
+commit 7d405d4776957dbfbd525319339a69f8fb83b567
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Oct 23 10:22:40 2019 +0000
+
+    bumped changelog version
+
 commit 068918b260e60dbb982bd09e514b34a784a5c313
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Oct 22 08:52:17 2019 -0400
