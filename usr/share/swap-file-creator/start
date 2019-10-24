@@ -18,6 +18,12 @@ do_start() {
 
    sanity_tests
 
+   total_ram="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
+   if [ "$ENOUGH_RAM" -ge "$total_ram" ]; then
+      echo "Enough RAM available. More than $ENOUGH_RAM MB RAM. Not enabling swapfile."
+      return 0
+   fi
+
    mkdir --parents "$RUN_FOLDER"
    rm --force "$RUN_FOLDER/success"
    rm --force "$RUN_FOLDER/fail"

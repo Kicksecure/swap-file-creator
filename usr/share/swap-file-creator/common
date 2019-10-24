@@ -99,3 +99,4 @@ fi
 [ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"
 [ -n "$RANDOM_PASSWORD_TIMEOUT" ] || RANDOM_PASSWORD_TIMEOUT="10"
 [ -n "$RANDOM_DEVICE" ] || RANDOM_DEVICE="/dev/random"
+[ -n "$ENOUGH_RAM" ] || ENOUGH_RAM="1950"
