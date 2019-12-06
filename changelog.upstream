@@ -1,3 +1,21 @@
+commit 44524f88a6293f5f4c964816c04540f9e88f83c6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Dec 6 09:30:05 2019 -0500
+
+    readme
+
+commit c5b8861dae774260c9dad1b51a1143ef23db3b9c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Dec 3 06:31:35 2019 -0500
+
+    document ENOUGH_RAM
+
+commit 59c7d32cec6484d82dc0559487f49f7c27a250b1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Oct 24 12:33:55 2019 +0000
+
+    bumped changelog version
+
 commit f474e41a8b65fa4b01623573432cbb41187ef8d1
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Oct 24 11:51:23 2019 +0000
