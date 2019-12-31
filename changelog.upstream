@@ -1,3 +1,21 @@
+commit 76b4c9fa064d92186bff12208430f8ecccc21732
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Dec 31 07:17:32 2019 -0500
+
+    fix Non-Qubes-Whonix Whonix-Gateway slow boot
+    
+    initramfs-tools - Begin: Running /scripts/local-block ... done. - takes a long time during boot - RESUME=none
+    
+    https://forums.whonix.org/t/swap-swap-file-whonix-gateway-freezing-during-apt-get-dist-upgrade-encrypted-swap-file-creator/8317
+    
+    Thanks to Algernon for reporting this bug!
+
+commit 3b14cc3bd075677da796a481e78cc13b2ae3f17f
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Dec 6 09:33:00 2019 -0500
+
+    bumped changelog version
+
 commit 44524f88a6293f5f4c964816c04540f9e88f83c6
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Dec 6 09:30:05 2019 -0500
