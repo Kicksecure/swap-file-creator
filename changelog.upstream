@@ -1,3 +1,17 @@
+commit fa82fec2758c6ccd040476bd6802476f920edab4
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Jan 1 03:09:32 2020 -0500
+
+    fix "/usr/share/swap-file-creator/start: line 72: warning: command substitution: ignored null byte in input"
+    
+    during random password generation
+
+commit 68737601dd582c719fc7aa389a4d4346bac6e881
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Dec 31 07:20:07 2019 -0500
+
+    bumped changelog version
+
 commit 76b4c9fa064d92186bff12208430f8ecccc21732
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Dec 31 07:17:32 2019 -0500
