@@ -7,6 +7,10 @@ Documentation=https://github.com/Whonix/swap-file-creator
 After=haveged.service
 After=jitterentropy.service
 
+## Do nothing inside systemd-nspawn container since does not work and swap is
+## managed by host
+ConditionVirtualization=!systemd-nspawn
+
 [Service]
 Type=oneshot
 RemainAfterExit=yes
