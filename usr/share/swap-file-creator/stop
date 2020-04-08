@@ -24,9 +24,9 @@ do_stop() {
 
    if [ "$SHRED_ON_STOP" = "yes" ]; then
       if [ -f "$SWAPFILE" ]; then
-         echo "Shredding $SWAPFILE... This may take a while.."
+         echo "Shredding '$SWAPFILE'... This may take a while..."
          shred $SHRED_OPTS "$SWAPFILE"
-         echo "Done shred $SWAPFILE"
+         echo "Done shred '$SWAPFILE'."
       fi
    fi
 

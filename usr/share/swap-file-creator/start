@@ -20,7 +20,7 @@ do_start() {
 
    total_ram="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
    if [ "$total_ram" -ge "$ENOUGH_RAM" ]; then
-      echo "Enough RAM available. More than $ENOUGH_RAM MB RAM. Not enabling swapfile."
+      echo "Enough RAM available. More than '$ENOUGH_RAM' MB RAM. Not enabling swapfile."
       return 0
    fi
 
@@ -45,9 +45,9 @@ do_start() {
    ## got interrupted for some reason might have only created a smaller file
    ## (0 MB in worst case).
    if [ "$swap_file_size_in_mb" -lt "$DD_COUNT" ]; then
-      echo "Creating encrypted $SWAPFILE ($PV_SIZE)... This may take a while.."
+      echo "Creating encrypted '$SWAPFILE' ('$PV_SIZE')... This may take a while..."
       dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$PV_SIZE" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
-      echo "Created encrypted $SWAPFILE"
+      echo "Created encrypted '$SWAPFILE'."
    fi
 
    chown --recursive root:root "$SWAPFILE"
@@ -76,8 +76,8 @@ do_start() {
       RANDOM_PASSWORD="$(timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" xxd -l100 -ps "$RANDOM_DEVICE" 2>/dev/null)" || { random_password_exit_code="$?" ; true; };
 
       if [ ! "$random_password_exit_code" = "0" ]; then
-         local msg="Failed to get RANDOM_PASSWORD from $RANDOM_DEVICE after $RANDOM_PASSWORD_TIMEOUT seconds.
-Most likely due to low entropy. random_password_exit_code: $random_password_exit_code Consider installing haveged.
+         local msg="Failed to get RANDOM_PASSWORD from '$RANDOM_DEVICE' after '$RANDOM_PASSWORD_TIMEOUT' seconds.
+Most likely due to low entropy. random_password_exit_code: '$random_password_exit_code' Consider installing haveged.
 Try increasing RANDOM_PASSWORD_TIMEOUT in /etc/default/swap-file-creator."
          error_handler "$msg"
       fi
