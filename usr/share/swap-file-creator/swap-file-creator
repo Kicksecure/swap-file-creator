@@ -20,9 +20,13 @@ do_start() {
 
    total_ram="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
    if [ "$total_ram" -ge "$ENOUGH_RAM" ]; then
-      echo "Enough RAM available. More than '$ENOUGH_RAM' MB RAM. Not enabling swapfile."
+      echo "INFO: Enough RAM available. More than '$ENOUGH_RAM' MB RAM. No need to create swapfile. OK."
       return 0
    fi
+
+   echo "INFO: Less than '$ENOUGH_RAM' MB RAM available. Therefore encrypted swapfile will be created. OK."
+   echo "INFO: Ideally there should be 2048 MB (2 GB) or more RAM."
+   echo "INFO: See: https://www.whonix.org/wiki/swap"
 
    mkdir --parents "$RUN_FOLDER"
    rm --force "$RUN_FOLDER/success"
@@ -45,10 +49,11 @@ do_start() {
    ## got interrupted for some reason might have only created a smaller file
    ## (0 MB in worst case).
    if [ "$swap_file_size_in_mb" -lt "$DD_COUNT" ]; then
-      echo "Creating encrypted '$SWAPFILE' ('$PV_SIZE')... This may take a while..."
+      echo "INFO: Creating swapfile ('$PV_SIZE')... This may take a while..."
       dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$PV_SIZE" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
-      echo "Created encrypted '$SWAPFILE'."
    fi
+
+   echo "INFO: Setting up encrypted swapfile '$SWAPFILE' ('$PV_SIZE')... This may take a moment..."
 
    chown --recursive root:root "$SWAPFILE"
    chmod --recursive 0600 "$SWAPFILE"
@@ -94,6 +99,9 @@ Try increasing RANDOM_PASSWORD_TIMEOUT in /etc/default/swap-file-creator."
 
    rm --force "$RUN_FOLDER/progress"
    touch "$RUN_FOLDER/success"
+
+   echo "INFO: Encrypted swapfile is ready. OK."
+
    return 0
 }
 
