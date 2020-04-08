@@ -1,3 +1,35 @@
+commit 29232f5416bb7569e23a9aa685fc0477e6df6f3a
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Apr 8 09:40:49 2020 +0000
+
+    suggest to increase RAM to avoid swapfile
+
+commit 7534539ad2ce957360037f45030bbbcf3d698719
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Apr 8 09:26:30 2020 +0000
+
+    update path
+
+commit 43af1e19484071268270fdab7ba231a39ee418b6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Apr 8 09:25:48 2020 +0000
+
+    usr/share/swap-file-creator/start -> usr/share/swap-file-creator/swap-file-creator
+    
+    because systemd uses the file name in console output
+
+commit 6afd302b43dc56f2c995ece39bac4cf31f5f3a6c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Wed Apr 8 09:13:10 2020 +0000
+
+    output
+
+commit f08c46ad9edfff384c5d4c66667474655cd705f0
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 2 08:00:30 2020 -0400
+
+    bumped changelog version
+
 commit 4d833d522cbd520c16496bb6dca8b8dd84a0dd68
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Thu Apr 2 07:22:49 2020 -0400
