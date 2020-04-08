@@ -14,7 +14,7 @@ ConditionVirtualization=!systemd-nspawn
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/share/swap-file-creator/start
+ExecStart=/usr/share/swap-file-creator/swap-file-creator
 ExecStop=/usr/share/swap-file-creator/stop
 ## Added console for better look and feel.
 StandardOutput=journal+console
