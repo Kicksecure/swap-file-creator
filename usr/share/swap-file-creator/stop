@@ -10,9 +10,13 @@ source /usr/share/swap-file-creator/common
 do_stop() {
    sanity_tests
 
-   swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
+   if test -e "$MAPPER_FULL" ; then
+      swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
+   fi
 
-   cryptsetup --batch-mode luksClose "$MAPPER" >/dev/null 2>&1 || true
+   if cryptsetup --batch-mode status "$MAPPER" >/dev/null 2>&1 ; then
+      cryptsetup --batch-mode luksClose "$MAPPER" >/dev/null 2>&1 || true
+   fi
 
    if [ -f "$RUN_FOLDER/loop" ]; then
       local loop
