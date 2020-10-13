@@ -1,3 +1,23 @@
+commit 827cbbdb1b09bba7ba3561aec6cc948b03d41f9c
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 13 12:32:50 2020 -0400
+
+    readme
+
+commit e622b3358e63fe4f09c255499541b320a16448d2
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Oct 9 09:43:33 2020 -0400
+
+    swapoff and luksClose only if previously opened
+    
+    https://forums.whonix.org/t/hardened-malloc-hardened-memory-allocator/7474/106
+
+commit 935ba35283f4871bee1f125e2cf2ac32c602acf1
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Thu Apr 16 08:44:47 2020 -0400
+
+    bumped changelog version
+
 commit 318f910b90096a3f337086492fda4b857e47d609
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Apr 15 14:05:37 2020 -0400
