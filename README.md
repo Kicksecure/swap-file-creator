@@ -10,7 +10,7 @@ enough RAM, no swap file will be created.
 Has an option to shred the swapfile on shutdown.
 ## How to install `swap-file-creator` using apt-get ##
 
-1\. Download [Whonix's Signing Key]().
+1\. Download Whonix's Signing Key.
 
 ```
 wget https://www.whonix.org/patrick.asc
