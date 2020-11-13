@@ -32,6 +32,11 @@
 ## shred extra options
 #SHRED_EXTRA=""
 
+## Wrapper in front of `cryptsetup`.
+## https://forums.whonix.org/t/hardened-malloc-hardened-memory-allocator/7474/106
+## defaults to:
+#cryptsetup_pre_wrapper="ld-system-preload-disable"
+
 ## Swap file crypt format command.
 ## No change required unless you know what you are doing.
 ## defaults to:

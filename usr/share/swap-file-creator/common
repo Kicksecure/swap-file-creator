@@ -59,6 +59,7 @@ sanity_tests() {
    command -v pv >/dev/null 2>&1
    command -v losetup >/dev/null 2>&1
    command -v cryptsetup >/dev/null 2>&1
+   command -v ld-system-preload-disable >/dev/null 2>&1
    command -v mkdir >/dev/null 2>&1
    command -v rm >/dev/null 2>&1
    command -v touch >/dev/null 2>&1
@@ -94,6 +95,7 @@ fi
 [ -n "$MAPPER" ] || MAPPER="swapfile"
 [ -n "$MAPPER_FULL" ] || MAPPER_FULL="/dev/mapper/$MAPPER"
 [ -n "$RUN_FOLDER" ] || RUN_FOLDER="/run/$NAME"
+[ -n "$cryptsetup_pre_wrapper" ] || cryptsetup_pre_wrapper="ld-system-preload-disable"
 [ -n "$CRYPTSETUP_FORMAT" ] || CRYPTSETUP_FORMAT="cryptsetup --batch-mode --pbkdf pbkdf2 --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat"
 [ -n "$SHRED_ON_STOP" ] || SHRED_ON_STOP="no"
 [ -n "$SHRED_OPTS" ] || SHRED_OPTS="--verbose --iterations=1"

@@ -14,8 +14,8 @@ do_stop() {
       swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
    fi
 
-   if cryptsetup --batch-mode status "$MAPPER" >/dev/null 2>&1 ; then
-      cryptsetup --batch-mode luksClose "$MAPPER" >/dev/null 2>&1 || true
+   if $cryptsetup_pre_wrapper cryptsetup --batch-mode status "$MAPPER" >/dev/null 2>&1 ; then
+      $cryptsetup_pre_wrapper cryptsetup --batch-mode luksClose "$MAPPER" >/dev/null 2>&1 || true
    fi
 
    if [ -f "$RUN_FOLDER/loop" ]; then
