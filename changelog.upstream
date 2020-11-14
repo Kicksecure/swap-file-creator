@@ -1,3 +1,19 @@
+commit c65edf17f952ac4a296ae6a0aac5a10541579ff6
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Fri Nov 13 09:33:23 2020 -0500
+
+    use cryptsetup_pre_wrapper ld-system-preload-disable
+    
+    to work around issue with hardened malloc slowing down cryptsetup
+    
+    https://forums.whonix.org/t/hardened-malloc-hardened-memory-allocator/7474/106
+
+commit 0042c35964afaa431803900484462e42968d6015
+Author: Patrick Schleizer <adrelanos@riseup.net>
+Date:   Tue Oct 13 12:32:51 2020 -0400
+
+    bumped changelog version
+
 commit 827cbbdb1b09bba7ba3561aec6cc948b03d41f9c
 Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Oct 13 12:32:50 2020 -0400
