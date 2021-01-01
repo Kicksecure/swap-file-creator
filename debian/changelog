@@ -1,3 +1,9 @@
+swap-file-creator (3:4.5-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@riseup.net>  Fri, 01 Jan 2021 21:12:10 +0000
+
 swap-file-creator (3:4.4-1) unstable; urgency=medium
 
   * New upstream version (local package).
