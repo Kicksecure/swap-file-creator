@@ -1,3 +1,20 @@
+commit b2b9dae3c16cacc6f786a74ac0fe723cd7794735
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Oct 12 19:47:06 2021 -0400
+
+    lower verbosity of output during boot
+    
+    to avoid "swap file created" message to overwrite console login prompt
+    
+    The alternative, configuring the login prompt to wait for
+    swap-file-creator to be done instead would lead to a slower boot process.
+
+commit a762927cdb5dd002035dae4f2cf3d0b884f4dc0f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sun Sep 12 11:59:31 2021 -0400
+
+    bumped changelog version
+
 commit 97330af1ae6650aa382ffd1a73ff4ad73df63728
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Sep 11 16:31:41 2021 -0400
