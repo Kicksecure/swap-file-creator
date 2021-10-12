@@ -52,7 +52,7 @@ do_start() {
       dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$PV_SIZE" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
    fi
 
-   echo "INFO: Setting up encrypted swapfile... This may take a moment..."
+   true "INFO: Setting up encrypted swapfile... This may take a moment..."
 
    chown --recursive root:root "$SWAPFILE"
    chmod --recursive 0600 "$SWAPFILE"
@@ -99,7 +99,7 @@ Try increasing RANDOM_PASSWORD_TIMEOUT in /etc/default/swap-file-creator."
    rm --force "$RUN_FOLDER/progress"
    touch "$RUN_FOLDER/success"
 
-   echo "INFO: Encrypted swapfile is ready. OK."
+   true "INFO: Encrypted swapfile is ready. OK."
 
    return 0
 }
