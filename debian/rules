@@ -10,7 +10,7 @@
 
 ## Use --no-stop-on-upgrade to not stop (and therefore not restart) the
 ## swap-file-creator systemd unit after package upgrade since there is no
-## reason to re-create the swap file.
+## reason to re-create the swap file during upgrade of this package.
 ##
 ## Not using --no-start because swap file should be created after installation
 ## of this package.
