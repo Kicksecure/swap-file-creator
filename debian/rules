@@ -8,5 +8,18 @@
 %:
 	dh $@
 
+## Use --no-stop-on-upgrade to not stop (and therefore not restart) the
+## swap-file-creator systemd unit after package upgrade since there is no
+## reason to re-create the swap file.
+##
+## Not using --no-start because swap file should be created after installation
+## of this package.
+##
+## dh_installsystemd manpage:
+## --no-stop-on-upgrade
+## "Do not stop service on upgrade. This has the side-effect of not restarting the service as a part of the upgrade."
+override_dh_installsystemd:
+	dh_installsystemd --no-stop-on-upgrade
+
 override_dh_installchangelogs:
 	dh_installchangelogs changelog.upstream upstream
