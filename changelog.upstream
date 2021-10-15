@@ -1,3 +1,32 @@
+commit ea587d1f9b300f205512e8b440a9c5f589d252f3
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Oct 14 11:21:52 2021 -0400
+
+    comment
+
+commit f03cd0c0c18a384a3440e9dbe1adebdeafa6d496
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Oct 14 11:20:09 2021 -0400
+
+    `dh_installsystemd --no-stop-on-upgrade`
+    
+    Use --no-stop-on-upgrade to not stop (and therefore not restart) the
+    swap-file-creator systemd unit after package upgrade since there is no
+    reason to re-create the swap file during upgrade of this package.
+    
+    Not using --no-start because swap file should be created after installation
+    of this package.
+    
+    dh_installsystemd manpage:
+    --no-stop-on-upgrade
+    "Do not stop service on upgrade. This has the side-effect of not restarting the service as a part of the upgrade."
+
+commit d1086a5b7c425a1d146349ce77a77b320c0c816d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Oct 12 19:50:03 2021 -0400
+
+    bumped changelog version
+
 commit b2b9dae3c16cacc6f786a74ac0fe723cd7794735
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Tue Oct 12 19:47:06 2021 -0400
