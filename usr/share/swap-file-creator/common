@@ -19,10 +19,10 @@ error_handler() {
 ## BASH_COMMAND: $BASH_COMMAND
 ## exit_code: $exit_code
 ##
-## Experts only:
+## For debugging, please run:
 ## bash -x $0
-## for verbose output. Clean the output and
-## submit to developers.
+##
+## Clean the output and submit to developers.
 ###############################################################################\
 "
    else
@@ -33,10 +33,10 @@ error_handler() {
 ##
 ## $1
 ##
-## Experts only:
+## For debugging, please run:
 ## bash -x $0
-## for verbose output. Clean the output and
-## submit to developers.
+##
+## Clean the output and submit to developers.
 ###############################################################################\
 "
    fi
