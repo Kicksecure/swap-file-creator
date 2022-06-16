@@ -69,7 +69,7 @@ do_start() {
       test_e_random_device_exit_code="0"
       test -e "$RANDOM_DEVICE" || { test_e_random_device_exit_code="$?" ; true; };
       if [ ! "$test_e_random_device_exit_code" = "0" ]; then
-         local msg="RANDOM_DEVICE $RANDOM_DEVICE does not exist."
+         local msg="RANDOM_DEVICE '$RANDOM_DEVICE' does not exist."
          error_handler "$msg"
       fi
       random_password_exit_code="0"
