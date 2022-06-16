@@ -19,6 +19,12 @@ error_handler() {
 ## BASH_COMMAND: $BASH_COMMAND
 ## exit_code: $exit_code
 ##
+## cryptsetup_pre_wrapper: '$cryptsetup_pre_wrapper'
+## CRYPTSETUP_FORMAT: '$CRYPTSETUP_FORMAT'
+## loop: '$loop'
+## MAPPER: '$MAPPER'
+## MAPPER_FULL: '$MAPPER_FULL'
+##
 ## For debugging, please run:
 ## bash -x $0
 ##
