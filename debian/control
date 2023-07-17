@@ -6,9 +6,9 @@ Section: misc
 Priority: optional
 Maintainer: Patrick Schleizer <adrelanos@whonix.org>
 Build-Depends: debhelper (>= 13), debhelper-compat (= 13)
-Homepage: https://github.com/Whonix/swap-file-creator
-Vcs-Browser: https://github.com/Whonix/swap-file-creator
-Vcs-Git: https://github.com/Whonix/swap-file-creator.git
+Homepage: https://github.com/Kicksecure/swap-file-creator
+Vcs-Browser: https://github.com/Kicksecure/swap-file-creator
+Vcs-Git: https://github.com/Kicksecure/swap-file-creator.git
 Standards-Version: 4.6.2
 Rules-Requires-Root: no
 
