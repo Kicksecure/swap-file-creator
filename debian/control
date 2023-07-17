@@ -1,12 +1,12 @@
-## Copyright (C) 2012 - 2023 ENCRYPTED SUPPORT LP <adrelanos@whonix.org>
+## Copyright (C) 2012 - 2023 ENCRYPTED SUPPORT LP <adrelanos@kicksecure.com>
 ## See the file COPYING for copying conditions.
 
 Source: swap-file-creator
 Section: misc
 Priority: optional
-Maintainer: Patrick Schleizer <adrelanos@whonix.org>
+Maintainer: Patrick Schleizer <adrelanos@kicksecure.com>
 Build-Depends: debhelper (>= 13), debhelper-compat (= 13)
-Homepage: https://github.com/Kicksecure/swap-file-creator
+Homepage: https://www.kicksecure.com/wiki/Swap-file-creator
 Vcs-Browser: https://github.com/Kicksecure/swap-file-creator
 Vcs-Git: https://github.com/Kicksecure/swap-file-creator.git
 Standards-Version: 4.6.2
