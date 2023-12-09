@@ -96,7 +96,7 @@ fi
 [ -n "$UUID" ] || UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
 [ -n "$DD_IF" ] || DD_IF="/dev/zero"
 [ -n "$DD_BS" ] || DD_BS="1M"
-[ -n "$DD_COUNT" ] || DD_COUNT="512"
+[ -n "$DD_COUNT" ] || DD_COUNT="1024"
 [ -n "$PV_SIZE" ] || PV_SIZE="${DD_COUNT}M"
 [ -n "$MAPPER" ] || MAPPER="swapfile"
 [ -n "$MAPPER_FULL" ] || MAPPER_FULL="/dev/mapper/$MAPPER"

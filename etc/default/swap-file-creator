@@ -15,7 +15,7 @@
 
 ## size of swap file
 ## defaults to:
-## 512M
+## 1024M
 #DD_BS="1024M"
 
 ## Delete swapfile on shut down.
