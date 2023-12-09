@@ -1,3 +1,15 @@
+commit 4f94502308d1b89c9ece28cb254a597df1538331
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Dec 9 11:30:32 2023 -0500
+
+    increase encrypted swap file size to 1 GB
+
+commit de96c98b026c38ed76bb86c8341a7f62dec22a93
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Nov 11 20:23:57 2023 +0000
+
+    bumped changelog version
+
 commit 4983b18096bf6f533f896d578cbc489cac760ffa
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Nov 11 13:41:27 2023 -0500
