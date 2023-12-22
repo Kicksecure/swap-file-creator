@@ -5,108 +5,224 @@
 
 set -e
 
-source /usr/share/swap-file-creator/common
+set -e
+set -o pipefail
+set -o errtrace
+set -o nounset
 
-do_start() {
-   do_status_return_code="0"
-   /usr/share/swap-file-creator/status || { do_status_return_code="$?" ; true; };
+error_handler() {
+   local exit_code="$?"
+   trap "" ERR
+   echo "\
+###############################################################################
+## Swap File Creator ERROR
+## $0
+##
+## BASH_COMMAND: $BASH_COMMAND
+## exit_code: $exit_code
+##
+## For debugging, please run:
+## bash -x $0
+##
+## Clean the output and submit to developers.
+###############################################################################\
+" >&2
+   exit 1
+}
 
-   if [ "$do_status_return_code" = "0" ]; then
-      echo "$NAME already running."
-      return 0
+trap "error_handler" ERR
+
+sanity_tests() {
+   command -v cryptsetup >/dev/null 2>&1
+   command -v mkdir >/dev/null 2>&1
+   command -v rm >/dev/null 2>&1
+   command -v chown >/dev/null 2>&1
+   command -v mkswap >/dev/null 2>&1
+   command -v swapon >/dev/null 2>&1
+   command -v swapoff >/dev/null 2>&1
+   command -v shred >/dev/null 2>&1
+   command -v cat >/dev/null 2>&1
+   command -v test >/dev/null 2>&1
+   command -v echo >/dev/null 2>&1
+   command -v stat >/dev/null 2>&1
+   command -v /usr/lib/systemd/systemd-cryptsetup >/dev/null 2>&1
+}
+
+source_config_file() {
+  if [ -f "/etc/default/swap-file-creator" ]; then
+    source "/etc/default/swap-file-creator"
+  fi
+}
+
+set_defaults() {
+  [[ -v "DESC" ]] || DESC="Encrypted Swap File Creator"
+  [[ -v "NAME" ]] || NAME="swap-file-creator"
+  [[ -v "SWAPFILE" ]] || SWAPFILE="/var/swapfile"
+  [[ -v "VERBOSE" ]] || VERBOSE="yes"
+  [[ -v "UUID" ]] || UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
+  [[ -v "MAPPER" ]] || MAPPER="swapfile"
+  [[ -v "MAPPER_FULL" ]] || MAPPER_FULL="/dev/mapper/$MAPPER"
+  [[ -v "RUN_FOLDER" ]] || RUN_FOLDER="/run/$NAME"
+  ## https://gitlab.com/cryptsetup/cryptsetup/-/issues/617
+  [[ -v "cryptsetup_pre_wrapper" ]] || cryptsetup_pre_wrapper="ld-system-preload-disable"
+  [[ -v "SWAPON_EXTRA" ]] || SWAPON_EXTRA=""
+  [[ -v "MKSWAP_EXTRA" ]] || MKSWAP_EXTRA=""
+  [[ -v "SHRED_ON_STOP" ]] || SHRED_ON_STOP="no"
+  [[ -v "SHRED_OPTS" ]] || SHRED_OPTS="--verbose --iterations=1"
+  [[ -v "RANDOM_DEVICE" ]] || RANDOM_DEVICE="/dev/random"
+  [[ -v "ENOUGH_RAM" ]] || ENOUGH_RAM="1950"
+  [[ -v "SWAP_FILE_SIZE_CUSTOM_MB" ]] || SWAP_FILE_SIZE_CUSTOM_MB=""
+}
+
+do_stop() {
+   if test -e "$MAPPER_FULL" ; then
+      swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
    fi
 
-   sanity_tests
+   /usr/lib/systemd/systemd-cryptsetup detach "$MAPPER" 2>/dev/null
 
-   total_ram="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
-   if [ "$total_ram" -ge "$ENOUGH_RAM" ]; then
-      echo "INFO: Enough RAM available. More than $ENOUGH_RAM MB RAM. No need to create swapfile. OK."
-      return 0
-   fi
-
-   echo "INFO: Less than $ENOUGH_RAM MB RAM available. Therefore '$SWAPFILE' ('$PV_SIZE') will be created... OK."
-   echo "INFO: Ideally you should assign 2048 MB (2 GB) or more RAM to this machine."
-   echo "INFO: See: https://www.whonix.org/wiki/swap"
-
-   mkdir --parents "$RUN_FOLDER"
-   rm --force "$RUN_FOLDER/success"
-   rm --force "$RUN_FOLDER/fail"
-   touch "$RUN_FOLDER/progress"
-
-   local swap_file_size_in_bytes
-   if [ -f "$SWAPFILE" ]; then
-      swap_file_size_in_bytes="$(stat -c '%s' "$SWAPFILE")"
-   else
-      swap_file_size_in_bytes="0"
-   fi
-   local swap_file_size_in_mb
-   swap_file_size_in_mb="$(( $swap_file_size_in_bytes / 1024 / 1024 ))"
-
-   ## Nevermind eventual small platform specific rounding errors.
-   swap_file_size_in_mb="$(( swap_file_size_in_mb + 2 ))"
-
-   ## We need to check the size of $SWAPFILE, because a previous run of dd that
-   ## got interrupted for some reason might have only created a smaller file
-   ## (0 MB in worst case).
-   if [ "$swap_file_size_in_mb" -lt "$DD_COUNT" ]; then
-      dd if="$DD_IF" bs="$DD_BS" count="$DD_COUNT" 2>/dev/null | pv --size "$PV_SIZE" | dd of="$SWAPFILE" bs="$DD_BS" 2>/dev/null
-   fi
-
-   true "INFO: Setting up encrypted swapfile... This may take a moment..."
-
-   chown --recursive root:root "$SWAPFILE"
-   chmod --recursive 0600 "$SWAPFILE"
-
-   local loop
-   loop="$(losetup -f $LOSETUP_LOOP_EXTRA)"
-   echo "$loop" > "$RUN_FOLDER/loop"
-   losetup "$loop" "$SWAPFILE" $LOSETUP_EXTRA
-
-   ## Setting RANDOM_PASSWORD here, to make sure /dev/random exists.
-   ## (Which is not the case on shutdown. - Therefore we do this inside the
-   ## start function, not outside any functions.)
-   if [ "$RANDOM_PASSWORD" = "" ]; then
-      test_e_random_device_exit_code="0"
-      test -e "$RANDOM_DEVICE" || { test_e_random_device_exit_code="$?" ; true; };
-      if [ ! "$test_e_random_device_exit_code" = "0" ]; then
-         local msg="RANDOM_DEVICE '$RANDOM_DEVICE' does not exist."
-         error_handler "$msg"
+   if [ "$SHRED_ON_STOP" = "yes" ]; then
+      if [ -f "$SWAPFILE" ]; then
+         echo "INFO: Shredding '$SWAPFILE'... This may take a while..."
+         shred $SHRED_OPTS "$SWAPFILE"
+         echo "INFO: Done shred '$SWAPFILE'."
       fi
-      random_password_exit_code="0"
-
-      ## /usr/share/swap-file-creator/start: line 72: warning: command substitution: ignored null byte in input
-      #RANDOM_PASSWORD="$(timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" dd if="$RANDOM_DEVICE" bs=1 count=100 2>/dev/null)" || { random_password_exit_code="$?" ; true; };
-
-      RANDOM_PASSWORD="$(timeout --kill-after="$RANDOM_PASSWORD_TIMEOUT" "$RANDOM_PASSWORD_TIMEOUT" xxd -l100 -ps "$RANDOM_DEVICE" 2>/dev/null)" || { random_password_exit_code="$?" ; true; };
-
-      if [ ! "$random_password_exit_code" = "0" ]; then
-         local msg="Failed to get RANDOM_PASSWORD from '$RANDOM_DEVICE' after '$RANDOM_PASSWORD_TIMEOUT' seconds.
-Most likely due to low entropy. random_password_exit_code: '$random_password_exit_code' Consider installing haveged.
-Try increasing RANDOM_PASSWORD_TIMEOUT in /etc/default/swap-file-creator."
-         error_handler "$msg"
-      fi
    fi
-
-   echo "$RANDOM_PASSWORD" | $cryptsetup_pre_wrapper $CRYPTSETUP_FORMAT "$loop"
-   echo "$RANDOM_PASSWORD" | $cryptsetup_pre_wrapper cryptsetup --batch-mode luksOpen "$loop" "$MAPPER" $CRYPTSETUP_LUKSOPEN_EXTRA
-
-   chown --recursive root:root "$MAPPER_FULL"
-   chmod --recursive 0600 "$MAPPER_FULL"
-
-   mkswap --force --uuid "$UUID" "$MAPPER_FULL" $MKSWAP_EXTRA >/dev/null
-   swapon "$MAPPER_FULL" $SWAPON_EXTRA
-
-   rm --force "$RUN_FOLDER/progress"
-   touch "$RUN_FOLDER/success"
-
-   true "INFO: Encrypted swapfile is ready. OK."
 
    return 0
 }
 
+do_start() {
+   echo "INFO: swap-file-creator..."
+
+   if command -v systemd-detect-virt >/dev/null ; then
+      hibernation=no
+   else
+      hibernation=yes
+   fi
+
+   [[ -v "HIBERNATION" ]] || HIBERNATION="$hibernation"
+
+   total_ram_in_mb="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
+
+   local swap_file_actual_size_in_bytes
+   if [ -f "$SWAPFILE" ]; then
+      swap_file_actual_size_in_bytes="$(stat --format='%s' "$SWAPFILE")"
+   else
+      swap_file_actual_size_in_bytes="0"
+   fi
+   local swap_file_actual_size_in_mb
+   swap_file_actual_size_in_mb="$(( $swap_file_actual_size_in_bytes / 1024 / 1024 ))"
+
+   ## Never mind eventual small platform specific rounding errors.
+   swap_file_actual_size_in_mb="$(( swap_file_actual_size_in_mb + 2 ))"
+
+   if [ "$total_ram_in_mb" -ge "$ENOUGH_RAM" ]; then
+      echo "INFO: Enough RAM available. More than $ENOUGH_RAM MB RAM. OK."
+   else
+      echo "INFO: Less than $ENOUGH_RAM MB RAM available."
+      echo "INFO: Ideally you should assign 2048 MB (2 GB) or more RAM to this machine."
+      echo "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
+   fi
+
+   local swap_file_target_size_mb
+   if [ "$SWAP_FILE_SIZE_CUSTOM_MB" = "" ]; then
+      ## For informational output.
+      calculate-swap-size "$total_ram_in_mb" "$HIBERNATION"
+
+      ## Take last word of last line.
+      swap_file_target_size_mb=$(calculate-swap-size "$total_ram_in_mb" "$HIBERNATION" | tail -1 | awk '{print $NF}')
+   else
+      swap_file_target_size_mb="$SWAP_FILE_SIZE_CUSTOM_MB"
+   fi
+
+   local swap_file_size_gb
+   swap_file_size_gb=$(echo "scale=0; $swap_file_target_size_mb / 1024" | bc)
+
+   dirname_swapfile="${SWAPFILE%/*}"
+   free_disk_space_in_gb=$(df "$dirname_swapfile" | awk 'NR==2 {print int($4/1024/1024)}')
+   free_disk_space_in_gb_plus=$(( free_disk_space_in_gb + 2 ))
+
+   if [ "$swap_file_size_gb" -ge "$free_disk_space_in_gb_plus" ]; then
+      echo "ERROR: Only $free_disk_space_in_gb GB free disk space. Insufficient to create $swap_file_size_gb GB sized swap file." >&2
+      exit 1
+   fi
+
+   local swap_file_target_size_bytes=$((swap_file_target_size_mb * 1000000))
+
+   local swap_file_target_size_gb
+   swap_file_target_size_gb=$(echo "scale=2; $swap_file_target_size_bytes/1024/1024/1024" | bc)
+   ## Round down to integer.
+   swap_file_target_size_gb=$(printf "%.0f" "$swap_file_target_size_gb")
+
+   ## We need to check the size of $SWAPFILE, because a previous run of fallocate that
+   ## got interrupted for some reason might have only created a smaller file
+   ## (0 MB in worst case).
+   ## fallocate is fast. Maybe no more test needed.
+   #if [ "$swap_file_target_size_mb" -lt "$swap_file_actual_size_in_mb" ]; then
+      ## Not exact.
+      ## For example 6144 MB would only be 5.7 G in "sudo swapon --show".
+      #fallocate --length "${swap_file_target_size_mb}MB" "$SWAPFILE"
+      ## Hence calculate in bytes.
+      fallocate --length "$swap_file_target_size_bytes" "$SWAPFILE"
+   #fi
+
+   chown --recursive root:root "$SWAPFILE"
+   chmod --recursive 0600 "$SWAPFILE"
+
+   do_stop
+
+   ## AUDIT: crypto
+   /usr/lib/systemd/systemd-cryptsetup attach "$MAPPER" "$SWAPFILE" "$RANDOM_DEVICE" 'swap,cipher=aes-xts-plain64,size=512'
+
+   chown --recursive root:root "$MAPPER_FULL"
+   chmod --recursive 0600 "$MAPPER_FULL"
+
+   mkswap --label "swapfile" --uuid "$UUID" "$MAPPER_FULL" $MKSWAP_EXTRA >/dev/null
+   swapon "$MAPPER_FULL" $SWAPON_EXTRA
+
+   swapon_line=$(swapon --raw --show=LABEL,SIZE | grep '\bswapfile\b')
+   swap_file_kernel_reported_size_gb=$(echo "$swapon_line" | awk '{print $NF}')
+   swap_file_kernel_reported_size_gb="${swap_file_kernel_reported_size_gb%G}"
+
+   local swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb + 1 ))
+
+   if [ "$swap_file_kernel_reported_size_gb_plus" -ge "$swap_file_target_size_gb" ]; then
+      echo "INFO: Encrypted '$SWAPFILE' ($swap_file_size_gb GB) ready. OK."
+      return 0
+   fi
+
+   echo "ERROR: swap_file_kernel_reported_size_gb_plus is smaller than expected swap_file_target_size_gb!" >&2
+   echo "swap_file_kernel_reported_size_gb_plus: $swap_file_kernel_reported_size_gb_plus" >&2
+   echo "swap_file_target_size_gb: $swap_file_target_size_gb" >&2
+   exit 1
+}
+
 if cat /proc/cmdline | grep --quiet "boot=live" ; then
-   echo "Live mode detected. Swap file creation skipped."
+   echo "INFO: Live mode detected. Swap file creation skipped."
    exit 0
 fi
 
-do_start
+sanity_tests
+source_config_file
+set_defaults
+
+if [ $# -eq 0 ]; then
+    echo "ERROR: No arguments provided."
+    echo "Usage: $0 [start|stop]"
+    exit 1
+fi
+
+case "$1" in
+    start)
+        do_start
+        ;;
+    stop)
+        do_stop
+        ;;
+    *)
+        echo "ERROR: Invalid argument: $1"
+        echo "Usage: $0 [start|stop]"
+        exit 1
+        ;;
+esac

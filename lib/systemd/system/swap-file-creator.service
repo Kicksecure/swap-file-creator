@@ -3,19 +3,20 @@
 
 [Unit]
 Description=Encrypted Swap File Creator
-Documentation=https://github.com/Whonix/swap-file-creator
+Documentation=https://www.kicksecure.com/wiki/swap-file-creator
 After=haveged.service
 After=jitterentropy.service
+After=systemd-random-seed-load.service
 
 ## Do nothing inside systemd-nspawn container since does not work and swap is
-## managed by host
+## managed by host.
 ConditionVirtualization=!systemd-nspawn
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/share/swap-file-creator/swap-file-creator
-ExecStop=/usr/share/swap-file-creator/stop
+ExecStart=/usr/share/swap-file-creator/swap-file-creator start
+ExecStop=/usr/share/swap-file-creator/swap-file-creator stop
 ## Added console for better look and feel.
 StandardOutput=journal+console
 

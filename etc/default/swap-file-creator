@@ -5,6 +5,9 @@
 
 ## bash fragment
 
+## SWAP_FILE_SIZE_CUSTOM_MB
+#SWAP_FILE_SIZE_CUSTOM_MB=2048
+
 ## verbose output
 ## defaults to:
 ## no
@@ -12,11 +15,6 @@
 ## yes
 ## no
 #VERBOSE="no"
-
-## size of swap file
-## defaults to:
-## 1024M
-#DD_BS="1024M"
 
 ## Delete swapfile on shut down.
 ## defaults to:
@@ -32,36 +30,11 @@
 ## shred extra options
 #SHRED_EXTRA=""
 
-## Wrapper in front of `cryptsetup`.
-## https://forums.whonix.org/t/hardened-malloc-hardened-memory-allocator/7474/106
-## defaults to:
-#cryptsetup_pre_wrapper="ld-system-preload-disable"
-
-## Swap file crypt format command.
-## No change required unless you know what you are doing.
-## defaults to:
-## cryptsetup --hash sha512 -c aes-xts-plain64 --key-size 512 luksFormat
-#CRYPTSETUP_FORMAT="cryptsetup -h sha256 -c aes-cbc-essiv:sha256 -s 256 luksFormat"
-
-## No change required unless you know what you are doing.
-## defaults to:
-## /dev/zero
-#DD_IF="/dev/random"
-
 ## No change required unless you know what you are doing.
 #UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
 
 ## No change required unless you know what you are doing.
 #SWAPFILE="/var/swapfile"
-
-## No change required unless you know what you are doing.
-#DD_EXTRA=""
-
-## No change required unless you know what you are doing.
-#LOSETUP_LOOP_EXTRA=""
-
-## No change required unless you know what you are doing.
-#LOSETUP_LOOP_EXTRA=""
 
 ## No change required unless you know what you are doing.
 #MKSWAP_EXTRA=""
@@ -81,14 +54,6 @@
 ## No change required unless you know what you are doing.
 #MAPPER_FULL="/dev/mapper/$MAPPER"
 
-## No change required unless you know what you are doing.
-#CRYPTSETUP_LUKSOPEN_EXTRA=""
-
-## No change required unless you know what you are doing.
-#RUN_FOLDER="/run/$NAME"
-
-## No change required unless you know what you are doing.
-#RANDOM_PASSWORD="$(dd if="/dev/random" bs=1 count=100 2>/dev/null)"
-
-## No change required unless you know what you are doing.
-##RANDOM_PASSWORD_TIMEOUT="10"
+## Pass 'yes' or 'no' to calculate-swap-size.
+## Otherwise auto detected. 'no' in VMs. 'yes' otherwise.
+#HIBERNATION="no"
