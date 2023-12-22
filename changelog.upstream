@@ -1,3 +1,33 @@
+commit 674f3a16d7cac7fa5d180ae854e83e9e8a653f30
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Dec 22 10:48:44 2023 -0500
+
+    vastly improve swap-file-creator
+    
+    * always create a swap file if swap-file-creator is installed
+    * increased minimum size of swap file to 6 GB
+    * vastly speed up swap-file-creator through use of `fallocate` and `systemd-cryptsetup`
+      from several or tens of seconds to around 1 second
+    * use `calculate-swap-size` to calculate size of swap file to be created
+    * take into account for size calculation if the system is using hibernation,
+      it is assumed that this is not the case in VMs, therefore a smaller
+      swapfile is sufficient.
+    * do not attempt to create a swap file if there is insufficient disk space
+    * improved output
+    * systemd `After=systemd-random-seed-load.service` for better entropy
+    * added a test to check if a swap file with the expected size has been created
+    * improved error handling
+    * code simplification through integration with systemd / journald for logs and status
+    * removed little/unused configuration options, see /etc/default/swap-file-creator
+    
+    https://forums.whonix.org/t/swap-swap-file-whonix-gateway-freezing-during-apt-get-dist-upgrade-encrypted-swap-file-creator/8317/8
+
+commit d065868b01b18fc6126d1af51bc0d182c8e55c80
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Dec 9 16:31:09 2023 +0000
+
+    bumped changelog version
+
 commit 4f94502308d1b89c9ece28cb254a597df1538331
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Dec 9 11:30:32 2023 -0500
