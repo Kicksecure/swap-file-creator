@@ -181,9 +181,29 @@ do_start() {
    mkswap --label "swapfile" --uuid "$UUID" "$MAPPER_FULL" $MKSWAP_EXTRA >/dev/null
    swapon "$MAPPER_FULL" $SWAPON_EXTRA
 
+   ## /proc/swap does not show the label.
+   ## output by swapon_line is not predictable, G vs M as unit.
+   local swapon_line
    swapon_line=$(swapon --raw --show=LABEL,SIZE | grep '\bswapfile\b')
-   swap_file_kernel_reported_size_gb=$(echo "$swapon_line" | awk '{print $NF}')
-   swap_file_kernel_reported_size_gb="${swap_file_kernel_reported_size_gb%G}"
+   swap_file_size_with_unit=$(echo "$swapon_line" | awk '{print $NF}')
+
+   # Check if the size is in GB or MB and convert accordingly
+   if [[ $swap_file_size_with_unit == *G ]]; then
+      # If size ends with 'G', remove the 'G'
+      swap_file_size_in_gb=${swap_file_size_with_unit%G}
+   elif [[ $swap_file_size_with_unit == *M ]]; then
+      # If size ends with 'M', remove the 'M' and divide by 1024
+      swap_file_size_in_mb=${swap_file_size_with_unit%M}
+      swap_file_size_in_gb=$(bc <<< "scale=2; $swap_file_size_in_mb / 1024")
+   else
+      echo "\
+WARNING: Minor issue.
+Unit test if swap file with correct size has been created has been skipped.
+Output of:
+    swapon --raw --show=LABEL,SIZE | grep '\bswapfile\b'
+showed unknown unit, not M or G.
+swap_file_size_with_unit: '$swap_file_size_with_unit'"
+   fi
 
    local swap_file_kernel_reported_size_gb_plus
    swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb + 1 ))
