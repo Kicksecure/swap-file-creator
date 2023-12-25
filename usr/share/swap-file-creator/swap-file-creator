@@ -185,7 +185,8 @@ do_start() {
    swap_file_kernel_reported_size_gb=$(echo "$swapon_line" | awk '{print $NF}')
    swap_file_kernel_reported_size_gb="${swap_file_kernel_reported_size_gb%G}"
 
-   local swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb + 1 ))
+   local swap_file_kernel_reported_size_gb_plus
+   swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb + 1 ))
 
    if [ "$swap_file_kernel_reported_size_gb_plus" -ge "$swap_file_target_size_gb" ]; then
       echo "INFO: Encrypted '$SWAPFILE' ($swap_file_size_gb GB) ready. OK."
