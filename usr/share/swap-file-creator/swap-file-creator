@@ -112,7 +112,7 @@ do_start() {
       swap_file_actual_size_in_bytes="0"
    fi
    local swap_file_actual_size_in_mb
-   swap_file_actual_size_in_mb="$(( $swap_file_actual_size_in_bytes / 1024 / 1024 ))"
+   swap_file_actual_size_in_mb="$(( swap_file_actual_size_in_bytes / 1024 / 1024 ))"
 
    ## Never mind eventual small platform specific rounding errors.
    swap_file_actual_size_in_mb="$(( swap_file_actual_size_in_mb + 2 ))"
