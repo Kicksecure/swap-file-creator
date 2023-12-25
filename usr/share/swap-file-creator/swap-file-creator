@@ -190,11 +190,11 @@ do_start() {
    # Check if the size is in GB or MB and convert accordingly
    if [[ $swap_file_size_with_unit == *G ]]; then
       # If size ends with 'G', remove the 'G'
-      swap_file_size_in_gb=${swap_file_size_with_unit%G}
+      swap_file_kernel_reported_size_gb=${swap_file_size_with_unit%G}
    elif [[ $swap_file_size_with_unit == *M ]]; then
       # If size ends with 'M', remove the 'M' and divide by 1024
       swap_file_size_in_mb=${swap_file_size_with_unit%M}
-      swap_file_size_in_gb=$(bc <<< "scale=2; $swap_file_size_in_mb / 1024")
+      swap_file_kernel_reported_size_gb=$(bc <<< "scale=2; $swap_file_size_in_mb / 1024")
    else
       echo "\
 WARNING: Minor issue.
