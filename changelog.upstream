@@ -1,3 +1,39 @@
+commit dd604bb51ffcae70f6e880a46566973e8ec79535
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Dec 25 13:40:48 2023 -0500
+
+    fix: handle cases where swapon returns decimal point numbers
+
+commit c83cdae33c07e9cb3991d689affefb4bf97f4e2f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Dec 25 13:35:13 2023 -0500
+
+    fix
+
+commit 35d67a55e498408e6f5fc8aee51a04fa8bf5ba78
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Dec 25 13:33:48 2023 -0500
+
+    fix: cases where swapon outputs M instead of G
+
+commit 7d3a83a05fab2219daff8ad17c729192d0b9b254
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Dec 25 13:19:04 2023 -0500
+
+    shellcheck
+
+commit a3194c47dc0a49dda785a1b6e4e79b100ef1dc90
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Mon Dec 25 13:18:10 2023 -0500
+
+    improved error handling
+
+commit ecb1c8752b591e5afff13559f96de77aedaccb28
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Dec 22 16:32:19 2023 +0000
+
+    bumped changelog version
+
 commit 674f3a16d7cac7fa5d180ae854e83e9e8a653f30
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Dec 22 10:48:44 2023 -0500
