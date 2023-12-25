@@ -205,8 +205,10 @@ showed unknown unit, not M or G.
 swap_file_size_with_unit: '$swap_file_size_with_unit'"
    fi
 
+   swap_file_kernel_reported_size_gb_rounded_up=$(printf "%.0f\n" $swap_file_kernel_reported_size_gb)
+
    local swap_file_kernel_reported_size_gb_plus
-   swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb + 1 ))
+   swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb_rounded_up + 1 ))
 
    if [ "$swap_file_kernel_reported_size_gb_plus" -ge "$swap_file_target_size_gb" ]; then
       echo "INFO: Encrypted '$SWAPFILE' ($swap_file_size_gb GB) ready. OK."
