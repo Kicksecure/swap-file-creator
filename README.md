@@ -1,11 +1,8 @@
 # Adds encrypted swap file to the system #
 
-On every boot, creates a new encrypted swapfile with a random password.
+On every boot, creates a new encrypted swapfile with a random key.
 
 Useful for systems with low RAM such as inside virtual machines.
-
-Has a setting ENOUGH_RAM which defaults to 1950 MB. If there is more than
-enough RAM, no swap file will be created.
 
 Has an option to shred the swapfile on shutdown.
 
