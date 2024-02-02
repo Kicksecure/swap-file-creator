@@ -1,3 +1,15 @@
+commit 2b9f8f0c61ae1c4f6bac1668f0099e91efdb53f4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Feb 2 08:48:08 2024 -0500
+
+    fix VM detection to disable hibernation swap file size calculation considerations inside VMs
+
+commit a52bcfd62c16f5310e9268e5944a57f15ec98448
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Feb 2 12:37:44 2024 +0000
+
+    bumped changelog version
+
 commit 2846e0418ec39739d703a7ec42e9fe2fbea245b9
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Feb 2 07:32:42 2024 -0500
