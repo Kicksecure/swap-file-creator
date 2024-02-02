@@ -5,7 +5,7 @@ Source: swap-file-creator
 Section: misc
 Priority: optional
 Maintainer: Patrick Schleizer <adrelanos@kicksecure.com>
-Build-Depends: debhelper (>= 13), debhelper-compat (= 13)
+Build-Depends: debhelper (>= 13.11.6), debhelper-compat (= 13)
 Homepage: https://www.kicksecure.com/wiki/Swap-file-creator
 Vcs-Browser: https://github.com/Kicksecure/swap-file-creator
 Vcs-Git: https://github.com/Kicksecure/swap-file-creator.git
