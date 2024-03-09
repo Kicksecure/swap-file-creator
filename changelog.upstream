@@ -1,3 +1,15 @@
+commit cacbe150505ec9d9c674dbd432dc9bf07ab868a7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Mar 9 10:19:03 2024 -0500
+
+    skip on ISO
+
+commit eb11492021c3f3b62fe1e4052f2e96755a9b8a6f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Feb 2 13:50:14 2024 +0000
+
+    bumped changelog version
+
 commit 2b9f8f0c61ae1c4f6bac1668f0099e91efdb53f4
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Feb 2 08:48:08 2024 -0500

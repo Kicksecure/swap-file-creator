@@ -1,3 +1,9 @@
+swap-file-creator (3:6.9-1) unstable; urgency=medium
+
+  * New upstream version (local package).
+
+ -- Patrick Schleizer <adrelanos@whonix.org>  Sat, 09 Mar 2024 15:19:21 +0000
+
 swap-file-creator (3:6.8-1) unstable; urgency=medium
 
   * New upstream version (local package).
