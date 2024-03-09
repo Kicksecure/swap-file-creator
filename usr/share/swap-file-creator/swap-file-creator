@@ -225,8 +225,11 @@ swap_file_size_with_unit: '$swap_file_size_with_unit'"
    exit 1
 }
 
-if cat /proc/cmdline | grep --quiet "boot=live" ; then
-   echo "INFO: Live mode detected. Swap file creation skipped."
+if grep --no-messages --quiet 'boot=live' /proc/cmdline; then
+   echo "INFO: grub-live mode detected. Swap file creation skipped."
+   exit 0
+elif grep --no-messages --quiet 'root=live' /proc/cmdline; then
+   echo "INFO: ISO live mode detected. Swap file creation skipped."
    exit 0
 fi
 
