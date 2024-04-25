@@ -1,3 +1,15 @@
+commit 7eee84f4ce0a4104b9992540d0b346c04615e945
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Apr 25 08:43:51 2024 -0400
+
+    skip output if live mode is detected and not creating a swap file
+
+commit cc44c8016a12f1e4b944d151f127935be8196e36
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Mar 9 15:19:22 2024 +0000
+
+    bumped changelog version
+
 commit cacbe150505ec9d9c674dbd432dc9bf07ab868a7
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Mar 9 10:19:03 2024 -0500
