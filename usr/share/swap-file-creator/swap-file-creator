@@ -95,8 +95,9 @@ do_stop() {
 do_start() {
    echo "INFO: swap-file-creator..."
 
+   systemd_detect_virt_output=""
    if command -v systemd-detect-virt >/dev/null ; then
-      if systemd-detect-virt &>/dev/null ; then
+      if systemd_detect_virt_output="$(systemd-detect-virt 2>/dev/null)" ; then
          ## Exit code 0. Virtualization detected.
          ## Therefore disabling hibernation consideration.
          hibernation_consideration=no
@@ -146,6 +147,11 @@ do_start() {
    dirname_swapfile="${SWAPFILE%/*}"
    free_disk_space_in_gb=$(df "$dirname_swapfile" | awk 'NR==2 {print int($4/1024/1024)}')
    free_disk_space_in_gb_plus=$(( free_disk_space_in_gb + 2 ))
+
+   if [ "$systemd_detect_virt_output" = "xen" ]; then
+      echo "INFO: xen detected. Could be a Qubes HVM. Skipping swap-file-creator. Doing nothing, ok."
+      exit 0
+   fi
 
    if [ "$swap_file_size_gb" -ge "$free_disk_space_in_gb_plus" ]; then
       echo "ERROR: Only $free_disk_space_in_gb GB free disk space. Insufficient to create $swap_file_size_gb GB sized swap file." >&2
