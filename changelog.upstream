@@ -1,3 +1,17 @@
+commit 03754a2b197e40ce9b4d6c803e85771d0086f60d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Aug 29 06:06:06 2024 -0400
+
+    skip swap-file-creator if xen was detected
+    
+    (Likely a Qubes HVM, which has dynamic RAM assignment.)
+
+commit a16c6c8ff3a3654c5310881d58c4e4e003a19180
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Apr 25 13:21:48 2024 +0000
+
+    bumped changelog version
+
 commit 7eee84f4ce0a4104b9992540d0b346c04615e945
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Apr 25 08:43:51 2024 -0400
