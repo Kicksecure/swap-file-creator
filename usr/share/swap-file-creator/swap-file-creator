@@ -102,10 +102,13 @@ do_start() {
          ## Therefore disabling hibernation consideration.
          hibernation_consideration=no
       else
-         hibernation_consideration=yes
+         ## https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654/8
+         #hibernation_consideration=yes
+         hibernation_consideration=no
       fi
    fi
 
+   ## User can set HIBERNATIO=yes in /etc/default/swap-file-creator
    [[ -v "HIBERNATION" ]] || HIBERNATION="$hibernation_consideration"
 
    total_ram_in_mb="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
