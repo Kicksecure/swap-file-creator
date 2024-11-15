@@ -50,6 +50,7 @@ sanity_tests() {
 
 source_config_file() {
   if [ -f "/etc/default/swap-file-creator" ]; then
+    bash -n "/etc/default/swap-file-creator"
     source "/etc/default/swap-file-creator"
   fi
 }
