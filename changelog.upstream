@@ -1,3 +1,27 @@
+commit da739875e36444ed44a5dfb256419058e40851d9
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Nov 15 06:17:30 2024 -0500
+
+    sanity test
+
+commit 528694be791b126da112cbf71276a1dacd9273f6
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Nov 15 06:16:30 2024 -0500
+
+    no longer consider hibernation by default
+    
+    to have a smaller default swap file by default
+    
+    and because hibernation is not yet compatible with Secure Boot
+    
+    https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654/8
+
+commit 4a3db90f0b14cac04cf7c35549f69074a368fd5e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Aug 29 10:07:05 2024 +0000
+
+    bumped changelog version
+
 commit 03754a2b197e40ce9b4d6c803e85771d0086f60d
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Aug 29 06:06:06 2024 -0400
