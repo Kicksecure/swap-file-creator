@@ -123,8 +123,11 @@ do_start() {
       swap_file_actual_size_in_bytes="0"
    fi
 
-   if ! test -w "$SWAPFILE" ; then
-      true "INFO: $SWAPFILE not writeable. Maybe read-only file system? Exiting."
+   local folder_of_swapfile
+   folder_of_swapfile="${SWAPFILE%/*}"
+
+   if ! test -w "$folder_of_swapfile" ; then
+      true "INFO: $SWAPFILE (actually $folder_of_swapfile) is not writeable. Maybe read-only file system? Exiting."
       exit 0
    fi
 
