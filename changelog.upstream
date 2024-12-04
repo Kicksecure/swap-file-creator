@@ -1,3 +1,33 @@
+commit 9196d2f83d9f8f33616d93c9c3d3a100f843d500
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Dec 4 17:50:21 2024 -0500
+
+    check if folder of swapfile exists
+
+commit 2d36c7dc0836ec269ca0693b0a59f48b74315e6c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Dec 4 17:48:50 2024 -0500
+
+    fix
+
+commit 0ef214ac443666efad3dda09271801725f06d076
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Dec 4 17:44:23 2024 -0500
+
+    add sanity tests to check if swap file is readable/writeable
+
+commit 341f8ef8f09a3c669cabb23ba62f0cddc2f80aaa
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Dec 4 17:41:05 2024 -0500
+
+    fix live mode detection
+
+commit d3cfb1f179cc290bf2e3cdd8b0704cc6ae7bb99f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Dec 4 15:21:13 2024 +0000
+
+    bumped changelog version
+
 commit 7bbb291e1380e573d995c4c8bcd4404e758b415a
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Dec 4 10:20:06 2024 -0500
