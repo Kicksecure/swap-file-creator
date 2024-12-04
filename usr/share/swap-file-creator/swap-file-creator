@@ -78,9 +78,9 @@ set_defaults() {
 do_stop() {
    if test -e "$MAPPER_FULL" ; then
       swapoff "$MAPPER_FULL" >/dev/null 2>&1 || true
-   fi
 
-   /usr/lib/systemd/systemd-cryptsetup detach "$MAPPER" 2>/dev/null
+      /usr/lib/systemd/systemd-cryptsetup detach "$MAPPER" 2>/dev/null
+   fi
 
    if [ "$SHRED_ON_STOP" = "yes" ]; then
       if [ -f "$SWAPFILE" ]; then
