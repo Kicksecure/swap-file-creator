@@ -244,12 +244,19 @@ swap_file_size_with_unit: '$swap_file_size_with_unit'"
    exit 1
 }
 
-if grep --no-messages --quiet 'boot=live' /proc/cmdline; then
-   true "INFO: grub-live mode detected. Swap file creation skipped."
-   exit 0
-elif grep --no-messages --quiet 'root=live' /proc/cmdline; then
-   true "INFO: ISO live mode detected. Swap file creation skipped."
-   exit 0
+if grep_result=$( \
+  grep \
+      --only-matching \
+      --fixed-strings \
+      -e 'boot=live' \
+      -e 'root=live' \
+      -e 'rootovl' \
+      -e 'rd.live.overlay.overlayfs=1' \
+      -e 'rd.live.image' \
+      /proc/cmdline \
+   ) ; then
+      true "INFO: ISO live mode detected. Swap file creation skipped. grep_result: $grep_result"
+      exit 0
 fi
 
 sanity_tests
