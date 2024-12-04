@@ -126,6 +126,11 @@ do_start() {
    local folder_of_swapfile
    folder_of_swapfile="${SWAPFILE%/*}"
 
+   if ! test -d "$folder_of_swapfile" ; then
+      echo "ERROR: folder_of_swapfile '$folder_of_swapfile' does not exist." >&2
+      exit 1
+   fi
+
    if ! test -w "$folder_of_swapfile" ; then
       true "INFO: $SWAPFILE (actually $folder_of_swapfile) is not writeable. Maybe read-only file system? Exiting."
       exit 0
