@@ -116,10 +116,18 @@ do_start() {
 
    local swap_file_actual_size_in_bytes
    if [ -f "$SWAPFILE" ]; then
+      ## Sanity test.
+      test -r "$SWAPFILE"
       swap_file_actual_size_in_bytes="$(stat --format='%s' "$SWAPFILE")"
    else
       swap_file_actual_size_in_bytes="0"
    fi
+
+   if ! test -w "$SWAPFILE" ; then
+      true "INFO: $SWAPFILE not writeable. Maybe read-only file system? Exiting."
+      exit 0
+   fi
+
    local swap_file_actual_size_in_mb
    swap_file_actual_size_in_mb="$(( swap_file_actual_size_in_bytes / 1024 / 1024 ))"
 
