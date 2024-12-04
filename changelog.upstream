@@ -1,3 +1,21 @@
+commit 7bbb291e1380e573d995c4c8bcd4404e758b415a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Dec 4 10:20:06 2024 -0500
+
+    increase verbosity
+
+commit 2ebf1d247979617bb007ee32850f4ac636afcb62
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Dec 4 10:18:41 2024 -0500
+
+    fix: detach mapper only if swap was on
+
+commit 770b9b26b671445d2e1a65e70d590464c6856fe7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Dec 4 14:58:13 2024 +0000
+
+    bumped changelog version
+
 commit b1f7358a8f6774da4aefeb001f2ebd2b00286065
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Dec 4 09:55:03 2024 -0500
