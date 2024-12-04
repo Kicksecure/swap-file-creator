@@ -134,13 +134,21 @@ do_start() {
       echo "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
    fi
 
+   local dirname_swapfile
+   local total_disk_space_in_mb
+   dirname_swapfile="${SWAPFILE%/*}"
+   total_disk_space_in_mb=$(df "$dirname_swapfile" | awk 'NR==2 {print int($2/1024)}')
+
    local swap_file_target_size_mb
    if [ "$SWAP_FILE_SIZE_CUSTOM_MB" = "" ]; then
+      local calculate_swap_size_report
+      calculate_swap_size_report="$(calculate-swap-size "$total_ram_in_mb" "$total_disk_space_in_mb" "$HIBERNATION")"
+
       ## For informational output.
-      calculate-swap-size "$total_ram_in_mb" "$HIBERNATION"
+      echo "$calculate_swap_size_report"
 
       ## Take last word of last line.
-      swap_file_target_size_mb=$(calculate-swap-size "$total_ram_in_mb" "$HIBERNATION" | tail -1 | awk '{print $NF}')
+      swap_file_target_size_mb=$(tail -1 <<< "$calculate_swap_size_report" | awk '{print $NF}')
    else
       swap_file_target_size_mb="$SWAP_FILE_SIZE_CUSTOM_MB"
    fi
@@ -148,7 +156,8 @@ do_start() {
    local swap_file_size_gb
    swap_file_size_gb=$(echo "scale=0; $swap_file_target_size_mb / 1024" | bc)
 
-   dirname_swapfile="${SWAPFILE%/*}"
+   local free_disk_space_in_gb
+   local free_disk_space_in_gb_plus
    free_disk_space_in_gb=$(df "$dirname_swapfile" | awk 'NR==2 {print int($4/1024/1024)}')
    free_disk_space_in_gb_plus=$(( free_disk_space_in_gb + 2 ))
 
