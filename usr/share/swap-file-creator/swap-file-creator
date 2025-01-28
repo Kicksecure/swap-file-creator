@@ -132,7 +132,7 @@ do_start() {
    fi
 
    if ! test -w "$folder_of_swapfile" ; then
-      true "INFO: $SWAPFILE (actually $folder_of_swapfile) is not writeable. Maybe read-only file system? Exiting."
+      true "INFO: File $SWAPFILE (actually folder $folder_of_swapfile) is not writeable. Maybe read-only file system? Exiting."
       exit 0
    fi
 
@@ -164,7 +164,8 @@ do_start() {
       echo "$calculate_swap_size_report"
 
       ## Take last word of last line.
-      swap_file_target_size_mb=$(tail -1 <<< "$calculate_swap_size_report" | awk '{print $NF}')
+      swap_file_target_size_mb=$(tail -1 <<< "$calculate_swap_size_report")
+      swap_file_target_size_mb=$(echo "$swap_file_target_size_mb" | awk '{print $NF}')
    else
       swap_file_target_size_mb="$SWAP_FILE_SIZE_CUSTOM_MB"
    fi
