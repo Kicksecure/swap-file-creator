@@ -191,9 +191,9 @@ do_start() {
    swap_file_target_size_bytes=$((swap_file_target_size_mb * 1000000))
 
    local swap_file_target_size_gb
-   swap_file_target_size_gb=$(echo "scale=2; $swap_file_target_size_bytes/1024/1024/1024" | bc)
+   swap_file_target_size_gb="$(echo "scale=2; "$swap_file_target_size_bytes"/1024/1024/1024" | bc)"
    ## Round down to integer.
-   swap_file_target_size_gb=$(printf "%.0f" "$swap_file_target_size_gb")
+   swap_file_target_size_gb="$(printf "%.0f" "$swap_file_target_size_gb")"
 
    ## We need to check the size of $SWAPFILE, because a previous run of fallocate that
    ## got interrupted for some reason might have only created a smaller file
@@ -245,7 +245,7 @@ showed unknown unit, not M or G.
 swap_file_size_with_unit: '$swap_file_size_with_unit'"
    fi
 
-   swap_file_kernel_reported_size_gb_rounded_up=$(printf "%.0f\n" $swap_file_kernel_reported_size_gb)
+   swap_file_kernel_reported_size_gb_rounded_up="$(printf "%.0f\n" "$swap_file_kernel_reported_size_gb")"
 
    local swap_file_kernel_reported_size_gb_plus
    swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb_rounded_up + 1 ))
