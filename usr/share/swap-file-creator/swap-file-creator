@@ -187,7 +187,8 @@ do_start() {
       exit 1
    fi
 
-   local swap_file_target_size_bytes=$((swap_file_target_size_mb * 1000000))
+   local swap_file_target_size_bytes
+   swap_file_target_size_bytes=$((swap_file_target_size_mb * 1000000))
 
    local swap_file_target_size_gb
    swap_file_target_size_gb=$(echo "scale=2; $swap_file_target_size_bytes/1024/1024/1024" | bc)
