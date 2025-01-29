@@ -1,3 +1,51 @@
+commit ed9332537f884a35a87f0e8bf7af0b6b8612b359
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Jan 29 06:53:01 2025 -0500
+
+    export
+
+commit 1d509ead24340600a7e3896302b107aa513bb63f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Jan 29 06:07:10 2025 -0500
+
+    fix printf error message on non-English locales
+    
+    by setting `LC_ALL=C` environment variable
+    
+    Thanks to @Decidable3 for the bug report!
+    
+    https://forums.whonix.org/t/swap-file-creator-error/21128
+
+commit 0ee0e924e05364470216a1b896af4067c47c58fc
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Jan 28 13:49:43 2025 -0500
+
+    refactoring
+
+commit 912c54d833359dea5cce73ed629afe42794b8005
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Jan 28 13:33:59 2025 -0500
+
+    quotes
+
+commit 2a2035ddeb95d47afff675aa2039eb5b4d8f09d2
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Jan 28 13:33:10 2025 -0500
+
+    quotes
+
+commit b3fd247df37d8c0067cc3754ce6f335753b5dad4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Tue Jan 28 13:28:25 2025 -0500
+
+    refactoring
+
+commit 2ccfcbb84612bddb47389f9baa1caf93ad0d23c7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Jan 23 16:30:15 2025 +0000
+
+    bumped changelog version
+
 commit e2834c94318d0bfc592da98c5521a73eb107f5b0
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Jan 23 11:12:34 2025 -0500
