@@ -28,13 +28,18 @@ error_handler() {
 ## Swap File Creator ERROR
 ## $0
 ##
-## BASH_COMMAND: $BASH_COMMAND
-## exit_code: $exit_code
+## BASH_COMMAND: '$BASH_COMMAND'
+## exit_code: '$exit_code'
 ##
 ## For debugging, please run:
-## bash -x $0
+##     bash -x $0 start
+## and/or:
+##     bash -x $0 stop
 ##
 ## Clean the output and submit to developers.
+##
+## See also:
+## https://www.kicksecure.com/wiki/swap-file-creator
 ###############################################################################\
 " >&2
    exit 1
