@@ -10,6 +10,15 @@ set -o pipefail
 set -o errtrace
 set -o nounset
 
+## https://forums.whonix.org/t/swap-file-creator-error/21128/3
+## avoid printf error
+#bash: printf: 3.14: invalid number
+##
+## Does not work:
+#export LANG=C
+## https://unix.stackexchange.com/questions/576701/what-is-the-difference-between-lang-c-and-lc-all-c
+LC_ALL=C
+
 error_handler() {
    local exit_code="$?"
    trap "" ERR
