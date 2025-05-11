@@ -279,8 +279,8 @@ swap_file_size_with_unit: '$swap_file_size_with_unit'"
    exit 1
 }
 
-if [ "$live_status_detected_live_mode_environment_machine" = "iso-live" ]; then
-  true "INFO: ISO live mode detected. Swap file creation skipped."
+if [ "$live_status_detected" = "true" ]; then
+  true "INFO: live mode detected. Swap file creation skipped."
   exit 0
 fi
 
