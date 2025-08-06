@@ -9,12 +9,13 @@ Build-Depends: debhelper (>= 13.11.6), debhelper-compat (= 13)
 Homepage: https://www.kicksecure.com/wiki/Swap-file-creator
 Vcs-Browser: https://github.com/Kicksecure/swap-file-creator
 Vcs-Git: https://github.com/Kicksecure/swap-file-creator.git
-Standards-Version: 4.6.2
+Standards-Version: 4.7.2
 Rules-Requires-Root: no
 
 Package: swap-file-creator
 Architecture: all
-Depends: helper-scripts, cryptsetup-bin, bc, ${misc:Depends}
+Depends: helper-scripts, cryptsetup-bin, bc, systemd-cryptsetup,
+ ${misc:Depends}
 Recommends: haveged, jitterentropy-rngd
 Description: Adds encrypted swap file to the system
  On every boot, creates a new encrypted swapfile with a random key.
