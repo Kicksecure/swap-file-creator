@@ -14,7 +14,8 @@ Rules-Requires-Root: no
 
 Package: swap-file-creator
 Architecture: all
-Depends: helper-scripts, cryptsetup-bin, bc, ${misc:Depends}
+Depends: helper-scripts, cryptsetup-bin, bc, systemd-cryptsetup,
+ ${misc:Depends}
 Recommends: haveged, jitterentropy-rngd
 Description: Adds encrypted swap file to the system
  On every boot, creates a new encrypted swapfile with a random key.
