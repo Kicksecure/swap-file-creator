@@ -51,25 +51,39 @@ trap "error_handler" ERR
 source /usr/libexec/helper-scripts/live-mode.sh
 
 sanity_tests() {
-   #command -v cryptsetup >/dev/null 2>&1
-   #command -v mkdir >/dev/null 2>&1
-   command -v safe-rm >/dev/null 2>&1
-   command -v chown >/dev/null 2>&1
-   command -v mkswap >/dev/null 2>&1
-   command -v swapon >/dev/null 2>&1
-   command -v swapoff >/dev/null 2>&1
-   command -v shred >/dev/null 2>&1
-   command -v cat >/dev/null 2>&1
-   command -v test >/dev/null 2>&1
-   command -v printf >/dev/null 2>&1
-   command -v stat >/dev/null 2>&1
-   command -v mountpoint >/dev/null 2>&1
-   command -v grep >/dev/null 2>&1
-   command -v sed >/dev/null 2>&1
-   command -v blkid >/dev/null 2>&1
-   command -v basename >/dev/null 2>&1
-   command -v dirname >/dev/null 2>&1
-   #command -v /usr/lib/systemd/systemd-cryptsetup >/dev/null 2>&1
+  local list cmd
+
+  #cryptsetup
+  #mkdir
+  #/usr/lib/systemd/systemd-cryptsetup
+  list=(
+    safe-rm
+    chown
+    mkswap
+    swapon
+    swapoff
+    shred
+    cat
+    test
+    printf
+    stat
+    mountpoint
+    grep
+    sed
+    blkid
+    basename
+    dirname
+    findmnt
+    fallocate
+    df
+    free
+    bc
+    calculate-swap-size
+  )
+
+  for cmd in "${list[@]}"; do
+    command -v "$cmd" >/dev/null
+  done
 }
 
 source_config_file() {
