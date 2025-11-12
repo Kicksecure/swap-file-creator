@@ -146,6 +146,8 @@ do_stop() {
 }
 
 do_start() {
+   local dirname_swapfile
+
    printf '%s\n' "INFO: swap-file-creator..."
 
    systemd_detect_virt_output=""
@@ -170,9 +172,10 @@ do_start() {
       exit 0
    fi
 
-   dirname_swapfile="${SWAPFILE%/*}"
-
-   bail_if_swap_not_on_luks
+   if ! luks_path_check_output="$(luks-path-check "$SWAPFILE" 2>&1)"; then
+      printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: no. - Doing nothing, ok."
+      exit 0
+   fi
 
    ## User can set HIBERNATION=yes in /etc/default/swap-file-creator
    [[ -v "HIBERNATION" ]] || HIBERNATION="$hibernation_consideration"
@@ -216,6 +219,7 @@ do_start() {
    fi
 
    local total_disk_space_in_mb
+   dirname_swapfile="${SWAPFILE%/*}"
    total_disk_space_in_mb=$(df "$dirname_swapfile" | awk 'NR==2 {print int($2/1024)}')
 
    local swap_file_target_size_mb
