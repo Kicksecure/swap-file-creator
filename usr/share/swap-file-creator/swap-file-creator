@@ -142,11 +142,13 @@ bail_if_swap_not_on_luks() {
       exit 1
    fi
 
-   swap_mount_slave_dev="$(find "/sys/block/$swap_mount_real_device/slaves" -mindepth 1)"
-   if [ "$(wc -l <<< "$swap_mount_slave_dev")" != '1' ]; then
+   swap_mount_slave_dev="$(find "/sys/block/$swap_mount_real_device/slaves" -mindepth 1 2>/dev/null)" || true
+   ## example
+   ## swap_mount_slave_dev=''
+   if [ "$swap_mount_slave_dev" = "" ] || [ "$(wc -l <<< "$swap_mount_slave_dev")" != '1' ]; then
       printf '%s\n' "INFO: Swapfile mountpoint source device '$swap_mount_device' has an incorrect number of slave devices to be a LUKS device, exiting, ok."
       printf '%s\n' "Slave devices:"
-      printf '%s\n' "$swap_mount_slave_dev"
+      printf '%s\n' "'$swap_mount_slave_dev'"
       exit 0
    fi
 
