@@ -47,6 +47,7 @@ error_handler() {
 
 trap "error_handler" ERR
 
+## sets: live_status_detected
 source /usr/libexec/helper-scripts/live-mode.sh
 
 sanity_tests() {
