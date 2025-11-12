@@ -113,6 +113,10 @@ set_defaults() {
   [[ -v "SWAP_FILE_SIZE_CUSTOM_MB" ]] || SWAP_FILE_SIZE_CUSTOM_MB=""
 }
 
+exit_function() {
+  exit "$1"
+}
+
 bail_if_swap_not_on_luks() {
    local swap_mount_device swap_mount_real_device swap_mount_slave_dev \
       blkid_swap_mount_fs
@@ -126,20 +130,20 @@ bail_if_swap_not_on_luks() {
    fi
    if ! [[ "$swap_mount_device" = '/dev/mapper/'* ]]; then
       printf '%s\n' "INFO: Swapfile mountpoint source device '$swap_mount_device' is not a device-mapper device, exiting, ok."
-      exit 0
+      exit_function 0
    fi
 
    swap_mount_real_device="$(readlink -f -- "$swap_mount_device")" || true
    if [ -z "$swap_mount_real_device" ]; then
       printf '%s\n' "ERROR: Cannot find true source device for swapfile mountpoint device '$swap_mount_device'!" >&2
-      exit 1
+      exit_function 1
    fi
    #swap_mount_real_device="$(basename -- "$swap_mount_real_device")"
    swap_mount_real_device="${swap_mount_real_device##*/}"
 
    if ! [[ "$swap_mount_real_device" = dm-* ]]; then
       printf '%s\n' "ERROR: Swapfile mountpoint source device '/dev/$swap_mount_real_device' is not a device-mapper device, exiting, ok." >&2
-      exit 1
+      exit_function 1
    fi
 
    swap_mount_slave_dev="$(find "/sys/block/$swap_mount_real_device/slaves" -mindepth 1 2>/dev/null)" || true
@@ -149,7 +153,7 @@ bail_if_swap_not_on_luks() {
       printf '%s\n' "INFO: Swapfile mountpoint source device '$swap_mount_device' has an incorrect number of slave devices to be a LUKS device, exiting, ok."
       printf '%s\n' "Slave devices:"
       printf '%s\n' "'$swap_mount_slave_dev'"
-      exit 0
+      exit_function 0
    fi
 
    #swap_mount_slave_dev="$(basename -- "$swap_mount_slave_dev")"
@@ -157,17 +161,17 @@ bail_if_swap_not_on_luks() {
 
    if ! [ -b "/dev/$swap_mount_slave_dev" ]; then
       printf '%s\n' "ERROR: Swapfile mountpoint underlying device '/dev/$swap_mount_slave_dev' does not exist!" >&2
-      exit 1
+      exit_function 1
    fi
 
    blkid_swap_mount_fs="$(blkid -s TYPE -o value "/dev/$swap_mount_slave_dev")"
    if [ -z "$blkid_swap_mount_fs" ]; then
       printf '%s\n' "INFO: 'blkid' did not return the filesystem on swapfile mountpoint underlying device '/dev/$swap_mount_slave_dev', exiting, ok."
-      exit 0
+      exit_function 0
    fi
    if [ "$blkid_swap_mount_fs" != 'crypto_LUKS' ]; then
       printf '%s\n' "INFO: Swapfile mountpoint underlying device '/dev/$swap_mount_slave_dev' is not a LUKS device, exiting, ok."
-      exit 0
+      exit_function 0
    fi
 }
 
