@@ -119,7 +119,7 @@ bail_if_swap_not_on_luks() {
    local swap_mount_device swap_mount_real_device swap_mount_slave_dev \
       blkid_swap_mount_fs
 
-   swap_mount_device="$(findmnt -n --output=SOURCE --target "$(dirname "$SWAPFILE")")" || true
+   swap_mount_device="$(findmnt -n --output=SOURCE --target "$(dirname -- "$SWAPFILE")")" || true
    if [ -z "$swap_mount_device" ]; then
       printf '%s\n' "ERROR: No mountpoint source device found for swapfile '$SWAPFILE'!" >&2
       exit 1
@@ -134,7 +134,7 @@ bail_if_swap_not_on_luks() {
       printf '%s\n' "ERROR: Cannot find true source device for swapfile mountpoint device '$swap_mount_device'!" >&2
       exit 1
    fi
-   swap_mount_real_device="$(basename "$swap_mount_real_device")"
+   swap_mount_real_device="$(basename -- "$swap_mount_real_device")"
 
    if ! [[ "$swap_mount_real_device" = dm-* ]]; then
       printf '%s\n' "ERROR: Swapfile mountpoint source device '/dev/$swap_mount_real_device' is not a device-mapper device, exiting, ok." >&2
@@ -148,7 +148,7 @@ bail_if_swap_not_on_luks() {
       printf '%s\n' "$swap_mount_slave_dev"
       exit 0
    fi
-   swap_mount_slave_dev="$(basename "$swap_mount_slave_dev")"
+   swap_mount_slave_dev="$(basename -- "$swap_mount_slave_dev")"
    if ! [ -b "/dev/$swap_mount_slave_dev" ]; then
       printf '%s\n' "ERROR: Swapfile mountpoint underlying device '/dev/$swap_mount_slave_dev' does not exist!" >&2
       exit 1
