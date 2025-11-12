@@ -320,7 +320,7 @@ do_start() {
    ## /proc/swap does not show the label.
    ## output by swapon_line is not predictable, G vs M as unit.
    local swapon_line
-   swapon_line=$(swapon --raw --show=LABEL,SIZE | grep '\bswapfile\b')
+   swapon_line=$(swapon --noheadings --raw --show=LABEL,SIZE | grep '\bswapfile\b')
    swap_file_size_with_unit=$(awk '{print $NF}' <<< "$swapon_line")
 
    # Check if the size is in GB or MB and convert accordingly
