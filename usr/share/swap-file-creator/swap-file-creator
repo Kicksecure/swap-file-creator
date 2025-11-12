@@ -115,7 +115,7 @@ do_stop() {
    local swapoff_exitcode
    swapoff_exitcode='0'
    if [ -f "$SWAPFILE" ]; then
-      if grep --quiet "^$SWAPFILE " < <(swapon) ; then
+      if grep -- "^$SWAPFILE " &>/dev/null < <(swapon) ; then
          swapoff "$SWAPFILE" || swapoff_exitcode="$?"
       fi
 
@@ -287,7 +287,7 @@ do_start() {
    ## /proc/swap does not show the label.
    ## output by swapon_line is not predictable, G vs M as unit.
    local swapon_line
-   swapon_line=$(swapon --noheadings --raw --show=LABEL,SIZE | grep '\bswapfile\b')
+   swapon_line=$(swapon --noheadings --raw --show=LABEL,SIZE | grep -- '\bswapfile\b')
    ## example swapon_line:
    #swapon_line=" 1024M"
    swap_file_size_with_unit=$(awk '{print $NF}' <<< "$swapon_line")
@@ -305,7 +305,7 @@ do_start() {
 WARNING: Minor issue.
 Unit test if swap file with correct size has been created has been skipped.
 Output of:
-    swapon --noheadings --raw --show=LABEL,SIZE | grep '\bswapfile\b'
+    swapon --noheadings --raw --show=LABEL,SIZE | grep -- '\bswapfile\b'
 showed unknown unit, not M or G.
 swapon_line: '$swapon_line'
 swap_file_size_with_unit: '$swap_file_size_with_unit'"
