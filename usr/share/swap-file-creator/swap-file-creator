@@ -342,6 +342,7 @@ Output of:
     swapon --noheadings --raw --show=LABEL,SIZE | grep '\bswapfile\b'
 showed unknown unit, not M or G.
 swap_file_size_with_unit: '$swap_file_size_with_unit'"
+      return 0
    fi
 
    swap_file_kernel_reported_size_gb_rounded_up="$(printf "%.0f\n" "$swap_file_kernel_reported_size_gb")"
