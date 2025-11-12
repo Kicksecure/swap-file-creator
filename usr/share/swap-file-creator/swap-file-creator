@@ -10,6 +10,8 @@ set -o pipefail
 set -o errtrace
 set -o nounset
 
+source /usr/libexec/helper-scripts/wc-test.sh
+
 ## https://forums.whonix.org/t/swap-file-creator-error/21128/3
 ## avoid printf error
 #bash: printf: 3.14: invalid number
