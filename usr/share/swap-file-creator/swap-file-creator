@@ -288,6 +288,7 @@ do_start() {
    ## /proc/swap does not show the label.
    ## output by swapon_line is not predictable, G vs M as unit.
    local swapon_line
+   ## TODO: There might be multiple lines. grep for exact swap file.
    swapon_line=$(swapon --noheadings --raw --show=LABEL,SIZE | grep -- '\bswapfile\b') || true
    ## example swapon_line:
    #swapon_line=" 1024M"
