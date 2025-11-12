@@ -1,3 +1,22 @@
+commit 77ec9613d125baeb236ca0eea2680e0bc7cfd68b
+Merge: ae2b0e0 8962ac4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 00:28:46 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 8962ac43ef9c7e1c87a532f83b7a6626521a8719
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Nov 11 21:28:19 2025 -0600
+
+    Stop creating an encrypted swapfile, only create swapfiles on LUKS volumes, delete swapfile on shutdown, improve do_stop reliability
+
+commit ae2b0e01027ce3ffb62a7c99333645539f91ad75
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Sep 19 16:19:56 2025 +0000
+
+    bumped changelog version
+
 commit e98a80fa86db6b11a799fb047b6c2e9e407df564
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Sep 18 10:08:17 2025 -0400
