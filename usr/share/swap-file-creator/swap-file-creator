@@ -74,7 +74,6 @@ sanity_tests() {
     sed
     blkid
     basename
-    dirname
     findmnt
     fallocate
     df
@@ -119,7 +118,7 @@ bail_if_swap_not_on_luks() {
    local swap_mount_device swap_mount_real_device swap_mount_slave_dev \
       blkid_swap_mount_fs
 
-   swap_mount_device="$(findmnt -n --output=SOURCE --target "$(dirname -- "$SWAPFILE")")" || true
+   swap_mount_device="$(findmnt -n --output=SOURCE --target "$dirname_swapfile")" || true
    if [ -z "$swap_mount_device" ]; then
       printf '%s\n' "ERROR: No mountpoint source device found for swapfile '$SWAPFILE'!" >&2
       exit 1
@@ -221,8 +220,11 @@ do_start() {
 
    if [ "$systemd_detect_virt_output" = "xen" ]; then
       printf '%s\n' "INFO: xen detected. Could be Qubes. Skipping swap-file-creator. Doing nothing, ok."
-      exit 0
+      ## TODO
+      #exit 0
    fi
+
+   dirname_swapfile="${SWAPFILE%/*}"
 
    bail_if_swap_not_on_luks
 
@@ -267,9 +269,7 @@ do_start() {
       printf '%s\n' "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
    fi
 
-   local dirname_swapfile
    local total_disk_space_in_mb
-   dirname_swapfile="${SWAPFILE%/*}"
    total_disk_space_in_mb=$(df "$dirname_swapfile" | awk 'NR==2 {print int($2/1024)}')
 
    local swap_file_target_size_mb
