@@ -322,6 +322,8 @@ do_start() {
    ## output by swapon_line is not predictable, G vs M as unit.
    local swapon_line
    swapon_line=$(swapon --noheadings --raw --show=LABEL,SIZE | grep '\bswapfile\b')
+   ## example swapon_line:
+   #swapon_line=" 1024M"
    swap_file_size_with_unit=$(awk '{print $NF}' <<< "$swapon_line")
 
    # Check if the size is in GB or MB and convert accordingly
