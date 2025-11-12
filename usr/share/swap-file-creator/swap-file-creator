@@ -118,7 +118,7 @@ bail_if_swap_not_on_luks() {
    local swap_mount_device swap_mount_real_device swap_mount_slave_dev \
       blkid_swap_mount_fs
 
-   swap_mount_device="$(findmnt -n --output=SOURCE --target "$dirname_swapfile")" || true
+   swap_mount_device="$(findmnt --noheadings --output=SOURCE --target "$dirname_swapfile")" || true
    ## example:
    #swap_mount_device="/dev/mapper/dmroot"
    if [ -z "$swap_mount_device" ]; then
