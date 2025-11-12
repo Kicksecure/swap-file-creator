@@ -16,7 +16,7 @@ Package: swap-file-creator
 Architecture: all
 Depends: helper-scripts, bc, safe-rm,
  ${misc:Depends}
-Recommends: haveged, jitterentropy-rngd
+## Recommends: haveged, jitterentropy-rngd
 Description: Adds encrypted swap file to the system
  On every boot, creates a new encrypted swapfile with a random key.
  .
