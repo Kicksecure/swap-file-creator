@@ -218,7 +218,7 @@ do_start() {
    fi
 
    if [ "$systemd_detect_virt_output" = "xen" ]; then
-      printf '%s\n' "INFO: xen detected. Could be a Qubes HVM. Skipping swap-file-creator. Doing nothing, ok."
+      printf '%s\n' "INFO: xen detected. Could be Qubes. Skipping swap-file-creator. Doing nothing, ok."
       exit 0
    fi
 
