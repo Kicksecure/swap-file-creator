@@ -339,7 +339,7 @@ do_start() {
 WARNING: Minor issue.
 Unit test if swap file with correct size has been created has been skipped.
 Output of:
-    swapon --raw --show=LABEL,SIZE | grep '\bswapfile\b'
+    swapon --noheadings --raw --show=LABEL,SIZE | grep '\bswapfile\b'
 showed unknown unit, not M or G.
 swap_file_size_with_unit: '$swap_file_size_with_unit'"
    fi
