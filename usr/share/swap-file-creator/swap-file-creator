@@ -23,7 +23,7 @@ export LC_ALL
 error_handler() {
    local exit_code="$?"
    trap "" ERR
-   echo "\
+   printf '%s\n' "\
 ###############################################################################
 ## Swap File Creator ERROR
 ## $0
@@ -50,8 +50,8 @@ trap "error_handler" ERR
 source /usr/libexec/helper-scripts/live-mode.sh
 
 sanity_tests() {
-   command -v cryptsetup >/dev/null 2>&1
-   command -v mkdir >/dev/null 2>&1
+   #command -v cryptsetup >/dev/null 2>&1
+   #command -v mkdir >/dev/null 2>&1
    command -v rm >/dev/null 2>&1
    command -v chown >/dev/null 2>&1
    command -v mkswap >/dev/null 2>&1
@@ -60,9 +60,15 @@ sanity_tests() {
    command -v shred >/dev/null 2>&1
    command -v cat >/dev/null 2>&1
    command -v test >/dev/null 2>&1
-   command -v echo >/dev/null 2>&1
+   command -v printf >/dev/null 2>&1
    command -v stat >/dev/null 2>&1
-   command -v /usr/lib/systemd/systemd-cryptsetup >/dev/null 2>&1
+   command -v mountpoint >/dev/null 2>&1
+   command -v grep >/dev/null 2>&1
+   command -v sed >/dev/null 2>&1
+   command -v blkid >/dev/null 2>&1
+   command -v basename >/dev/null 2>&1
+   command -v dirname >/dev/null 2>&1
+   #command -v /usr/lib/systemd/systemd-cryptsetup >/dev/null 2>&1
 }
 
 source_config_file() {
@@ -78,11 +84,11 @@ set_defaults() {
   [[ -v "SWAPFILE" ]] || SWAPFILE="/var/swapfile"
   [[ -v "VERBOSE" ]] || VERBOSE="yes"
   [[ -v "UUID" ]] || UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
-  [[ -v "MAPPER" ]] || MAPPER="swapfile"
-  [[ -v "MAPPER_FULL" ]] || MAPPER_FULL="/dev/mapper/$MAPPER"
+  #[[ -v "MAPPER" ]] || MAPPER="swapfile"
+  #[[ -v "MAPPER_FULL" ]] || MAPPER_FULL="/dev/mapper/$MAPPER"
   [[ -v "RUN_FOLDER" ]] || RUN_FOLDER="/run/$NAME"
   ## https://gitlab.com/cryptsetup/cryptsetup/-/issues/617
-  [[ -v "cryptsetup_pre_wrapper" ]] || cryptsetup_pre_wrapper="ld-system-preload-disable"
+  #[[ -v "cryptsetup_pre_wrapper" ]] || cryptsetup_pre_wrapper="ld-system-preload-disable"
   [[ -v "SWAPON_EXTRA" ]] || SWAPON_EXTRA=""
   [[ -v "MKSWAP_EXTRA" ]] || MKSWAP_EXTRA=""
   [[ -v "SHRED_ON_STOP" ]] || SHRED_ON_STOP="no"
@@ -92,18 +98,84 @@ set_defaults() {
   [[ -v "SWAP_FILE_SIZE_CUSTOM_MB" ]] || SWAP_FILE_SIZE_CUSTOM_MB=""
 }
 
-do_stop() {
-   if test -e "$MAPPER_FULL" ; then
-      swapoff "$MAPPER_FULL" || true
+bail_if_swap_not_on_luks() {
+   local swap_mount_device swap_mount_real_device swap_mount_slave_dev \
+      blkid_swap_mount_fs
 
-      /usr/lib/systemd/systemd-cryptsetup detach "$MAPPER"
+   swap_mount_device="$(findmnt -n --output=SOURCE --target "$(dirname "$SWAPFILE")")" || true
+   if [ -z "$swap_mount_device" ]; then
+      printf '%s\n' "ERROR: No mountpoint source device found for swapfile '$SWAPFILE'!" >&2
+      exit 1
+   fi
+   if ! [[ "$swap_mount_device" = '/dev/mapper/'* ]]; then
+      printf '%s\n' "INFO: Swapfile mountpoint source device '$swap_mount_device' is not a device-mapper device, exiting, ok."
+      exit 0
    fi
 
-   if [ "$SHRED_ON_STOP" = "yes" ]; then
+   swap_mount_real_device="$(readlink -f "$swap_mount_device")" || true
+   if [ -z "$swap_mount_real_device" ]; then
+      printf '%s\n' "ERROR: Cannot find true source device for swapfile mountpoint device '$swap_mount_device'!" >&2
+      exit 1
+   fi
+   swap_mount_real_device="$(basename "$swap_mount_real_device")"
+
+   if ! [[ "$swap_mount_real_device" = dm-* ]]; then
+      printf '%s\n' "ERROR: Swapfile mountpoint source device '/dev/$swap_mount_real_device' is not a device-mapper device, exiting, ok." >&2
+      exit 1
+   fi
+
+   swap_mount_slave_dev="$(find "/sys/block/$swap_mount_real_device/slaves" -mindepth 1)"
+   if [ "$(wc -l <<< "$swap_mount_slave_dev")" != '1' ]; then
+      printf '%s\n' "INFO: Swapfile mountpoint source device '$swap_mount_device' has an incorrect number of slave devices to be a LUKS device, exiting, ok."
+      printf '%s\n' "Slave devices:"
+      printf '%s\n' "$swap_mount_slave_dev"
+      exit 0
+   fi
+   swap_mount_slave_dev="$(basename "$swap_mount_slave_dev")"
+   if ! [ -b "/dev/$swap_mount_slave_dev" ]; then
+      printf '%s\n' "ERROR: Swapfile mountpoint underlying device '/dev/$swap_mount_slave_dev' does not exist!" >&2
+      exit 1
+   fi
+
+   blkid_swap_mount_fs="$(blkid -s TYPE -o value "/dev/$swap_mount_slave_dev")"
+   if [ -z "$blkid_swap_mount_fs" ]; then
+      printf '%s\n' "INFO: 'blkid' did not return the filesystem on swapfile mountpoint underlying device '/dev/$swap_mount_slave_dev', exiting, ok."
+      exit 0
+   fi
+   if [ "$blkid_swap_mount_fs" != 'crypto_LUKS' ]; then
+      printf '%s\n' "INFO: Swapfile mountpoint underlying device '/dev/$swap_mount_slave_dev' is not a LUKS device, exiting, ok."
+      exit 0
+   fi
+}
+
+do_stop() {
+   local swapoff_exitcode
+   swapoff_exitcode='0'
+   if [ -f "$SWAPFILE" ]; then
+      if grep --quiet "^$SWAPFILE " < <(swapon) ; then
+         swapoff "$SWAPFILE" || swapoff_exitcode="$?"
+      fi
+
+      #if [ "$swapoff_exitcode" = '0' ]; then
+      #   /usr/lib/systemd/systemd-cryptsetup detach "$MAPPER"
+      #fi
+   fi
+
+   ## Avoid shredding the swapfile if swapoff failed, as doing so could shred
+   ## actively in-use memory and crash the system.
+   if [ "$swapoff_exitcode" = '0' ]; then
+      if [ "$SHRED_ON_STOP" = "yes" ]; then
+         if [ -f "$SWAPFILE" ]; then
+            printf '%s\n' "INFO: Shredding '$SWAPFILE'... This may take a while..."
+            shred $SHRED_OPTS "$SWAPFILE"
+            printf '%s\n' "INFO: Done shred '$SWAPFILE'."
+         fi
+      fi
+
       if [ -f "$SWAPFILE" ]; then
-         echo "INFO: Shredding '$SWAPFILE'... This may take a while..."
-         shred $SHRED_OPTS "$SWAPFILE"
-         echo "INFO: Done shred '$SWAPFILE'."
+         printf '%s\n' "INFO: Removing '$SWAPFILE'..."
+         safe-rm --force -- "$SWAPFILE"
+         printf '%s\n' "INFO: Done removing '$SWAPFILE'."
       fi
    fi
 
@@ -111,7 +183,7 @@ do_stop() {
 }
 
 do_start() {
-   echo "INFO: swap-file-creator..."
+   printf '%s\n' "INFO: swap-file-creator..."
 
    systemd_detect_virt_output=""
    if command -v systemd-detect-virt >/dev/null ; then
@@ -126,7 +198,14 @@ do_start() {
       fi
    fi
 
-   ## User can set HIBERNATIO=yes in /etc/default/swap-file-creator
+   bail_if_swap_not_on_luks
+
+   if [ "$systemd_detect_virt_output" = "xen" ]; then
+      printf '%s\n' "INFO: xen detected. Could be a Qubes HVM. Skipping swap-file-creator. Doing nothing, ok."
+      exit 0
+   fi
+
+   ## User can set HIBERNATION=yes in /etc/default/swap-file-creator
    [[ -v "HIBERNATION" ]] || HIBERNATION="$hibernation_consideration"
 
    total_ram_in_mb="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
@@ -144,7 +223,7 @@ do_start() {
    folder_of_swapfile="${SWAPFILE%/*}"
 
    if ! test -d "$folder_of_swapfile" ; then
-      echo "ERROR: folder_of_swapfile '$folder_of_swapfile' does not exist." >&2
+      printf '%s\n' "ERROR: folder_of_swapfile '$folder_of_swapfile' does not exist." >&2
       exit 1
    fi
 
@@ -160,11 +239,11 @@ do_start() {
    swap_file_actual_size_in_mb="$(( swap_file_actual_size_in_mb + 2 ))"
 
    if [ "$total_ram_in_mb" -ge "$ENOUGH_RAM" ]; then
-      echo "INFO: Enough RAM available. More than $ENOUGH_RAM MB RAM. OK."
+      printf '%s\n' "INFO: Enough RAM available. More than $ENOUGH_RAM MB RAM. OK."
    else
-      echo "INFO: Less than $ENOUGH_RAM MB RAM available."
-      echo "INFO: Ideally you should assign 2048 MB (2 GB) or more RAM to this machine."
-      echo "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
+      printf '%s\n' "INFO: Less than $ENOUGH_RAM MB RAM available."
+      printf '%s\n' "INFO: Ideally you should assign 2048 MB (2 GB) or more RAM to this machine."
+      printf '%s\n' "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
    fi
 
    local dirname_swapfile
@@ -178,30 +257,25 @@ do_start() {
       calculate_swap_size_report="$(calculate-swap-size "$total_ram_in_mb" "$total_disk_space_in_mb" "$HIBERNATION")"
 
       ## For informational output.
-      echo "$calculate_swap_size_report"
+      printf '%s\n' "$calculate_swap_size_report"
 
       ## Take last word of last line.
       swap_file_target_size_mb=$(tail -1 <<< "$calculate_swap_size_report")
-      swap_file_target_size_mb=$(echo "$swap_file_target_size_mb" | awk '{print $NF}')
+      swap_file_target_size_mb=$(awk '{print $NF}' <<< "$swap_file_target_size_mb")
    else
       swap_file_target_size_mb="$SWAP_FILE_SIZE_CUSTOM_MB"
    fi
 
    local swap_file_size_gb
-   swap_file_size_gb=$(echo "scale=0; $swap_file_target_size_mb / 1024" | bc)
+   swap_file_size_gb=$(bc <<< "scale=0; $swap_file_target_size_mb / 1024")
 
    local free_disk_space_in_gb
    local free_disk_space_in_gb_plus
    free_disk_space_in_gb=$(df "$dirname_swapfile" | awk 'NR==2 {print int($4/1024/1024)}')
    free_disk_space_in_gb_plus=$(( free_disk_space_in_gb + 2 ))
 
-   if [ "$systemd_detect_virt_output" = "xen" ]; then
-      echo "INFO: xen detected. Could be a Qubes HVM. Skipping swap-file-creator. Doing nothing, ok."
-      exit 0
-   fi
-
    if [ "$swap_file_size_gb" -ge "$free_disk_space_in_gb_plus" ]; then
-      echo "ERROR: Only $free_disk_space_in_gb GB free disk space. Insufficient to create $swap_file_size_gb GB sized swap file." >&2
+      printf '%s\n' "ERROR: Only $free_disk_space_in_gb GB free disk space. Insufficient to create $swap_file_size_gb GB sized swap file." >&2
       exit 1
    fi
 
@@ -209,9 +283,11 @@ do_start() {
    swap_file_target_size_bytes=$((swap_file_target_size_mb * 1000000))
 
    local swap_file_target_size_gb
-   swap_file_target_size_gb="$(echo "scale=2; $swap_file_target_size_bytes/1024/1024/1024" | bc)"
+   swap_file_target_size_gb="$(bc <<< "scale=2; $swap_file_target_size_bytes/1024/1024/1024")"
    ## Round down to integer.
    swap_file_target_size_gb="$(printf "%.0f" "$swap_file_target_size_gb")"
+
+   do_stop
 
    ## We need to check the size of $SWAPFILE, because a previous run of fallocate that
    ## got interrupted for some reason might have only created a smaller file
@@ -228,22 +304,20 @@ do_start() {
    chown --recursive root:root "$SWAPFILE"
    chmod --recursive 0600 "$SWAPFILE"
 
-   do_stop
-
    ## AUDIT: crypto
-   /usr/lib/systemd/systemd-cryptsetup attach "$MAPPER" "$SWAPFILE" "$RANDOM_DEVICE" 'swap,cipher=aes-xts-plain64,size=512'
+   #/usr/lib/systemd/systemd-cryptsetup attach "$MAPPER" "$SWAPFILE" "$RANDOM_DEVICE" 'swap,cipher=aes-xts-plain64,size=512'
 
-   chown --recursive root:root "$MAPPER_FULL"
-   chmod --recursive 0600 "$MAPPER_FULL"
+   #chown --recursive root:root "$MAPPER_FULL"
+   #chmod --recursive 0600 "$MAPPER_FULL"
 
-   mkswap --label "swapfile" --uuid "$UUID" "$MAPPER_FULL" $MKSWAP_EXTRA >/dev/null
-   swapon "$MAPPER_FULL" $SWAPON_EXTRA
+   mkswap --label "swapfile" --uuid "$UUID" "$SWAPFILE" $MKSWAP_EXTRA >/dev/null
+   swapon "$SWAPFILE" $SWAPON_EXTRA
 
    ## /proc/swap does not show the label.
    ## output by swapon_line is not predictable, G vs M as unit.
    local swapon_line
    swapon_line=$(swapon --raw --show=LABEL,SIZE | grep '\bswapfile\b')
-   swap_file_size_with_unit=$(echo "$swapon_line" | awk '{print $NF}')
+   swap_file_size_with_unit=$(awk '{print $NF}' <<< "$swapon_line")
 
    # Check if the size is in GB or MB and convert accordingly
    if [[ $swap_file_size_with_unit == *G ]]; then
@@ -254,7 +328,7 @@ do_start() {
       swap_file_size_in_mb=${swap_file_size_with_unit%M}
       swap_file_kernel_reported_size_gb=$(bc <<< "scale=2; $swap_file_size_in_mb / 1024")
    else
-      echo "\
+      printf '%s\n' "\
 WARNING: Minor issue.
 Unit test if swap file with correct size has been created has been skipped.
 Output of:
@@ -269,13 +343,13 @@ swap_file_size_with_unit: '$swap_file_size_with_unit'"
    swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb_rounded_up + 1 ))
 
    if [ "$swap_file_kernel_reported_size_gb_plus" -ge "$swap_file_target_size_gb" ]; then
-      echo "INFO: Encrypted '$SWAPFILE' ($swap_file_size_gb GB) ready. OK."
+      printf '%s\n' "INFO: Encrypted '$SWAPFILE' ($swap_file_size_gb GB) ready. OK."
       return 0
    fi
 
-   echo "ERROR: swap_file_kernel_reported_size_gb_plus is smaller than expected swap_file_target_size_gb!" >&2
-   echo "swap_file_kernel_reported_size_gb_plus: $swap_file_kernel_reported_size_gb_plus" >&2
-   echo "swap_file_target_size_gb: $swap_file_target_size_gb" >&2
+   printf '%s\n' "ERROR: swap_file_kernel_reported_size_gb_plus is smaller than expected swap_file_target_size_gb!" >&2
+   printf '%s\n' "swap_file_kernel_reported_size_gb_plus: $swap_file_kernel_reported_size_gb_plus" >&2
+   printf '%s\n' "swap_file_target_size_gb: $swap_file_target_size_gb" >&2
    exit 1
 }
 
@@ -289,8 +363,8 @@ source_config_file
 set_defaults
 
 if [ $# -eq 0 ]; then
-    echo "ERROR: No arguments provided."
-    echo "Usage: $0 [start|stop]"
+    printf '%s\n' "ERROR: No arguments provided." >&2
+    printf '%s\n' "Usage: $0 [start|stop]" >&2
     exit 1
 fi
 
@@ -302,8 +376,8 @@ case "$1" in
         do_stop
         ;;
     *)
-        echo "ERROR: Invalid argument: $1"
-        echo "Usage: $0 [start|stop]"
+        printf '%s\n' "ERROR: Invalid argument: $1" >&2
+        printf '%s\n' "Usage: $0 [start|stop]" >&2
         exit 1
         ;;
 esac

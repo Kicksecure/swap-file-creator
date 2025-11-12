@@ -49,9 +49,11 @@
 #SWAPON_EXTRA="--verbose"
 
 ## No change required unless you know what you are doing.
+## Currently does nothing.
 #MAPPER="swapfile"
 
 ## No change required unless you know what you are doing.
+## Currently does nothing.
 #MAPPER_FULL="/dev/mapper/$MAPPER"
 
 ## Pass 'yes' or 'no' to calculate-swap-size.

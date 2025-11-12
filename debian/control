@@ -14,7 +14,7 @@ Rules-Requires-Root: no
 
 Package: swap-file-creator
 Architecture: all
-Depends: helper-scripts, cryptsetup-bin, bc, systemd-cryptsetup,
+Depends: helper-scripts, bc,
  ${misc:Depends}
 Recommends: haveged, jitterentropy-rngd
 Description: Adds encrypted swap file to the system
