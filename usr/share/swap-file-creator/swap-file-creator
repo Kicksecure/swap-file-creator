@@ -119,6 +119,8 @@ bail_if_swap_not_on_luks() {
       blkid_swap_mount_fs
 
    swap_mount_device="$(findmnt -n --output=SOURCE --target "$dirname_swapfile")" || true
+   ## example:
+   #swap_mount_device="/dev/mapper/dmroot"
    if [ -z "$swap_mount_device" ]; then
       printf '%s\n' "ERROR: No mountpoint source device found for swapfile '$SWAPFILE'!" >&2
       exit 1
