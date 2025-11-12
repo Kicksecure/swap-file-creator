@@ -130,7 +130,7 @@ bail_if_swap_not_on_luks() {
       exit 0
    fi
 
-   swap_mount_real_device="$(readlink -f "$swap_mount_device")" || true
+   swap_mount_real_device="$(readlink -f -- "$swap_mount_device")" || true
    if [ -z "$swap_mount_real_device" ]; then
       printf '%s\n' "ERROR: Cannot find true source device for swapfile mountpoint device '$swap_mount_device'!" >&2
       exit 1
