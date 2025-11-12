@@ -341,6 +341,7 @@ Unit test if swap file with correct size has been created has been skipped.
 Output of:
     swapon --noheadings --raw --show=LABEL,SIZE | grep '\bswapfile\b'
 showed unknown unit, not M or G.
+swapon_line: '$swapon_line'
 swap_file_size_with_unit: '$swap_file_size_with_unit'"
       return 0
    fi
