@@ -53,7 +53,7 @@ source /usr/libexec/helper-scripts/live-mode.sh
 sanity_tests() {
    #command -v cryptsetup >/dev/null 2>&1
    #command -v mkdir >/dev/null 2>&1
-   command -v rm >/dev/null 2>&1
+   command -v safe-rm >/dev/null 2>&1
    command -v chown >/dev/null 2>&1
    command -v mkswap >/dev/null 2>&1
    command -v swapon >/dev/null 2>&1
