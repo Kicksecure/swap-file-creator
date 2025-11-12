@@ -196,6 +196,10 @@ do_start() {
          #hibernation_consideration=yes
          hibernation_consideration=no
       fi
+   else
+      ## XXX
+      hibernation_consideration=no
+      systemd_detect_virt_output=""
    fi
 
    bail_if_swap_not_on_luks
