@@ -114,9 +114,10 @@ set_defaults() {
 do_stop() {
    local swapoff_exitcode
    swapoff_exitcode='0'
+   swapon_output=$(swapon 2>/dev/null) || true
    if [ -f "$SWAPFILE" ]; then
-      if grep -- "^$SWAPFILE " &>/dev/null < <(swapon) ; then
-         swapoff "$SWAPFILE" || swapoff_exitcode="$?"
+      if printf '%s\n' "$swapon_output" | grep -- "^$SWAPFILE " &>/dev/null; then
+         swapoff "$SWAPFILE" || { swapoff_exitcode="$?"; true; };
       fi
 
       #if [ "$swapoff_exitcode" = '0' ]; then
