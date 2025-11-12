@@ -164,7 +164,7 @@ bail_if_swap_not_on_luks() {
       exit_function 1
    fi
 
-   blkid_swap_mount_fs="$(blkid -s TYPE -o value "/dev/$swap_mount_slave_dev")"
+   blkid_swap_mount_fs="$(blkid -s TYPE -o value "/dev/$swap_mount_slave_dev")" || true
    if [ -z "$blkid_swap_mount_fs" ]; then
       printf '%s\n' "INFO: 'blkid' did not return the filesystem on swapfile mountpoint underlying device '/dev/$swap_mount_slave_dev', exiting, ok."
       exit_function 0
@@ -238,6 +238,7 @@ do_start() {
    dirname_swapfile="${SWAPFILE%/*}"
 
    bail_if_swap_not_on_luks
+   exit
 
    ## User can set HIBERNATION=yes in /etc/default/swap-file-creator
    [[ -v "HIBERNATION" ]] || HIBERNATION="$hibernation_consideration"
