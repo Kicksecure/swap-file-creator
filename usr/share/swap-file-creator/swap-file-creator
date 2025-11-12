@@ -231,14 +231,12 @@ do_start() {
 
    if [ "$systemd_detect_virt_output" = "xen" ]; then
       printf '%s\n' "INFO: xen detected. Could be Qubes. Skipping swap-file-creator. Doing nothing, ok."
-      ## TODO
-      #exit 0
+      exit 0
    fi
 
    dirname_swapfile="${SWAPFILE%/*}"
 
    bail_if_swap_not_on_luks
-   exit
 
    ## User can set HIBERNATION=yes in /etc/default/swap-file-creator
    [[ -v "HIBERNATION" ]] || HIBERNATION="$hibernation_consideration"
