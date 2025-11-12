@@ -318,7 +318,7 @@ swap_file_size_with_unit: '$swap_file_size_with_unit'"
    swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb_rounded_up + 1 ))
 
    if [ "$swap_file_kernel_reported_size_gb_plus" -ge "$swap_file_target_size_gb" ]; then
-      printf '%s\n' "INFO: Encrypted '$SWAPFILE' ($swap_file_size_gb GB) ready. OK."
+      printf '%s\n' "INFO: File '$SWAPFILE' ($swap_file_size_gb GB) ready. OK."
       return 0
    fi
 
