@@ -360,10 +360,6 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-if [ -z "${1:-}" ]; then
-   printf '%s\n' "ERROR: No mode provided." >&2
-fi
-
 case "$1" in
     start)
         do_start
