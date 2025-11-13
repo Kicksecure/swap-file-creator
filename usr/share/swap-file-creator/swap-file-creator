@@ -147,7 +147,7 @@ do_stop() {
    ## TODO: Why is this needed?
 #    if [ "$DO_PRE_CHECK" = 'yes' ] \
 #       && [ "$pre_check_done" = 'false' ] \
-#       && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
+#       && ! luks-path-check "$SWAPFILE" &>/dev/null; then
 #       printf '%s\n' "INFO: Removing '$SWAPFILE'..."
 #       safe-rm --force -- "$SWAPFILE"
 #       printf '%s\n' "INFO: Done removing '$SWAPFILE'."
@@ -191,7 +191,7 @@ do_start() {
          exit 0
       fi
 
-      if ! luks-path-check "$SWAPFILE" >dev/null 2>&1; then
+      if ! luks-path-check "$SWAPFILE" &>/dev/null ; then
          printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: 'no'. - Doing nothing, ok."
          exit 0
       else
