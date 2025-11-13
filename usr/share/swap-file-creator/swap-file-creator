@@ -111,7 +111,7 @@ set_defaults() {
   [[ -v "RANDOM_DEVICE" ]] || RANDOM_DEVICE="/dev/random"
   [[ -v "ENOUGH_RAM" ]] || ENOUGH_RAM="1950"
   [[ -v "SWAP_FILE_SIZE_CUSTOM_MB" ]] || SWAP_FILE_SIZE_CUSTOM_MB=""
-  [[ -v "DO_LUKS_CHECK" ]] || DO_LUKS_CHECK="yes"
+  [[ -v "DO_PRE_CHECK" ]] || DO_PRE_CHECK="yes"
 }
 
 do_stop() {
@@ -143,7 +143,7 @@ do_stop() {
    fi
 
   if [ -f "$SWAPFILE" ] \
-      && [ "$DO_LUKS_CHECK" = 'yes' ] \
+      && [ "$DO_PRE_CHECK" = 'yes' ] \
       && [ "$pre_check_done" = 'false' ] \
       && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
       printf '%s\n' "INFO: Removing '$SWAPFILE'..."
@@ -186,7 +186,7 @@ do_start() {
       exit 0
    fi
 
-   if [ "$DO_LUKS_CHECK" = 'yes' ]; then
+   if [ "$DO_PRE_CHECK" = 'yes' ]; then
       if ! luks-path-check "$SWAPFILE" >dev/null 2>&1; then
          printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: no. - Doing nothing, ok."
          exit 0

@@ -62,4 +62,4 @@
 
 ## Pass 'yes' or 'no' to enable or disable the LUKS check.
 ## Useful for enabling swap on unencrypted installations.
-#DO_LUKS_CHECK="yes"
+#DO_PRE_CHECK="yes"
