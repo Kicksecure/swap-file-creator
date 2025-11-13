@@ -60,6 +60,10 @@
 ## Otherwise auto detected. 'no' in VMs. 'yes' otherwise.
 #HIBERNATION="no"
 
-## Pass 'yes' or 'no' to enable or disable the LUKS check.
-## Useful for enabling swap on unencrypted installations.
+## Pass 'yes' or 'no' to enable or disable both:
+## - the LUKS check
+## - virtualizer check
+## Useful for:
+## - enabling swap on unencrypted installations
+## - using swap-file-creator inside Xen or Qubes.
 #DO_PRE_CHECK="yes"

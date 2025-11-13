@@ -185,12 +185,12 @@ do_start() {
       systemd_detect_virt_output=""
    fi
 
-   if [ "$systemd_detect_virt_output" = "xen" ]; then
-      printf '%s\n' "INFO: xen detected. Could be Qubes. Skipping swap-file-creator. Doing nothing, ok."
-      exit 0
-   fi
-
    if [ "$DO_PRE_CHECK" = 'yes' ]; then
+      if [ "$systemd_detect_virt_output" = "xen" ]; then
+         printf '%s\n' "INFO: xen detected. Could be Qubes. Skipping swap-file-creator. Doing nothing, ok."
+         exit 0
+      fi
+
       if ! luks-path-check "$SWAPFILE" >dev/null 2>&1; then
          printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: no. - Doing nothing, ok."
          exit 0
