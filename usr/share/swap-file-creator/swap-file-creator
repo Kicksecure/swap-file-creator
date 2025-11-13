@@ -134,7 +134,7 @@ do_stop() {
       return 0
    fi
 
-   if [ -f "$SWAPFILE" ]; then
+   if ! [ -f "$SWAPFILE" ]; then
       return 0
    fi
 
