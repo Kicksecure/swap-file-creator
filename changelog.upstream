@@ -1,3 +1,101 @@
+commit f0987272e55bca09628b9d4bee178f5f8b0d46dc
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:55:22 2025 -0500
+
+    add root_check
+
+commit 1251c6bdaa9d89e0e4885b07a5fed6b88ee8928f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:54:21 2025 -0500
+
+    output
+
+commit 3bab812f997ba696ab34874906af6adca82ea971
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:43:53 2025 -0500
+
+    output
+
+commit 055b48855d0db932043be06e036b755af03a6768
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:42:24 2025 -0500
+
+    allow running swap-file-creator inside Xen / Qubes if setting `DO_PRE_CHECK=no`
+
+commit 0bc7e572a9a2d3e5cb940550e7fc79c7d2fcf502
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:39:59 2025 -0500
+
+    code simplification
+
+commit 78df1e5f5efb8473d34d91dc7671e2950d8d68bc
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:38:17 2025 -0500
+
+    refactoring
+
+commit 8f2ea96090c6c61097b446b69d18e16d7d9b0c06
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:36:23 2025 -0500
+
+    end-of-options
+
+commit cbf592fb9eff66dac83a958df65dd3781005f044
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:35:48 2025 -0500
+
+    refactoring
+
+commit 05565452e3a17957dc22ad2a7fe620a49b405d6e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:34:46 2025 -0500
+
+    refactoring
+
+commit b1178c6f68bfdd1a8e29aae28361777916779a80
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:34:07 2025 -0500
+
+    refactoring
+
+commit e5d3f240de4672a5de3dc5e6772262634d969eb0
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:32:31 2025 -0500
+
+    local
+
+commit ed085868aacfab495c05241c1036c408709d0741
+Merge: 9f11963 774da73
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 01:29:15 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 774da73c9a816e39a3df526d23ae3b4eeff961e2
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Wed Nov 12 21:05:11 2025 -0600
+
+    fix
+
+commit e8f67629b15b7bf156f2e1553eb8adf0f92b9e24
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Wed Nov 12 21:04:03 2025 -0600
+
+    Use config file for allowing the user to disable LUKS check, fix some issues
+
+commit c181983ecd0e526b2ee94d5136e5e30b28bf28ab
+Merge: 7145ef4 9f11963
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Wed Nov 12 19:37:04 2025 -0600
+
+    Merge branch 'master' into arraybolt3/trixie
+
+commit 9f1196336e1cdcb452d5bd17f5e2802248f9f849
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 10:12:56 2025 +0000
+
+    bumped changelog version
+
 commit 48fe346f937590808f6cc3421a9f1db97dc5ee60
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Nov 12 05:11:50 2025 -0500
@@ -195,6 +293,12 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Nov 12 06:13:51 2025 +0000
 
     bumped changelog version
+
+commit 7145ef4d9e7b9db4561b420efff3a7f8dbbfb1c5
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Nov 11 23:49:52 2025 -0600
+
+    Allow forcing creation of a swapfile on unencrypted systems, don't remove swapfile if unnecessary, wording adjustments
 
 commit 77ec9613d125baeb236ca0eea2680e0bc7cfd68b
 Merge: ae2b0e0 8962ac4
