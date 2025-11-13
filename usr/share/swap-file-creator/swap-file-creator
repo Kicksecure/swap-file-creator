@@ -20,6 +20,8 @@ set -o nounset
 LC_ALL=C
 export LC_ALL
 
+luks_check_done='false'
+
 error_handler() {
    local exit_code="$?"
    trap "" ERR
@@ -51,35 +53,35 @@ trap "error_handler" ERR
 source /usr/libexec/helper-scripts/live-mode.sh
 
 sanity_tests() {
-  local list cmd
+  local cmd_list cmd
 
   #cryptsetup
   #mkdir
   #/usr/lib/systemd/systemd-cryptsetup
-  list=(
-    safe-rm
-    chown
-    mkswap
-    swapon
-    swapoff
-    shred
-    cat
-    test
-    printf
-    stat
-    mountpoint
-    grep
-    sed
-    blkid
-    findmnt
-    fallocate
-    df
-    free
-    bc
-    calculate-swap-size
+  cmd_list=(
+    'safe-rm'
+    'chown'
+    'mkswap'
+    'swapon'
+    'swapoff'
+    'shred'
+    'cat'
+    'test'
+    'printf'
+    'stat'
+    'mountpoint'
+    'grep'
+    'sed'
+    'blkid'
+    'findmnt'
+    'fallocate'
+    'df'
+    'free'
+    'bc'
+    'calculate-swap-size'
   )
 
-  for cmd in "${list[@]}"; do
+  for cmd in "${cmd_list[@]}"; do
     command -v "$cmd" >/dev/null
   done
 }
@@ -92,7 +94,7 @@ source_config_file() {
 }
 
 set_defaults() {
-  [[ -v "DESC" ]] || DESC="Encrypted Swap File Creator"
+  [[ -v "DESC" ]] || DESC="Swap File Creator"
   [[ -v "NAME" ]] || NAME="swap-file-creator"
   [[ -v "SWAPFILE" ]] || SWAPFILE="/var/swapfile"
   [[ -v "VERBOSE" ]] || VERBOSE="yes"
@@ -109,14 +111,15 @@ set_defaults() {
   [[ -v "RANDOM_DEVICE" ]] || RANDOM_DEVICE="/dev/random"
   [[ -v "ENOUGH_RAM" ]] || ENOUGH_RAM="1950"
   [[ -v "SWAP_FILE_SIZE_CUSTOM_MB" ]] || SWAP_FILE_SIZE_CUSTOM_MB=""
+  [[ -v "DO_LUKS_CHECK" ]] || DO_LUKS_CHECK="yes"
 }
 
 do_stop() {
-   local swapoff_exitcode
+   local swapon_output swapoff_exitcode
    swapoff_exitcode='0'
-   swapon_output=$(swapon 2>/dev/null) || true
+   swapon_output="$(swapon 2>/dev/null)" || true
    if [ -f "$SWAPFILE" ]; then
-      if printf '%s\n' "$swapon_output" | grep -- "^$SWAPFILE " &>/dev/null; then
+      if grep --fixed-strings -- "$SWAPFILE" < <(printf '%b' "$swapon_output") &>/dev/null; then
          swapoff "$SWAPFILE" || { swapoff_exitcode="$?"; true; };
       fi
 
@@ -136,7 +139,10 @@ do_stop() {
          fi
       fi
 
-      if [ -f "$SWAPFILE" ]; then
+      if [ -f "$SWAPFILE" ] \
+         && [ "$DO_LUKS_CHECK" = 'yes' ] \
+         && [ "$luks_check_done" = 'false' ] \
+         && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
          printf '%s\n' "INFO: Removing '$SWAPFILE'..."
          safe-rm --force -- "$SWAPFILE"
          printf '%s\n' "INFO: Done removing '$SWAPFILE'."
@@ -150,6 +156,11 @@ do_start() {
    local dirname_swapfile
 
    printf '%s\n' "INFO: swap-file-creator..."
+
+   if ! [[ "$SWAPFILE" = /* ]]; then
+      printf '%s\n' "ERROR: 'SWAPFILE' value '$SWAPFILE' is not an absolute path!" >&2
+      exit 1
+   fi
 
    systemd_detect_virt_output=""
    if command -v systemd-detect-virt >/dev/null ; then
@@ -173,9 +184,13 @@ do_start() {
       exit 0
    fi
 
-   if ! luks_path_check_output="$(luks-path-check "$SWAPFILE" 2>&1)"; then
-      printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: no. - Doing nothing, ok."
-      exit 0
+   if [ "$DO_LUKS_CHECK" = 'yes' ]; then
+      if ! luks-path-check "$SWAPFILE" >dev/null 2>&1; then
+         printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: no. - Doing nothing, ok."
+         exit 0
+      else
+         luks_check_done='true'
+      fi
    fi
 
    ## User can set HIBERNATION=yes in /etc/default/swap-file-creator
@@ -288,10 +303,10 @@ do_start() {
    ## /proc/swap does not show the label.
    ## output by swapon_line is not predictable, G vs M as unit.
    local swapon_line
-   ## TODO: There might be multiple lines. grep for exact swap file.
-   swapon_line=$(swapon --noheadings --raw --show=LABEL,SIZE | grep -- '\bswapfile\b') || true
+   swapon_line="$(swapon --noheadings --raw --show=NAME,SIZE)"
+   swapon_line="$(printf '%b' "$swapon_line" | grep --fixed-strings -- "$SWAPFILE" | tail -n1)" || true
    ## example swapon_line:
-   #swapon_line=" 1024M"
+   #swapon_line="/var/swapfile 1024M"
    swap_file_size_with_unit=$(awk '{print $NF}' <<< "$swapon_line")
 
    # Check if the size is in GB or MB and convert accordingly
@@ -307,8 +322,8 @@ do_start() {
 WARNING: Minor issue.
 Unit test if swap file with correct size has been created has been skipped.
 Output of:
-    swapon --noheadings --raw --show=LABEL,SIZE | grep -- '\bswapfile\b'
-showed unknown unit, not M or G.
+    swapon --noheadings --raw --show=NAME,SIZE
+showed unknown unit for file '$SWAPFILE', not M or G.
 swapon_line: '$swapon_line'
 swap_file_size_with_unit: '$swap_file_size_with_unit'"
       return 0
@@ -341,7 +356,7 @@ set_defaults
 
 if [ $# -eq 0 ]; then
     printf '%s\n' "ERROR: No arguments provided." >&2
-    printf '%s\n' "Usage: $0 [start|stop]" >&2
+    printf '%s\n' "Usage: $0 (start|stop)" >&2
     exit 1
 fi
 
@@ -354,7 +369,7 @@ case "$1" in
         ;;
     *)
         printf '%s\n' "ERROR: Invalid argument: $1" >&2
-        printf '%s\n' "Usage: $0 [start|stop]" >&2
+        printf '%s\n' "Usage: $0 (start|stop)" >&2
         exit 1
         ;;
 esac

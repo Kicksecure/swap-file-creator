@@ -2,7 +2,7 @@
 ## See the file COPYING for copying conditions.
 
 [Unit]
-Description=Encrypted Swap File Creator
+Description=Creates a swap file on LUKS-encrypted systems
 Documentation=https://www.kicksecure.com/wiki/swap-file-creator
 After=haveged.service
 After=jitterentropy.service
