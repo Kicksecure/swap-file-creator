@@ -20,7 +20,7 @@ set -o nounset
 LC_ALL=C
 export LC_ALL
 
-luks_check_done='false'
+pre_check_done='false'
 
 error_handler() {
    local exit_code="$?"
@@ -144,7 +144,7 @@ do_stop() {
 
   if [ -f "$SWAPFILE" ] \
       && [ "$DO_LUKS_CHECK" = 'yes' ] \
-      && [ "$luks_check_done" = 'false' ] \
+      && [ "$pre_check_done" = 'false' ] \
       && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
       printf '%s\n' "INFO: Removing '$SWAPFILE'..."
       safe-rm --force -- "$SWAPFILE"
@@ -191,7 +191,7 @@ do_start() {
          printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: no. - Doing nothing, ok."
          exit 0
       else
-         luks_check_done='true'
+         pre_check_done='true'
       fi
    fi
 
