@@ -144,13 +144,16 @@ do_stop() {
       printf '%s\n' "INFO: Done shred '$SWAPFILE'."
    fi
 
-   if [ "$DO_PRE_CHECK" = 'yes' ] \
-      && [ "$pre_check_done" = 'false' ] \
-      && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
-      printf '%s\n' "INFO: Removing '$SWAPFILE'..."
-      safe-rm --force -- "$SWAPFILE"
-      printf '%s\n' "INFO: Done removing '$SWAPFILE'."
-   fi
+   ## TODO: Why is this needed?
+#    if [ "$DO_PRE_CHECK" = 'yes' ] \
+#       && [ "$pre_check_done" = 'false' ] \
+#       && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
+#       printf '%s\n' "INFO: Removing '$SWAPFILE'..."
+#       safe-rm --force -- "$SWAPFILE"
+#       printf '%s\n' "INFO: Done removing '$SWAPFILE'."
+#    fi
+
+   safe-rm --force -- "$SWAPFILE"
 
    return 0
 }
