@@ -360,6 +360,11 @@ sanity_tests
 source_config_file
 set_defaults
 
+if ! [ "$(id -u)" = 0 ]; then
+    printf '%s\n' "$0: ERROR: Must be run as root/sudo." >&2
+    exit 1
+fi
+
 if [ $# -eq 0 ]; then
     printf '%s\n' "ERROR: No arguments provided." >&2
     printf '%s\n' "Usage: $0 (start|stop)" >&2
