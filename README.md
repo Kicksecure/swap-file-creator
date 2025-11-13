@@ -1,10 +1,18 @@
-# Adds encrypted swap file to the system #
+# Creates a swap file on LUKS-encrypted systems #
 
-On every boot, creates a new encrypted swapfile with a random key.
+On every boot, creates a swap file on LUKS-encrypted systems.
+Checks if the system is using LUKS encryption before creating a
+swap file.
 
-Useful for systems with low RAM such as inside virtual machines.
+Can optionally also create a swap file on unencrypted systems.
+Useful for systems with low RAM, such as inside virtual machines.
 
-Has an option to shred the swapfile on shutdown.
+Has an option to shred the swap file on shutdown.
+
+Earlier versions created an encrypted swap file by default, which
+was encrypted with an ephemeral key. Unfortunately, this is no longer
+possible as of Debian trixie due to a Linux kernel bug.
+https://lore.kernel.org/lkml/20251111231835.1232ad8f@kf-m2g5/T/#u
 
 ## How to install `swap-file-creator` using apt-get ##
 
