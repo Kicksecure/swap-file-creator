@@ -346,8 +346,8 @@ swap_file_size_with_unit: '$swap_file_size_with_unit'"
    fi
 
    printf '%s\n' "ERROR: swap_file_kernel_reported_size_gb_plus is smaller than expected swap_file_target_size_gb!" >&2
-   printf '%s\n' "swap_file_kernel_reported_size_gb_plus: $swap_file_kernel_reported_size_gb_plus" >&2
-   printf '%s\n' "swap_file_target_size_gb: $swap_file_target_size_gb" >&2
+   printf '%s\n' "swap_file_kernel_reported_size_gb_plus: '$swap_file_kernel_reported_size_gb_plus'" >&2
+   printf '%s\n' "swap_file_target_size_gb: '$swap_file_target_size_gb'" >&2
    exit 1
 }
 
