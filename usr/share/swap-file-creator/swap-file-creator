@@ -204,7 +204,7 @@ do_start() {
    if [ -f "$SWAPFILE" ]; then
       ## Sanity test.
       test -r "$SWAPFILE"
-      swap_file_actual_size_in_bytes="$(stat --format='%s' "$SWAPFILE")"
+      swap_file_actual_size_in_bytes="$(stat --format='%s' -- "$SWAPFILE")"
    else
       swap_file_actual_size_in_bytes="0"
    fi
