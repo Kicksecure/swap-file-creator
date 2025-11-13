@@ -134,22 +134,23 @@ do_stop() {
       return 0
    fi
 
-   if [ "$SHRED_ON_STOP" = "yes" ]; then
-      if [ -f "$SWAPFILE" ]; then
-         printf '%s\n' "INFO: Shredding '$SWAPFILE'... This may take a while..."
-         shred $SHRED_OPTS "$SWAPFILE"
-         printf '%s\n' "INFO: Done shred '$SWAPFILE'."
-      fi
+   if [ -f "$SWAPFILE" ]; then
+      return 0
    fi
 
-  if [ -f "$SWAPFILE" ] \
-      && [ "$DO_PRE_CHECK" = 'yes' ] \
+   if [ "$SHRED_ON_STOP" = "yes" ]; then
+      printf '%s\n' "INFO: Shredding '$SWAPFILE'... This may take a while..."
+      shred $SHRED_OPTS "$SWAPFILE"
+      printf '%s\n' "INFO: Done shred '$SWAPFILE'."
+   fi
+
+   if [ "$DO_PRE_CHECK" = 'yes' ] \
       && [ "$pre_check_done" = 'false' ] \
       && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
       printf '%s\n' "INFO: Removing '$SWAPFILE'..."
       safe-rm --force -- "$SWAPFILE"
       printf '%s\n' "INFO: Done removing '$SWAPFILE'."
-  fi
+   fi
 
    return 0
 }
