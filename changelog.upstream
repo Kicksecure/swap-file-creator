@@ -1,3 +1,220 @@
+commit 48fe346f937590808f6cc3421a9f1db97dc5ee60
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 05:11:50 2025 -0500
+
+    comment
+
+commit 9888cc47c28ca394d7c689471a99fcec0931823e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 05:09:27 2025 -0500
+
+    fix
+
+commit 6408db83a36d84fb8796d371c8a771466a5127c5
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 05:09:03 2025 -0500
+
+    fix
+
+commit 636c2c3026cf9aff200c3d3b2f34683ecd79ff37
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 05:07:21 2025 -0500
+
+    fix
+
+commit a2bc1432220fbbf89133f13f878935fd2202544a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:43:17 2025 -0500
+
+    output
+
+commit 93ae7cd88fa53412552a9519ad386665d8b4583a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:42:33 2025 -0500
+
+    fix
+
+commit a4199ce8e7421cd3fe5771f1857d69d54388a061
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:31:22 2025 -0500
+
+    move to helper-scripts
+
+commit 0c07b47812cd62e4568de64c8b9af7869bf72e4b
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:24:02 2025 -0500
+
+    fix
+
+commit 7b6702962114fc216d8e462bff268fceda27bcaf
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:23:27 2025 -0500
+
+    fix
+
+commit 8cbdb01438c77b99247b0f1f87401f9995afa929
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:20:31 2025 -0500
+
+    refactoring
+
+commit 5e25e29df4c92734304d1acd697a15eb31cc87c1
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:18:28 2025 -0500
+
+    fix
+
+commit 6c12ae007a86c5a2239b816ddf23a773e06e3220
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:14:09 2025 -0500
+
+    refactoring
+
+commit bdbe023341232853b46d0c3fd13d1cfc81d7fd2b
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:10:48 2025 -0500
+
+    end-of-options
+
+commit 4fdba8c6f6f631496d24727149c16f796feb46f7
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:06:38 2025 -0500
+
+    use long option name
+
+commit ea41bb4ccd70ced60e93342ac089a0810afcd71f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:05:25 2025 -0500
+
+    comment
+
+commit 6f3327fe7ce6e52280dcb02a100bade22db7c819
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:03:25 2025 -0500
+
+    refactoring
+
+commit 136e50d3a05c377d94a55eb18b8db42f1f6929b3
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 02:00:16 2025 -0500
+
+    end-of-options
+
+commit 2aef33e93f751dc1a25d306157a123fd1028c0f2
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:59:32 2025 -0500
+
+    sanity test
+
+commit b5265120d16a560d94a23828fd287f2b90fb6ae3
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:58:27 2025 -0500
+
+    output
+
+commit 091ecdf74b3767f107c6429e870c85509c001fb9
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:57:26 2025 -0500
+
+    skip faster in Qubes
+
+commit 005375936f8cb6fe461d4d8a0568978503ea4fa1
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:32:52 2025 -0500
+
+    end-of-options
+
+commit 0195a060030e2b18de2654c08e1d630bf41eaf3c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:31:17 2025 -0500
+
+    refactoring
+
+commit c63468df78cb87a8ae1cd2f0befb61186b09d867
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:26:40 2025 -0500
+
+    cleanup
+
+commit 901c3fe2eb8d9112f83228dd179b87129f6593b1
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:26:13 2025 -0500
+
+    fix
+
+commit da4ef296d1e9e496d5b36517c98951f96042da91
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:25:43 2025 -0500
+
+    fix
+
+commit d995cb60927e1c8ecd948242383e02e5deb7df07
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:24:20 2025 -0500
+
+    output
+
+commit a57ef59c9ca5abed86752d62061e24de249b0d74
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:23:22 2025 -0500
+
+    fix
+
+commit a312a5592699bc0c501703a953def88424fd6900
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:21:14 2025 -0500
+
+    output
+
+commit 2f2a9ca5fdf26d856a01a7297518158477e02820
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:21:00 2025 -0500
+
+    comment
+
+commit f62ba7fa29283a1924c0658164b92bb7ca474ad8
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:18:55 2025 -0500
+
+    comment
+
+commit 02408410c0b7b321575f9597072d48a345124b17
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:17:41 2025 -0500
+
+    fix
+
+commit f394c40a8913a8b2a0c1428c90ae98ed3280599f
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 01:15:26 2025 -0500
+
+    fix
+
+commit 87c080fb8b7956d7147515522313683bf3dbc95e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 06:13:51 2025 +0000
+
+    bumped changelog version
+
+commit 77ec9613d125baeb236ca0eea2680e0bc7cfd68b
+Merge: ae2b0e0 8962ac4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Wed Nov 12 00:28:46 2025 -0500
+
+    Merge remote-tracking branch 'ArrayBolt3/arraybolt3/trixie'
+
+commit 8962ac43ef9c7e1c87a532f83b7a6626521a8719
+Author: Aaron Rainbolt <arraybolt3@ubuntu.com>
+Date:   Tue Nov 11 21:28:19 2025 -0600
+
+    Stop creating an encrypted swapfile, only create swapfiles on LUKS volumes, delete swapfile on shutdown, improve do_stop reliability
+
+commit ae2b0e01027ce3ffb62a7c99333645539f91ad75
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Fri Sep 19 16:19:56 2025 +0000
+
+    bumped changelog version
+
 commit e98a80fa86db6b11a799fb047b6c2e9e407df564
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Sep 18 10:08:17 2025 -0400
