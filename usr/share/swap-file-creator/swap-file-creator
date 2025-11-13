@@ -130,24 +130,26 @@ do_stop() {
 
    ## Avoid shredding the swapfile if swapoff failed, as doing so could shred
    ## actively in-use memory and crash the system.
-   if [ "$swapoff_exitcode" = '0' ]; then
-      if [ "$SHRED_ON_STOP" = "yes" ]; then
-         if [ -f "$SWAPFILE" ]; then
-            printf '%s\n' "INFO: Shredding '$SWAPFILE'... This may take a while..."
-            shred $SHRED_OPTS "$SWAPFILE"
-            printf '%s\n' "INFO: Done shred '$SWAPFILE'."
-         fi
-      fi
+   if [ ! "$swapoff_exitcode" = '0' ]; then
+      return 0
+   fi
 
-      if [ -f "$SWAPFILE" ] \
-         && [ "$DO_LUKS_CHECK" = 'yes' ] \
-         && [ "$luks_check_done" = 'false' ] \
-         && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
-         printf '%s\n' "INFO: Removing '$SWAPFILE'..."
-         safe-rm --force -- "$SWAPFILE"
-         printf '%s\n' "INFO: Done removing '$SWAPFILE'."
+   if [ "$SHRED_ON_STOP" = "yes" ]; then
+      if [ -f "$SWAPFILE" ]; then
+         printf '%s\n' "INFO: Shredding '$SWAPFILE'... This may take a while..."
+         shred $SHRED_OPTS "$SWAPFILE"
+         printf '%s\n' "INFO: Done shred '$SWAPFILE'."
       fi
    fi
+
+  if [ -f "$SWAPFILE" ] \
+      && [ "$DO_LUKS_CHECK" = 'yes' ] \
+      && [ "$luks_check_done" = 'false' ] \
+      && ! luks-path-check "$SWAPFILE" >/dev/null 2>&1; then
+      printf '%s\n' "INFO: Removing '$SWAPFILE'..."
+      safe-rm --force -- "$SWAPFILE"
+      printf '%s\n' "INFO: Done removing '$SWAPFILE'."
+  fi
 
    return 0
 }
