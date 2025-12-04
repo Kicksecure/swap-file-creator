@@ -1,3 +1,27 @@
+commit c66fcd873fc89124ae094b7221f8ac1e8508eea0
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 06:24:19 2025 -0500
+
+    also parse `.conf` files in `/etc/default/swap-file-creator.d` and `/usr/local/etc/default/swap-file-creator.d folders`
+
+commit ac32210fc9369f0127603e19956a33aeab0e1a1a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 06:20:33 2025 -0500
+
+    readme
+
+commit 94319096cb0c289cc46160a79c54788ed732beb4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 06:17:15 2025 -0500
+
+    decription
+
+commit 1e46220064021f14a948549d4f3f3841076c623a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Nov 13 12:45:22 2025 +0000
+
+    bumped changelog version
+
 commit 581addc9935f98685696ca79ab3f4a615f9161fa
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Nov 13 07:45:11 2025 -0500
