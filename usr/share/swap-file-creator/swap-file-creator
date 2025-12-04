@@ -310,6 +310,9 @@ do_start() {
    #chmod --recursive 0600 -- "$MAPPER_FULL"
 
    mkswap --label "swapfile" --uuid "$UUID" "$SWAPFILE" $MKSWAP_EXTRA >/dev/null
+
+   ## TODO: Btrfs bug:
+   #swapon: /var/swapfile: swapon failed: Invalid argument
    swapon "$SWAPFILE" $SWAPON_EXTRA
 
    ## /proc/swap does not show the label.
