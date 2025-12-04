@@ -165,7 +165,7 @@ do_stop() {
 }
 
 do_start() {
-   local systemd_detect_virt_output hibernation_consideration dirname_swapfile
+   local systemd_detect_virt_output hibernation_consideration dirname_swapfile fileystem_type
 
    printf '%s\n' "INFO: swap-file-creator..."
 
@@ -288,17 +288,28 @@ do_start() {
 
    do_stop
 
-   ## We need to check the size of $SWAPFILE, because a previous run of fallocate that
-   ## got interrupted for some reason might have only created a smaller file
-   ## (0 MB in worst case).
-   ## fallocate is fast. Maybe no more test needed.
-   #if [ "$swap_file_target_size_mb" -lt "$swap_file_actual_size_in_mb" ]; then
-      ## Not exact.
-      ## For example 6144 MB would only be 5.7 G in "sudo swapon --show".
-      #fallocate --length "${swap_file_target_size_mb}MB" "$SWAPFILE"
-      ## Hence calculate in bytes.
-      fallocate --length "$swap_file_target_size_bytes" "$SWAPFILE"
-   #fi
+   fileystem_type=$(findmnt --noheadings --output FSTYPE --target "$folder_of_swapfile")
+
+   if [ "$fileystem_type" = "btrfs" ]; then
+      command -v "btrfs" >/dev/null
+      ## Need to use 'btrfs'. Otherwise, 'swapon "$SWAPFILE" $SWAPON_EXTRA' would fail with:
+      ## > swapon: /var/swapfile: swapon failed: Invalid argument
+      ## https://unix.stackexchange.com/questions/599949/swapfile-swapon-invalid-argument
+      ## https://btrfs.readthedocs.io/en/latest/Swapfile.html
+      btrfs filesystem mkswapfile --size "${swap_file_target_size_gb}G" "$SWAPFILE"
+   else
+      ## We need to check the size of $SWAPFILE, because a previous run of fallocate that
+      ## got interrupted for some reason might have only created a smaller file
+      ## (0 MB in worst case).
+      ## fallocate is fast. Maybe no more test needed.
+      #if [ "$swap_file_target_size_mb" -lt "$swap_file_actual_size_in_mb" ]; then
+          ## Not exact.
+          ## For example 6144 MB would only be 5.7 G in "sudo swapon --show".
+          #fallocate --length "${swap_file_target_size_mb}MB" "$SWAPFILE"
+          ## Hence calculate in bytes.
+          fallocate --length "$swap_file_target_size_bytes" "$SWAPFILE"
+      #fi
+   fi
 
    chown --recursive root:root -- "$SWAPFILE"
    chmod --recursive 0600 -- "$SWAPFILE"
@@ -309,10 +320,12 @@ do_start() {
    #chown --recursive root:root -- "$MAPPER_FULL"
    #chmod --recursive 0600 -- "$MAPPER_FULL"
 
-   mkswap --label "swapfile" --uuid "$UUID" "$SWAPFILE" $MKSWAP_EXTRA >/dev/null
+   if [ "$fileystem_type" = "btrfs" ]; then
+      true "INFO: mkswap not needed for btrfs, ok."
+   else
+      mkswap --label "swapfile" --uuid "$UUID" "$SWAPFILE" $MKSWAP_EXTRA >/dev/null
+   fi
 
-   ## TODO: Btrfs bug:
-   #swapon: /var/swapfile: swapon failed: Invalid argument
    swapon "$SWAPFILE" $SWAPON_EXTRA
 
    ## /proc/swap does not show the label.
