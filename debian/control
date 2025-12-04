@@ -17,17 +17,26 @@ Architecture: all
 Depends: helper-scripts, bc, safe-rm,
  ${misc:Depends}
 ## Recommends: haveged, jitterentropy-rngd
-Description: Creates a swap file on LUKS-encrypted systems
- On every boot, creates a swap file on LUKS-encrypted systems.
- Checks if the system is using LUKS encryption before creating a
- swap file.
+Description: Swap file creator for LUKS-encrypted systems
+ swap-file-creator automatically creates and enables a swap file on
+ systems using LUKS full-disk encryption. A new swap file is created on
+ every boot if the target path resides on a LUKS-encrypted device.
  .
- Can optionally also create a swap file on unencrypted systems.
- Useful for systems with low RAM, such as inside virtual machines.
+ By default, no swap file is created on unencrypted disks. This can be
+ optionally overridden (not recommended for privacy), allowing swap-file-
+ creator to operate on unencrypted storage as well.
  .
- Has an option to shred the swap file on shutdown.
+ The tool is particularly useful for systems with low RAM, such as virtual
+ machines, where lack of swap may cause freezing during upgrades or heavy
+ memory operations.
  .
- Earlier versions created an encrypted swap file by default, which
- was encrypted with an ephemeral key. Unfortunately, this is no longer
- possible as of Debian trixie due to a Linux kernel bug.
+ The swap file can be shredded on shutdown for additional privacy, if
+ enabled. Various parameters, including file path, custom size, and
+ pre-checks, can be configured through /etc/default/swap-file-creator.
+ .
+ Earlier versions provided an additional dm-crypt layer and created a
+ swap file encrypted with an ephemeral key. Due to a Linux kernel bug,
+ this functionality is no longer possible as of Debian trixie, and the
+ swap file is instead placed directly on top of LUKS full-disk
+ encryption. More details:
  https://lore.kernel.org/lkml/20251111231835.1232ad8f@kf-m2g5/T/#u
