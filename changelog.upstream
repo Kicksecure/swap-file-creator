@@ -1,3 +1,21 @@
+commit 2ef0e350c03864f3995ec22ede6ddb0ce5508b2d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 06:52:39 2025 -0500
+
+    fix swap file creation on Btrfs
+
+commit 92c8d1b50c832782fe72cea88e093a7b6debef2c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 06:31:22 2025 -0500
+
+    comment
+
+commit 9028084fae2ca1405cc605c22207193d53d0595c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 11:25:28 2025 +0000
+
+    bumped changelog version
+
 commit c66fcd873fc89124ae094b7221f8ac1e8508eea0
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Dec 4 06:24:19 2025 -0500
