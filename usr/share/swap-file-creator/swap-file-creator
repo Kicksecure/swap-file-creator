@@ -86,11 +86,17 @@ sanity_tests() {
   done
 }
 
-source_config_file() {
-  if [ -f "/etc/default/swap-file-creator" ]; then
-    bash -n "/etc/default/swap-file-creator"
-    source "/etc/default/swap-file-creator"
-  fi
+source_config_files() {
+  shopt -s nullglob
+  local i
+
+  for i in /etc/default/swap-file-creator /etc/default/swap-file-creator.d/*.conf /usr/local/etc/default/swap-file-creator.d/*.conf; do
+    if ! test -f "$i"; then
+       continue
+    fi
+    bash -n "$i"
+    source "$i"
+  done
 }
 
 set_defaults() {
@@ -357,7 +363,7 @@ if [ "$live_status_detected" = "true" ]; then
 fi
 
 sanity_tests
-source_config_file
+source_config_files
 set_defaults
 
 if ! [ "$(id -u)" = 0 ]; then
