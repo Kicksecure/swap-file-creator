@@ -53,7 +53,7 @@ trap "error_handler" ERR
 ## sets: live_status_detected
 source /usr/libexec/helper-scripts/live-mode.sh
 
-output() {
+log() {
   printf '%s\n' "$@"
 }
 
@@ -150,18 +150,18 @@ do_stop() {
    fi
 
    if [ "$SHRED_ON_STOP" = "yes" ]; then
-      output "INFO: Shredding '$SWAPFILE' before removal... This may take a while..."
+      log "INFO: Shredding '$SWAPFILE' before removal... This may take a while..."
       shred $SHRED_OPTS "$SWAPFILE"
-      output "INFO: Done shredding '$SWAPFILE'."
+      log "INFO: Done shredding '$SWAPFILE'."
    fi
 
    ## TODO: Why is this needed?
 #    if [ "$DO_PRE_CHECK" = 'yes' ] \
 #       && [ "$pre_check_done" = 'false' ] \
 #       && ! luks-path-check "$SWAPFILE" &>/dev/null; then
-#       output "INFO: Removing '$SWAPFILE'..."
+#       log "INFO: Removing '$SWAPFILE'..."
 #       safe-rm --force -- "$SWAPFILE"
-#       output "INFO: Done removing '$SWAPFILE'."
+#       log "INFO: Done removing '$SWAPFILE'."
 #    fi
 
    safe-rm --force -- "$SWAPFILE"
@@ -172,10 +172,10 @@ do_stop() {
 do_start() {
    local systemd_detect_virt_output hibernation_consideration dirname_swapfile fileystem_type
 
-   output "INFO: swap-file-creator..."
+   log "INFO: swap-file-creator..."
 
    if ! [[ "$SWAPFILE" = /* ]]; then
-      output "ERROR: 'SWAPFILE' value '$SWAPFILE' is not an absolute path. Swap file not enabled." >&2
+      log "ERROR: 'SWAPFILE' value '$SWAPFILE' is not an absolute path. Swap file not enabled." >&2
       exit 1
    fi
 
@@ -198,12 +198,12 @@ do_start() {
 
    if [ "$DO_PRE_CHECK" = 'yes' ]; then
       if [ "$systemd_detect_virt_output" = "xen" ]; then
-         output "INFO: Virtualizer 'xen' detected. Could be 'Qubes'. Skipping swap-file-creator (no swap file will be created). Doing nothing, ok."
+         log "INFO: Virtualizer 'xen' detected. Could be 'Qubes'. Skipping swap-file-creator (no swap file will be created). Doing nothing, ok."
          exit 0
       fi
 
       if ! luks-path-check "$SWAPFILE" &>/dev/null ; then
-         output "INFO: Encrypted disk (LUKS) detected for file '$SWAPFILE': no. Not creating a swap file (expected). Doing nothing, OK. See also: https://www.kicksecure.com/wiki/swap-file-creator"
+         log "INFO: Encrypted disk (LUKS) detected for file '$SWAPFILE': no. Not creating a swap file (expected). Doing nothing, OK. See also: https://www.kicksecure.com/wiki/swap-file-creator"
          exit 0
       else
          pre_check_done='true'
@@ -228,7 +228,7 @@ do_start() {
    folder_of_swapfile="${SWAPFILE%/*}"
 
    if ! test -d "$folder_of_swapfile" ; then
-      output "ERROR: folder_of_swapfile '$folder_of_swapfile' does not exist." >&2
+      log "ERROR: folder_of_swapfile '$folder_of_swapfile' does not exist." >&2
       exit 1
    fi
 
@@ -244,11 +244,11 @@ do_start() {
    swap_file_actual_size_in_mb="$(( swap_file_actual_size_in_mb + 2 ))"
 
    if [ "$total_ram_in_mb" -ge "$ENOUGH_RAM" ]; then
-      output "INFO: Enough RAM available (at least $ENOUGH_RAM MB). OK."
+      log "INFO: Enough RAM available (at least $ENOUGH_RAM MB). OK."
    else
-      output "INFO: Low RAM detected (less than $ENOUGH_RAM MB)."
-      output "INFO: Consider assigning 2048 MB (2 GB) or more RAM to this machine."
-      output "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
+      log "INFO: Low RAM detected (less than $ENOUGH_RAM MB)."
+      log "INFO: Consider assigning 2048 MB (2 GB) or more RAM to this machine."
+      log "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
    fi
 
    local total_disk_space_in_mb
@@ -261,7 +261,7 @@ do_start() {
       calculate_swap_size_report="$(calculate-swap-size "$total_ram_in_mb" "$total_disk_space_in_mb" "$HIBERNATION")"
 
       ## For informational output.
-      output "$calculate_swap_size_report"
+      log "$calculate_swap_size_report"
 
       ## Take last word of last line.
       swap_file_target_size_mb=$(tail -1 <<< "$calculate_swap_size_report")
@@ -279,7 +279,7 @@ do_start() {
    free_disk_space_in_gb_plus=$(( free_disk_space_in_gb + 2 ))
 
    if [ "$swap_file_size_gb" -ge "$free_disk_space_in_gb_plus" ]; then
-      output "ERROR: Only $free_disk_space_in_gb GB free disk space. Insufficient to create $swap_file_size_gb GB sized swap file. Swap file not enabled." >&2
+      log "ERROR: Only $free_disk_space_in_gb GB free disk space. Insufficient to create $swap_file_size_gb GB sized swap file. Swap file not enabled." >&2
       exit 1
    fi
 
@@ -351,7 +351,7 @@ do_start() {
       swap_file_size_in_mb=${swap_file_size_with_unit%M}
       swap_file_kernel_reported_size_gb=$(bc <<< "scale=2; $swap_file_size_in_mb / 1024")
    else
-      output "\
+      log "\
 INFO: Minor note (not an error).
 Swap file has been enabled; the size self-check was skipped.
 Output of:
@@ -368,13 +368,13 @@ swap_file_size_with_unit: '$swap_file_size_with_unit'"
    swap_file_kernel_reported_size_gb_plus=$(( swap_file_kernel_reported_size_gb_rounded_up + 1 ))
 
    if [ "$swap_file_kernel_reported_size_gb_plus" -ge "$swap_file_target_size_gb" ]; then
-      output "INFO: File '$SWAPFILE' ($swap_file_size_gb GB) created and enabled. OK."
+      log "INFO: File '$SWAPFILE' ($swap_file_size_gb GB) created and enabled. OK."
       return 0
    fi
 
-   output "ERROR: swap_file_kernel_reported_size_gb_plus is smaller than expected swap_file_target_size_gb!" >&2
-   output "swap_file_kernel_reported_size_gb_plus: '$swap_file_kernel_reported_size_gb_plus'" >&2
-   output "swap_file_target_size_gb: '$swap_file_target_size_gb'" >&2
+   log "ERROR: swap_file_kernel_reported_size_gb_plus is smaller than expected swap_file_target_size_gb!" >&2
+   log "swap_file_kernel_reported_size_gb_plus: '$swap_file_kernel_reported_size_gb_plus'" >&2
+   log "swap_file_target_size_gb: '$swap_file_target_size_gb'" >&2
    exit 1
 }
 
@@ -388,13 +388,13 @@ source_config_files
 set_defaults
 
 if ! [ "$(id -u)" = 0 ]; then
-    output "$0: ERROR: Must be run as root/sudo." >&2
+    log "$0: ERROR: Must be run as root/sudo." >&2
     exit 1
 fi
 
 if [ $# -eq 0 ]; then
-    output "ERROR: No arguments provided." >&2
-    output "Usage: $0 (start|stop)" >&2
+    log "ERROR: No arguments provided." >&2
+    log "Usage: $0 (start|stop)" >&2
     exit 1
 fi
 
@@ -406,8 +406,8 @@ case "$1" in
         do_stop
         ;;
     *)
-        output "ERROR: Invalid argument: $1" >&2
-        output "Usage: $0 (start|stop)" >&2
+        log "ERROR: Invalid argument: $1" >&2
+        log "Usage: $0 (start|stop)" >&2
         exit 1
         ;;
 esac
