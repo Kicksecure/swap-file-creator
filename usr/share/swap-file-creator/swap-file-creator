@@ -199,7 +199,7 @@ do_start() {
       fi
 
       if ! luks-path-check "$SWAPFILE" &>/dev/null ; then
-         printf '%s\n' "INFO: LUKS encrypted device for file '$SWAPFILE': no. Not creating a swap file (expected). Doing nothing, OK. See also: https://www.kicksecure.com/wiki/swap"
+         printf '%s\n' "INFO: Encrypted disk (LUKS) detected for file '$SWAPFILE': no. Not creating a swap file (expected). Doing nothing, OK. See also: https://www.kicksecure.com/wiki/swap-file-creator"
          exit 0
       else
          pre_check_done='true'
