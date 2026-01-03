@@ -22,10 +22,19 @@ export LC_ALL
 
 pre_check_done='false'
 
+log() {
+  if [ "${VERBOSE-}" = "yes" ]; then
+    printf '%s\n' "$@"
+    return 0
+  fi
+  printf '%s\n' "$0: $@" | systemd-cat
+  return 0
+}
+
 error_handler() {
    local exit_code="$?"
    trap "" ERR
-   printf '%s\n' "\
+   log "\
 ###############################################################################
 ## Swap File Creator ERROR
 ## $0
@@ -50,17 +59,20 @@ error_handler() {
 
 trap "error_handler" ERR
 
+exit_handler() {
+   local exit_code="$?"
+   if [ "$exit_code" = "0" ]; then
+      log "INFO: END: OK"
+   else
+      log "ERROR: END: with ERROR exit code: '$exit_code'" >&2
+   fi
+   exit "$exit_code"
+}
+
+trap exit_handler EXIT
+
 ## sets: live_status_detected
 source /usr/libexec/helper-scripts/live-mode.sh
-
-log() {
-  if [ "${VERBOSE-}" = "yes" ]; then
-    printf '%s\n' "$@"
-    return 0
-  fi
-  printf '%s\n' "$0: $@" | systemd-cat
-  return 0
-}
 
 sanity_tests() {
   local cmd_list cmd
