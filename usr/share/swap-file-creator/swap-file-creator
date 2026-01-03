@@ -198,7 +198,7 @@ do_start() {
       fi
 
       if ! luks-path-check "$SWAPFILE" &>/dev/null ; then
-         printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: 'no'. - Doing nothing, ok."
+         printf '%s\n' "INFO: File '$SWAPFILE' on LUKS encrypted device: 'no'. - Doing nothing, ok. See also: https://www.kicksecure.com/wiki/swap"
          exit 0
       else
          pre_check_done='true'
