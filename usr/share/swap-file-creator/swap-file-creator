@@ -54,7 +54,12 @@ trap "error_handler" ERR
 source /usr/libexec/helper-scripts/live-mode.sh
 
 log() {
-  printf '%s\n' "$@"
+  if [ "${VERBOSE-}" = "yes" ]; then
+    printf '%s\n' "$@"
+    return 0
+  fi
+  printf '%s\n' "$0: $@" | systemd-cat
+  return 0
 }
 
 sanity_tests() {
@@ -108,7 +113,7 @@ set_defaults() {
   [[ -v "DESC" ]] || DESC="Swap File Creator"
   [[ -v "NAME" ]] || NAME="swap-file-creator"
   [[ -v "SWAPFILE" ]] || SWAPFILE="/var/swapfile"
-  [[ -v "VERBOSE" ]] || VERBOSE="yes"
+  [[ -v "VERBOSE" ]] || VERBOSE="no"
   [[ -v "UUID" ]] || UUID="0615ba72-85b0-4183-8d54-300bb0d2e491"
   #[[ -v "MAPPER" ]] || MAPPER="swapfile"
   #[[ -v "MAPPER_FULL" ]] || MAPPER_FULL="/dev/mapper/$MAPPER"
@@ -174,6 +179,20 @@ do_start() {
 
    log "INFO: swap-file-creator..."
 
+   total_ram_in_mb="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
+
+   if [ "$total_ram_in_mb" -ge "$ENOUGH_RAM" ]; then
+      log "INFO: Enough RAM available (at least $ENOUGH_RAM MB). OK."
+   else
+      if [ "${VERBOSE-}" = "no" ]; then
+         VERBOSE=true
+         log "INFO: swap-file-creator..."
+      fi
+      log "INFO: Low RAM detected (less than $ENOUGH_RAM MB)."
+      log "INFO: Consider assigning 2048 MB (2 GB) or more RAM to this machine."
+      log "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
+   fi
+
    if ! [[ "$SWAPFILE" = /* ]]; then
       log "ERROR: 'SWAPFILE' value '$SWAPFILE' is not an absolute path. Swap file not enabled." >&2
       exit 1
@@ -198,7 +217,7 @@ do_start() {
 
    if [ "$DO_PRE_CHECK" = 'yes' ]; then
       if [ "$systemd_detect_virt_output" = "xen" ]; then
-         log "INFO: Virtualizer 'xen' detected. Could be 'Qubes'. Skipping swap-file-creator (no swap file will be created). Doing nothing, ok."
+         log "INFO: Virtualizer 'xen' detected. Could be 'Qubes'. Skipping swap-file-creator (no swap file will be created). Doing nothing, OK."
          exit 0
       fi
 
@@ -213,7 +232,6 @@ do_start() {
    ## User can set HIBERNATION=yes in /etc/default/swap-file-creator
    [[ -v "HIBERNATION" ]] || HIBERNATION="$hibernation_consideration"
 
-   total_ram_in_mb="$(free -m | sed  -n -e '/^Mem:/s/^[^0-9]*\([0-9]*\) .*/\1/p')"
 
    local swap_file_actual_size_in_bytes
    if [ -f "$SWAPFILE" ]; then
@@ -242,14 +260,6 @@ do_start() {
 
    ## Never mind eventual small platform specific rounding errors.
    swap_file_actual_size_in_mb="$(( swap_file_actual_size_in_mb + 2 ))"
-
-   if [ "$total_ram_in_mb" -ge "$ENOUGH_RAM" ]; then
-      log "INFO: Enough RAM available (at least $ENOUGH_RAM MB). OK."
-   else
-      log "INFO: Low RAM detected (less than $ENOUGH_RAM MB)."
-      log "INFO: Consider assigning 2048 MB (2 GB) or more RAM to this machine."
-      log "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
-   fi
 
    local total_disk_space_in_mb
    dirname_swapfile="${SWAPFILE%/*}"
@@ -326,7 +336,7 @@ do_start() {
    #chmod --recursive 0600 -- "$MAPPER_FULL"
 
    if [ "$fileystem_type" = "btrfs" ]; then
-      true "INFO: mkswap not needed for btrfs, ok."
+      true "INFO: mkswap not needed for btrfs, OK."
    else
       mkswap --label "swapfile" --uuid "$UUID" "$SWAPFILE" $MKSWAP_EXTRA >/dev/null
    fi
