@@ -1,3 +1,57 @@
+commit 3f6c96c70e00c2d0fb10655f2c1d2c7ce5529e4e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 3 07:12:55 2026 -0500
+
+    add exit_handler
+
+commit fad8d566f926bb214b43cb0d3b0c92dbf3fde98c
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 3 07:06:07 2026 -0500
+
+    reduce verbosity (no output during boot) when ENOUGH_RAM is detected
+
+commit bd77f14249c851e99536a81d0c84ef93b95bbda4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 3 06:54:14 2026 -0500
+
+    refactoring
+
+commit 693359c5c581d5a3d5cfbe914d9bade338498b45
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 3 06:53:19 2026 -0500
+
+    refactoring
+
+commit 734dcc4f2c1560c5ad89b09355300f4fa0255051
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 3 06:15:16 2026 -0500
+
+    output
+
+commit f6b6c59a14a08cc069177b61bf1bd869ce92e8b4
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 3 06:00:55 2026 -0500
+
+    output
+
+commit e3c3babfb52568a24cd4989366c5e4bd6ed9ff04
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 3 05:59:16 2026 -0500
+
+    output
+
+commit 09dc46726da7857accce1d3f007abd06efdade8a
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Jan 3 05:28:12 2026 -0500
+
+    output
+
+commit e93255b51b2081e38949de324bbb3d04d7f6322e
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Thu Dec 4 11:53:02 2025 +0000
+
+    bumped changelog version
+
 commit 2ef0e350c03864f3995ec22ede6ddb0ce5508b2d
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Dec 4 06:52:39 2025 -0500
