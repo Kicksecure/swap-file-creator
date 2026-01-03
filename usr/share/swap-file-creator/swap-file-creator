@@ -240,9 +240,9 @@ do_start() {
    swap_file_actual_size_in_mb="$(( swap_file_actual_size_in_mb + 2 ))"
 
    if [ "$total_ram_in_mb" -ge "$ENOUGH_RAM" ]; then
-      printf '%s\n' "INFO: Enough RAM available (>= $ENOUGH_RAM MB). OK."
+      printf '%s\n' "INFO: Enough RAM available (at least $ENOUGH_RAM MB). OK."
    else
-      printf '%s\n' "INFO: Low RAM detected (< $ENOUGH_RAM MB)."
+      printf '%s\n' "INFO: Low RAM detected (less than $ENOUGH_RAM MB)."
       printf '%s\n' "INFO: Consider assigning 2048 MB (2 GB) or more RAM to this machine."
       printf '%s\n' "INFO: See: https://www.kicksecure.com/wiki/swap-file-creator"
    fi
