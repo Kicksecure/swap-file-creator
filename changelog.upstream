@@ -1,3 +1,9 @@
+commit ad8863fa232497d10d2fb08491f6343cb790650d
+Author: Patrick Schleizer <adrelanos@whonix.org>
+Date:   Sat Mar 28 09:54:34 2026 +0000
+
+    bumped changelog version
+
 commit df47d36b86f215c03d861979593d2d59c28d8d20
 Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Mar 28 05:30:53 2026 -0400
@@ -603,11 +609,11 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Wed Jan 29 06:07:10 2025 -0500
 
     fix printf error message on non-English locales
-    
+
     by setting `LC_ALL=C` environment variable
-    
+
     Thanks to @Decidable3 for the bug report!
-    
+
     https://forums.whonix.org/t/swap-file-creator-error/21128
 
 commit 0ee0e924e05364470216a1b896af4067c47c58fc
@@ -754,11 +760,11 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Nov 15 06:16:30 2024 -0500
 
     no longer consider hibernation by default
-    
+
     to have a smaller default swap file by default
-    
+
     and because hibernation is not yet compatible with Secure Boot
-    
+
     https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654/8
 
 commit 4a3db90f0b14cac04cf7c35549f69074a368fd5e
@@ -772,7 +778,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Aug 29 06:06:06 2024 -0400
 
     skip swap-file-creator if xen was detected
-    
+
     (Likely a Qubes HVM, which has dynamic RAM assignment.)
 
 commit a16c6c8ff3a3654c5310881d58c4e4e003a19180
@@ -906,7 +912,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Fri Dec 22 10:48:44 2023 -0500
 
     vastly improve swap-file-creator
-    
+
     * always create a swap file if swap-file-creator is installed
     * increased minimum size of swap file to 6 GB
     * vastly speed up swap-file-creator through use of `fallocate` and `systemd-cryptsetup`
@@ -922,7 +928,7 @@ Date:   Fri Dec 22 10:48:44 2023 -0500
     * improved error handling
     * code simplification through integration with systemd / journald for logs and status
     * removed little/unused configuration options, see /etc/default/swap-file-creator
-    
+
     https://forums.whonix.org/t/swap-swap-file-whonix-gateway-freezing-during-apt-get-dist-upgrade-encrypted-swap-file-creator/8317/8
 
 commit d065868b01b18fc6126d1af51bc0d182c8e55c80
@@ -948,7 +954,7 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Sat Nov 11 13:41:27 2023 -0500
 
     change license to AGPL-3+
-    
+
     https://forums.whonix.org/t/license-change-to-agplv3/17455
 
 commit 1ec8dfd87887c7d07f0722dd471119be16ae9377
@@ -1112,14 +1118,14 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Thu Oct 14 11:20:09 2021 -0400
 
     `dh_installsystemd --no-stop-on-upgrade`
-    
+
     Use --no-stop-on-upgrade to not stop (and therefore not restart) the
     swap-file-creator systemd unit after package upgrade since there is no
     reason to re-create the swap file during upgrade of this package.
-    
+
     Not using --no-start because swap file should be created after installation
     of this package.
-    
+
     dh_installsystemd manpage:
     --no-stop-on-upgrade
     "Do not stop service on upgrade. This has the side-effect of not restarting the service as a part of the upgrade."
@@ -1135,9 +1141,9 @@ Author: Patrick Schleizer <adrelanos@whonix.org>
 Date:   Tue Oct 12 19:47:06 2021 -0400
 
     lower verbosity of output during boot
-    
+
     to avoid "swap file created" message to overwrite console login prompt
-    
+
     The alternative, configuring the login prompt to wait for
     swap-file-creator to be done instead would lead to a slower boot process.
 
@@ -1212,9 +1218,9 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Nov 13 09:33:23 2020 -0500
 
     use cryptsetup_pre_wrapper ld-system-preload-disable
-    
+
     to work around issue with hardened malloc slowing down cryptsetup
-    
+
     https://forums.whonix.org/t/hardened-malloc-hardened-memory-allocator/7474/106
 
 commit 0042c35964afaa431803900484462e42968d6015
@@ -1234,7 +1240,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Oct 9 09:43:33 2020 -0400
 
     swapoff and luksClose only if previously opened
-    
+
     https://forums.whonix.org/t/hardened-malloc-hardened-memory-allocator/7474/106
 
 commit 935ba35283f4871bee1f125e2cf2ac32c602acf1
@@ -1284,7 +1290,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Apr 8 09:25:48 2020 +0000
 
     usr/share/swap-file-creator/start -> usr/share/swap-file-creator/swap-file-creator
-    
+
     because systemd uses the file name in console output
 
 commit 6afd302b43dc56f2c995ece39bac4cf31f5f3a6c
@@ -1340,7 +1346,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Mar 31 15:29:17 2020 -0400
 
     Do nothing inside systemd-nspawn container since does not work and swap is managed by host
-    
+
     ConditionVirtualization=!systemd-nspawn
 
 commit 5ef1398a4969536a0863832b82e02d85b228d2cc
@@ -1354,7 +1360,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Wed Jan 1 03:09:32 2020 -0500
 
     fix "/usr/share/swap-file-creator/start: line 72: warning: command substitution: ignored null byte in input"
-    
+
     during random password generation
 
 commit 68737601dd582c719fc7aa389a4d4346bac6e881
@@ -1368,11 +1374,11 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Tue Dec 31 07:17:32 2019 -0500
 
     fix Non-Qubes-Whonix Whonix-Gateway slow boot
-    
+
     initramfs-tools - Begin: Running /scripts/local-block ... done. - takes a long time during boot - RESUME=none
-    
+
     https://forums.whonix.org/t/swap-swap-file-whonix-gateway-freezing-during-apt-get-dist-upgrade-encrypted-swap-file-creator/8317
-    
+
     Thanks to Algernon for reporting this bug!
 
 commit 3b14cc3bd075677da796a481e78cc13b2ae3f17f
@@ -1548,18 +1554,18 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Mar 1 14:32:41 2019 +0000
 
     add improved legal protections clauses
-    
+
     The license for software created by Whonix is the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version with additional terms applicable per GNU GPL version 3 section 7.
-    
+
     The additional terms are based on the Doom 3 license which is Debian refers to as `GPL-3+-with-id-software-additional-terms`, which is Debian DFSG [1] (The Debian Free Software Guidelines) approved and which is therefore suitable for Debian `main`. Whonix made applied minimal changes to it:
-    
+
     * Rewrite `The Doom 3 BFG Edition GPL Source Code` to the more common `this program` which is used throughout the GPL.
     * Added a "trump clause" [2], in other words, any conflicts or disputes between the additional terms and the GPLv3 shall be resolved in favor of the GPLv3 by adding `Notwithstanding any other provision of this License` (as mentioned in GPL FAQ [3]) at the beginning of the additional terms.
-    
+
     [1] https://www.debian.org/social_contract#guidelines
     [2] https://www.fsf.org/news/canonical-updated-licensing-terms
     [3] https://www.gnu.org/licenses/gpl-faq.html#v3Notwithstanding
-    
+
     For more considerations, see also:
     https://www.whonix.org/wiki/Dev/Licensing
 
@@ -1636,7 +1642,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Sat Dec 9 12:31:47 2017 +0000
 
     Merge pull request #2 from Algernon-01/master
-    
+
     Patches for live system based on initramfs-tools.
 
 commit 4e789a6186cfdd2abb4859b453a20e22c9698c20
@@ -1668,7 +1674,7 @@ Author: Patrick Schleizer <adrelanos@riseup.net>
 Date:   Fri Feb 10 15:47:52 2017 +0000
 
     remove faketime from Build-Depends:
-    
+
     since no longer used for reproducible builds
 
 commit f8aba92f558e7fd21f42534bbd0fa8230ccddf44
